@@ -12,7 +12,7 @@ application/hooks/*
 !application/logs/.htaccess
 
 user_guide/*
-system/*
+
 
 
 # IDE Files
