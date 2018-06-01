@@ -23,7 +23,7 @@ class DisplayArchivedWeatherSummaryFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class DisplayArchivedWeatherSummaryFormReportData extends CI_Controller {
         $year = $this->input->post('year');
         $month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -51,46 +51,9 @@ class DisplayArchivedWeatherSummaryFormReportData extends CI_Controller {
 
 
         //Get the Month Selected As A Number.
-        $monthAsANumberselected="";
-        if($month=='January'){
-            $monthAsANumberselected=1;
+        $monthAsANumberselected=$this->DbHandler->getMonthNumber($month);
 
-        }elseif($month=='February'){
-            $monthAsANumberselected=2;
 
-        }elseif($month=='March'){
-            $monthAsANumberselected=3;
-
-        }elseif($month=='April'){
-            $monthAsANumberselected=4;
-
-        }elseif($month=='May'){
-            $monthAsANumberselected=5;
-
-        }elseif($month=='June'){
-            $monthAsANumberselected=6;
-
-        }elseif($month=='July'){
-            $monthAsANumberselected=7;
-
-        }elseif($month=='August'){
-            $monthAsANumberselected=8;
-
-        }elseif($month=='September'){
-            $monthAsANumberselected=9;
-
-        }elseif($month=='October'){
-            $monthAsANumberselected=10;
-
-        }
-        elseif($month=='November'){
-            $monthAsANumberselected=11;
-
-        }
-        elseif($month=='December'){
-            $monthAsANumberselected=12;
-
-        }
 
 
 
@@ -112,20 +75,10 @@ class DisplayArchivedWeatherSummaryFormReportData extends CI_Controller {
         }
 
 
-        $userstation=$session_data['UserStation'];
-
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
-        //  var_dump($query);
-        if ($query) {
-            $data['stationsdata'] = $query;
-        } else {
-            $data['stationsdata'] = array();
-        }
-
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

@@ -38,7 +38,7 @@ class ArchiveDekadalFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -56,7 +56,7 @@ class ArchiveDekadalFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -125,14 +125,14 @@ class ArchiveDekadalFormReportData extends CI_Controller {
 
 
         $Approved = "FALSE";
-        $creationDate= date('Y-m-d H:i:s');
+       // $creationDate= date('Y-m-d H:i:s');
         $SubmittedBy=$name;
 
 
-
+$stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
         $insertArchiveDekadalFormDataIntoDB=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=> $stationNumber,
-            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,'CreationDate'=>$creationDate,
+            'Date'=>$date,'station'=>$stationId,
+            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
             'MAX_TEMP'=> $maxTemp, 'MIN_TEMP'=>$minTemp,
 
             'DRY_BULB_0600Z'=>$dryBulb0600Z,'WET_BULB_0600Z'=>$wetBulb0600Z,
@@ -159,13 +159,13 @@ class ArchiveDekadalFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added  Archive Dekadal Form  info',
                 'Details' => $name . ' added  Archive Dekadal Form info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             // save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -192,14 +192,9 @@ class ArchiveDekadalFormReportData extends CI_Controller {
         $date = $this->input->post('date');
 
 
-
-
-
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
             $stationNumber = $this->input->post('stationNo');
-
-
-
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
         $maxTemp = $this->input->post('maxTemp');
         $minTemp = $this->input->post('minTemp');
 
@@ -222,8 +217,6 @@ class ArchiveDekadalFormReportData extends CI_Controller {
         $windDirection1200Z = $this->input->post('windDirection1200Z');
         $windSpeed1200Z = $this->input->post('windSpeed1200Z');
 
-
-
         $Approved = $this->input->post('approval');
 
         $id = $this->input->post('id');
@@ -232,7 +225,7 @@ class ArchiveDekadalFormReportData extends CI_Controller {
 
 
         $updateArchiveDekadalFormDataInDB=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=> $stationNumber,
+            'Date'=>$date,'station'=>$stationId,
             'Approved'=>$Approved,
             'MAX_TEMP'=> $maxTemp, 'MIN_TEMP'=>$minTemp,
 
@@ -245,7 +238,7 @@ class ArchiveDekadalFormReportData extends CI_Controller {
             'DEW_POINT_1200Z'=>$dewPoint1200Z,'RELATIVE_HUMIDITY_1200Z'=>$relativeHumidity1200Z,
             'WIND_DIRECTION_1200Z'=>$windDirection1200Z,'WIND_SPEED_1200Z'=>$windSpeed1200Z);
 
-        $updatesuccess=$this->DbHandler->updateData($updateArchiveDekadalFormDataInDB,'archivedekadalformreportdata',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateArchiveDekadalFormDataInDB,"",'archivedekadalformreportdata',$id);
 
 
         //Redirect the user back with  message
@@ -256,13 +249,13 @@ class ArchiveDekadalFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated Archived Dekadal Form info',
                 'Details' => $name . ' updated Archived Dekadal Form info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -299,13 +292,13 @@ class ArchiveDekadalFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted Archived Dekadal  info',
                 'Details' => $name . ' deleted Archived Dekadal from the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

@@ -40,7 +40,7 @@ class MetarForm extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -60,7 +60,7 @@ class MetarForm extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
@@ -129,7 +129,7 @@ class MetarForm extends CI_Controller {
         $rew1w1 = $this->input->post('rew1w1_metar');
 
         $approved="false";
-        $creationDate= date('Y-m-d H:i:s');
+       // $creationDate= date('Y-m-d H:i:s');
         $user=$firstname.' '.$surname;
         //$approved='false';
 
@@ -141,7 +141,7 @@ class MetarForm extends CI_Controller {
             'Dew_temperature'=>$dew_temperature,
             'Wet_bulb'=> $wet_bulb,'TTTdTd'=> $tttdtd, 'Qnhhpa'=>$qnhhpa, 'Qnhin'=>$qnhin,
             'Qfehpa'=>$qfehpa, 'Qfein'=>$qfein,'REW1W1'=>$rew1w1,'Approved'=>$approved,
-            'CreationDate'=>$creationDate, 'SubmittedBy'=>$user);
+             'SubmittedBy'=>$user);
 
 
         //Insert New Metar Infor into the Database.
@@ -160,7 +160,7 @@ class MetarForm extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added metar book info',
                 'Details' => $name . ' added metar book info into the system',
                 'StationName' => $userstation,
@@ -262,7 +262,7 @@ class MetarForm extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated metar book info',
                 'Details' => $name . ' updated metar book info into the system',
                 'StationName' => $userstation,
@@ -305,7 +305,7 @@ class MetarForm extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted metar book info',
                 'Details' => $name . ' deleted metar book info into the system',
                 'StationName' => $userstation,

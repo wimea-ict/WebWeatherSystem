@@ -19,7 +19,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','scannedarchivesynopticformreportcopydetails');  //value,field,table
+        $query = $this->DbHandler->selectAllscanDaily($userstation,'StationName','scans_daily',"synopticform");  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['archivedscannedsynopticformreportcopydetails'] = $query;
@@ -42,7 +42,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -62,7 +62,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -75,7 +75,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
 
         $scannedsynopticformid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($scannedsynopticformid,'id','scannedarchivesynopticformreportcopydetails');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($scannedsynopticformid,'id','scans_daily');  //$value, $field,$table
         if ($query) {
             $data['scannedsynopticformreportcopyidDetails'] = $query;
         } else {
@@ -98,9 +98,12 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
 
         $config['upload_path'] = 'archive/';    //path on the server to store the file
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -119,7 +122,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             $filename_firstpage = $data['file_name'];
 
 
-     ////////////////////////////////////////////////////
+     /////////////////////////////////////////////////////////////
             $file_element_name1 = 'archievescannedcopy_synopticformreport_secondpage';   //name of the input text field
 
 
@@ -127,7 +130,10 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             // $config['upload_path'] = '/uploads/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
             $config['encrypt_name'] = FALSE;
-            $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            // $config['max_size'] = '2GB';
+            //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+            //1MB=1024KB  THEN 2048MB=2097152KB
+            $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
             $config['max_height'] = '768';
             $config['max_width'] = '1024';
 
@@ -165,7 +171,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             $description = $this->input->post('description_synoptic');
 
 
-            $creationDate= date('Y-m-d H:i:s');
+           // $creationDate= date('Y-m-d H:i:s');
             $Approved="FALSE";
             $firstname=$session_data['FirstName'];
             $surname=$session_data['SurName'];
@@ -174,9 +180,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             $insertScannedSynopticFormReportDataCopyDetails=array(
                 'Form' => $formname, 'StationName' => $station,
                 'StationNumber' => $stationNo, 'Date' => $dateOnScannedSynopticFormReport,'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                'Description'=>$description,'FileName_FirstPage' => $filename_firstpage,'FileName_SecondPage' => $filename_secondpage,
-
-                'CreationDate'=> $creationDate);
+                'Description'=>$description,'FileName_FirstPage' => $filename_firstpage,'FileName_SecondPage' => $filename_secondpage);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
             $insertsuccess= $this->DbHandler->insertData($insertScannedSynopticFormReportDataCopyDetails,'scannedarchivesynopticformreportcopydetails'); //Array for data to insert then  the Table Name
@@ -191,7 +195,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
                 $userstationNo=$session_data['StationNumber'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                $userlogs = array('User' => $name,
                     'UserRole' => $userrole,'Action' => 'Added new Scanned Synoptic Form details',
                     'Details' => $name . ' added new Scanned Synoptic Form details into the system ',
                     'StationName' => $userstation,
@@ -226,12 +230,16 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
 
         $file_element_name1 = 'updatearchievescannedcopy_synopticformreport_firstpage';
 
+        if (isset($_FILES[$file_element_name1]) && is_uploaded_file($_FILES[$file_element_name1]['tmp_name'])) { //file has been uploaded
 
-        $config['upload_path'] = 'archive/';
+            $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -248,17 +256,25 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
         {
             $data = $this->upload->data();
             $filename1 = $data['file_name'];
+        }
+        } else {    //no file has been uploaded.
 
+            $filename1= $this->input->post('PreviouslyUploadedFileName_synopticformreport_firstpage');
+        }
 
     ///////////////////////////////////////////////////////////////////////
             $file_element_name2 = 'updatearchievescannedcopy_synopticformreport_secondpage';
 
+        if (isset($_FILES[$file_element_name2]) && is_uploaded_file($_FILES[$file_element_name2]['tmp_name'])) { //file has been uploaded
 
             $config['upload_path'] = 'archive/';
             // $config['upload_path'] = '/uploads/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
             $config['encrypt_name'] = FALSE;
-            $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            // $config['max_size'] = '2GB';
+            //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+            //1MB=1024KB  THEN 2048MB=2097152KB
+            $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
             $config['max_height'] = '768';
             $config['max_width'] = '1024';
 
@@ -275,39 +291,33 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             {
                 $data = $this->upload->data();
                 $filename2 = $data['file_name'];
+            }
+        } else {    //no file has been uploaded.
 
+            $filename2= $this->input->post('PreviouslyUploadedFileName_synopticformreport_secondpage');
+        }
 
 
 
             $formname = firstcharuppercase(chgtolowercase($this->input->post('formname')));
 
-
-
-                $station = $this->input->post('station');
+                $stationId = $this->input->post('stationId');
                 $stationNo = $this->input->post('stationNo');
-
-
-
-
                 $dateOnScannedSynopticFormReport = $this->input->post('dateOnScannedSynopticFormReport');
 
 
             $description = $this->input->post('description');
 
             $id = $this->input->post('id');
+                $approved=$this->input->post('approval');
 
-
-
-
-
-
+//'FileName_SecondPage' => $filename2
             $updateScannedSynopticFormDataReportDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'Date' => $dateOnScannedSynopticFormReport,
-                'Description'=>$description,'FileName_FirstPage' => $filename1,'FileName_SecondPage' => $filename2);
+                'Approved'=>$approved,'station' => $stationId, 'form_date' => $dateOnScannedSynopticFormReport,
+                'Description'=>$description,'FileRef' => $filename1);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $updatesuccess=$this->DbHandler->updateData($updateScannedSynopticFormDataReportDetails,'scannedarchivesynopticformreportcopydetails',$id);
+            $updatesuccess=$this->DbHandler->updateData($updateScannedSynopticFormDataReportDetails,"",'scans_daily',$id);
 
             //Redirect the user back with  message
             if($updatesuccess){
@@ -319,7 +329,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
                 $userstationNo=$session_data['StationNumber'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                $userlogs = array('User' => $name,
                     'UserRole' => $userrole,'Action' => 'Updated new Scanned Synoptic Form details',
                     'Details' => $name . ' added new Scanned Synoptic Form details into the system ',
                     'StationName' => $userstation,
@@ -339,8 +349,8 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
 
             }
 
-        }
-        }
+      //  }
+     //   }
 
     }
     public function deleteInformationForArchiveScannedSynopticFormReport() {
@@ -359,7 +369,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted Synoptic details',
                 'Details' => $name . ' deleted Synoptic details into the system ',
                 'StationName' => $userstation,
@@ -381,6 +391,7 @@ class ArchiveScannedSynopticFormDataReportCopy extends CI_Controller {
         }
 
     }
+
     function getInstruments($stationName) {  //Pass the StationName to get the Station Number.
         $this->load->helper(array('form', 'url'));
 

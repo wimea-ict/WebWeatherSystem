@@ -19,7 +19,7 @@ class DisplayArchivedObservationSlipFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class DisplayArchivedObservationSlipFormData extends CI_Controller {
 
 
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -66,7 +66,7 @@ class DisplayArchivedObservationSlipFormData extends CI_Controller {
 
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

@@ -17,7 +17,6 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
-
         $query = $this->DbHandler->selectAll($userstation,'StationName','archiveobservationslipformdata');
 
 
@@ -40,7 +39,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -59,7 +58,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
@@ -108,20 +107,50 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         $totalAmountOfAllClouds = $this->input->post('totalamountofallclouds_archiveobservationslipformdata');
         $totalAmountOfLowClouds = $this->input->post('totalamountoflowclouds_archiveobservationslipformdata');
 
-        $TypeOfLowClouds = $this->input->post('TypeOfLowClouds_archiveobservationslipformdata');
-        $OktasOfLowClouds= $this->input->post('OktasOfLowClouds_archiveobservationslipformdata');
-        $HeightOfLowClouds = $this->input->post('HeightOfLowClouds_archiveobservationslipformdata');
-        $CLCODEOfLowClouds = $this->input->post('CLCODEOfLowClouds_archiveobservationslipformdata');
+        $TypeOfLowClouds1 = $this->input->post('TypeOfLowClouds1_archiveobservationslipformdata');
+        $OktasOfLowClouds1= $this->input->post('OktasOfLowClouds1_archiveobservationslipformdata');
+        $HeightOfLowClouds1 = $this->input->post('HeightOfLowClouds1_archiveobservationslipformdata');
+        $CLCODEOfLowClouds1 = $this->input->post('CLCODEOfLowClouds1_archiveobservationslipformdata');
 
-        $TypeOfMediumClouds = $this->input->post('TypeOfMediumClouds_archiveobservationslipformdata');
-        $OktasOfMediumClouds= $this->input->post('OktasOfMediumClouds_archiveobservationslipformdata');
-        $HeightOfMediumClouds = $this->input->post('HeightOfMediumClouds_archiveobservationslipformdata');
-        $CLCODEOfMediumClouds = $this->input->post('CLCODEOfMediumClouds_archiveobservationslipformdata');
+        $TypeOfLowClouds2 = $this->input->post('TypeOfLowClouds2_archiveobservationslipformdata');
+        $OktasOfLowClouds2= $this->input->post('OktasOfLowClouds2_archiveobservationslipformdata');
+        $HeightOfLowClouds2 = $this->input->post('HeightOfLowClouds2_archiveobservationslipformdata');
+        $CLCODEOfLowClouds2 = $this->input->post('CLCODEOfLowClouds2_archiveobservationslipformdata');
 
-        $TypeOfHighClouds = $this->input->post('TypeOfHighClouds_archiveobservationslipformdata');
-        $OktasOfHighClouds= $this->input->post('OktasOfHighClouds_archiveobservationslipformdata');
-        $HeightOfHighClouds = $this->input->post('HeightOfHighClouds_archiveobservationslipformdata');
-        $CLCODEOfHighClouds = $this->input->post('CLCODEOfHighClouds_archiveobservationslipformdata');
+        $TypeOfLowClouds3 = $this->input->post('TypeOfLowClouds3_archiveobservationslipformdata');
+        $OktasOfLowClouds3= $this->input->post('OktasOfLowClouds3_archiveobservationslipformdata');
+        $HeightOfLowClouds3 = $this->input->post('HeightOfLowClouds3_archiveobservationslipformdata');
+        $CLCODEOfLowClouds3 = $this->input->post('CLCODEOfLowClouds3_archiveobservationslipformdata');
+
+        $TypeOfMediumClouds1 = $this->input->post('TypeOfMediumClouds1_archiveobservationslipformdata');
+        $OktasOfMediumClouds1= $this->input->post('OktasOfMediumClouds1_archiveobservationslipformdata');
+        $HeightOfMediumClouds1 = $this->input->post('HeightOfMediumClouds1_archiveobservationslipformdata');
+        $CLCODEOfMediumClouds1 = $this->input->post('CLCODEOfMediumClouds1_archiveobservationslipformdata');
+
+        $TypeOfMediumClouds2 = $this->input->post('TypeOfMediumClouds2_archiveobservationslipformdata');
+        $OktasOfMediumClouds2= $this->input->post('OktasOfMediumClouds2_archiveobservationslipformdata');
+        $HeightOfMediumClouds2 = $this->input->post('HeightOfMediumClouds2_archiveobservationslipformdata');
+        $CLCODEOfMediumClouds2 = $this->input->post('CLCODEOfMediumClouds2_archiveobservationslipformdata');
+
+        $TypeOfMediumClouds3 = $this->input->post('TypeOfMediumClouds3_archiveobservationslipformdata');
+        $OktasOfMediumClouds3= $this->input->post('OktasOfMediumClouds3_archiveobservationslipformdata');
+        $HeightOfMediumClouds3 = $this->input->post('HeightOfMediumClouds3_archiveobservationslipformdata');
+        $CLCODEOfMediumClouds3 = $this->input->post('CLCODEOfMediumClouds3_archiveobservationslipformdata');
+
+        $TypeOfHighClouds1 = $this->input->post('TypeOfHighClouds1_archiveobservationslipformdata');
+        $OktasOfHighClouds1= $this->input->post('OktasOfHighClouds1_archiveobservationslipformdata');
+        $HeightOfHighClouds1 = $this->input->post('HeightOfHighClouds1_archiveobservationslipformdata');
+        $CLCODEOfHighClouds1 = $this->input->post('CLCODEOfHighClouds1_archiveobservationslipformdata');
+
+        $TypeOfHighClouds2 = $this->input->post('TypeOfHighClouds2_archiveobservationslipformdata');
+        $OktasOfHighClouds2= $this->input->post('OktasOfHighClouds2_archiveobservationslipformdata');
+        $HeightOfHighClouds2 = $this->input->post('HeightOfHighClouds2_archiveobservationslipformdata');
+        $CLCODEOfHighClouds2 = $this->input->post('CLCODEOfHighClouds2_archiveobservationslipformdata');
+
+        $TypeOfHighClouds3 = $this->input->post('TypeOfHighClouds3_archiveobservationslipformdata');
+        $OktasOfHighClouds3= $this->input->post('OktasOfHighClouds3_archiveobservationslipformdata');
+        $HeightOfHighClouds3 = $this->input->post('HeightOfHighClouds3_archiveobservationslipformdata');
+        $CLCODEOfHighClouds3 = $this->input->post('CLCODEOfHighClouds3_archiveobservationslipformdata');
 
 
         $CloudSearchLightReading = $this->input->post('cloudsearchlight_archiveobservationslipformdata');
@@ -163,7 +192,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
         $approved="FALSE";
-        $creationDate= date('Y-m-d H:i:s');
+       // $creationDate= date('Y-m-d H:i:s');
         $user=$firstname.' '.$surname;
 
 
@@ -174,14 +203,41 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
             'TotalAmountOfLowClouds'=> $totalAmountOfLowClouds,
 
-            'TypeOfLowClouds'=> $TypeOfLowClouds, 'OktasOfLowClouds'=> $OktasOfLowClouds,
-            'HeightOfLowClouds'=>$HeightOfLowClouds, 'CLCODEOfLowClouds'=> $CLCODEOfLowClouds,
+            'TypeOfLowClouds1'=> $TypeOfLowClouds1, 'OktasOfLowClouds1'=> $OktasOfLowClouds1,
+            'HeightOfLowClouds1'=>$HeightOfLowClouds1, 'CLCODEOfLowClouds1'=> $CLCODEOfLowClouds1,
 
-            'TypeOfMediumClouds'=> $TypeOfMediumClouds, 'OktasOfMediumClouds'=> $OktasOfMediumClouds,
-            'HeightOfMediumClouds'=>$HeightOfMediumClouds, 'CLCODEOfMediumClouds'=> $CLCODEOfMediumClouds,
+            'TypeOfLowClouds2'=> $TypeOfLowClouds2, 'OktasOfLowClouds2'=> $OktasOfLowClouds2,
+            'HeightOfLowClouds2'=>$HeightOfLowClouds2, 'CLCODEOfLowClouds2'=> $CLCODEOfLowClouds2,
 
-            'TypeOfHighClouds'=> $TypeOfHighClouds, 'OktasOfHighClouds'=> $OktasOfHighClouds,
-            'HeightOfHighClouds'=>$HeightOfHighClouds, 'CLCODEOfHighClouds'=> $CLCODEOfHighClouds,
+            'TypeOfLowClouds3'=> $TypeOfLowClouds3, 'OktasOfLowClouds3'=> $OktasOfLowClouds3,
+            'HeightOfLowClouds3'=>$HeightOfLowClouds3, 'CLCODEOfLowClouds3'=> $CLCODEOfLowClouds3,
+
+
+
+
+            'TypeOfMediumClouds1'=> $TypeOfMediumClouds1, 'OktasOfMediumClouds1'=> $OktasOfMediumClouds1,
+            'HeightOfMediumClouds1'=>$HeightOfMediumClouds1, 'CLCODEOfMediumClouds1'=> $CLCODEOfMediumClouds1,
+
+            'TypeOfMediumClouds2'=> $TypeOfMediumClouds2, 'OktasOfMediumClouds2'=> $OktasOfMediumClouds2,
+            'HeightOfMediumClouds2'=>$HeightOfMediumClouds2, 'CLCODEOfMediumClouds2'=> $CLCODEOfMediumClouds2,
+
+            'TypeOfMediumClouds3'=> $TypeOfMediumClouds3, 'OktasOfMediumClouds3'=> $OktasOfMediumClouds3,
+            'HeightOfMediumClouds3'=>$HeightOfMediumClouds3, 'CLCODEOfMediumClouds3'=> $CLCODEOfMediumClouds3,
+
+
+
+
+
+            'TypeOfHighClouds1'=> $TypeOfHighClouds1, 'OktasOfHighClouds1'=> $OktasOfHighClouds1,
+            'HeightOfHighClouds1'=>$HeightOfHighClouds1, 'CLCODEOfHighClouds1'=> $CLCODEOfHighClouds1,
+
+            'TypeOfHighClouds2'=> $TypeOfHighClouds2, 'OktasOfHighClouds2'=> $OktasOfHighClouds2,
+            'HeightOfHighClouds2'=>$HeightOfHighClouds2, 'CLCODEOfHighClouds2'=> $CLCODEOfHighClouds2,
+
+            'TypeOfHighClouds3'=> $TypeOfHighClouds3, 'OktasOfHighClouds3'=> $OktasOfHighClouds3,
+            'HeightOfHighClouds3'=>$HeightOfHighClouds3, 'CLCODEOfHighClouds3'=> $CLCODEOfHighClouds3,
+
+
 
 
             'CloudSearchLightReading'=> $CloudSearchLightReading,
@@ -217,7 +273,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
             'Approved'=>$approved,
-            'CreationDate'=>$creationDate, 'SubmittedBy'=>$user);
+             'SubmittedBy'=>$user);
 
 
 
@@ -233,13 +289,13 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added New Archive Observation Slip Form info',
                 'Details' => $name . ' added New Archive Observation Slip Form info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             $this->DbHandler->saveUserLogs($userlogs);
@@ -275,27 +331,58 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
             $stationNumber = $this->input->post('stationNo');
-
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
 
 
         $timeobservationslip = $this->input->post('timeRecorded');
         $totalAmountOfAllClouds = $this->input->post('totalamountofallclouds');
         $totalAmountOfLowClouds = $this->input->post('totalamountoflowclouds');
 
-        $TypeOfLowClouds = $this->input->post('TypeOfLowClouds');
-        $OktasOfLowClouds= $this->input->post('OktasOfLowClouds');
-        $HeightOfLowClouds = $this->input->post('HeightOfLowClouds');
-        $CLCODEOfLowClouds = $this->input->post('CLCODEOfLowClouds');
+        $TypeOfLowClouds1 = $this->input->post('TypeOfLowClouds1');
+        $OktasOfLowClouds1= $this->input->post('OktasOfLowClouds1');
+        $HeightOfLowClouds1 = $this->input->post('HeightOfLowClouds1');
+        $CLCODEOfLowClouds1 = $this->input->post('CLCODEOfLowClouds1');
 
-        $TypeOfMediumClouds = $this->input->post('TypeOfMediumClouds');
-        $OktasOfMediumClouds= $this->input->post('OktasOfMediumClouds');
-        $HeightOfMediumClouds = $this->input->post('HeightOfMediumClouds');
-        $CLCODEOfMediumClouds = $this->input->post('CLCODEOfMediumClouds');
+        $TypeOfLowClouds2 = $this->input->post('TypeOfLowClouds2');
+        $OktasOfLowClouds2= $this->input->post('OktasOfLowClouds2');
+        $HeightOfLowClouds2 = $this->input->post('HeightOfLowClouds2');
+        $CLCODEOfLowClouds2 = $this->input->post('CLCODEOfLowClouds2');
 
-        $TypeOfHighClouds = $this->input->post('TypeOfHighClouds');
-        $OktasOfHighClouds= $this->input->post('OktasOfHighClouds');
-        $HeightOfHighClouds = $this->input->post('HeightOfHighClouds');
-        $CLCODEOfHighClouds = $this->input->post('CLCODEOfHighClouds');
+        $TypeOfLowClouds3 = $this->input->post('TypeOfLowClouds3');
+        $OktasOfLowClouds3= $this->input->post('OktasOfLowClouds3');
+        $HeightOfLowClouds3 = $this->input->post('HeightOfLowClouds3');
+        $CLCODEOfLowClouds3 = $this->input->post('CLCODEOfLowClouds3');
+
+        $TypeOfMediumClouds1 = $this->input->post('TypeOfMediumClouds1');
+        $OktasOfMediumClouds1= $this->input->post('OktasOfMediumClouds1');
+        $HeightOfMediumClouds1 = $this->input->post('HeightOfMediumClouds1');
+        $CLCODEOfMediumClouds1 = $this->input->post('CLCODEOfMediumClouds1');
+
+        $TypeOfMediumClouds2 = $this->input->post('TypeOfMediumClouds2');
+        $OktasOfMediumClouds2= $this->input->post('OktasOfMediumClouds2');
+        $HeightOfMediumClouds2 = $this->input->post('HeightOfMediumClouds2');
+        $CLCODEOfMediumClouds2 = $this->input->post('CLCODEOfMediumClouds2');
+
+        $TypeOfMediumClouds3 = $this->input->post('TypeOfMediumClouds3');
+        $OktasOfMediumClouds3= $this->input->post('OktasOfMediumClouds3');
+        $HeightOfMediumClouds3 = $this->input->post('HeightOfMediumClouds3');
+        $CLCODEOfMediumClouds3 = $this->input->post('CLCODEOfMediumClouds3');
+
+        $TypeOfHighClouds1 = $this->input->post('TypeOfHighClouds1');
+        $OktasOfHighClouds1= $this->input->post('OktasOfHighClouds1');
+        $HeightOfHighClouds1 = $this->input->post('HeightOfHighClouds1');
+        $CLCODEOfHighClouds1 = $this->input->post('CLCODEOfHighClouds1');
+
+        $TypeOfHighClouds2 = $this->input->post('TypeOfHighClouds2');
+        $OktasOfHighClouds2= $this->input->post('OktasOfHighClouds2');
+        $HeightOfHighClouds2 = $this->input->post('HeightOfHighClouds2');
+        $CLCODEOfHighClouds2 = $this->input->post('CLCODEOfHighClouds2');
+
+        $TypeOfHighClouds3 = $this->input->post('TypeOfHighClouds3');
+        $OktasOfHighClouds3= $this->input->post('OktasOfHighClouds3');
+        $HeightOfHighClouds3 = $this->input->post('HeightOfHighClouds3');
+        $CLCODEOfHighClouds3 = $this->input->post('CLCODEOfHighClouds3');
+
 
 
         $CloudSearchLightReading = $this->input->post('cloudsearchlight');
@@ -342,20 +429,36 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
         $updateArchiveObservationSlipFormData=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=>$stationNumber,
+            'Date'=>$date,'station'=>$stationId,
             'TIME'=> $timeobservationslip,
             'TotalAmountOfAllClouds'=>$totalAmountOfAllClouds,
-
             'TotalAmountOfLowClouds'=> $totalAmountOfLowClouds,
+            'TypeOfLowClouds1'=> $TypeOfLowClouds1, 'OktasOfLowClouds1'=> $OktasOfLowClouds1,
+            'HeightOfLowClouds1'=>$HeightOfLowClouds1, 'CLCODEOfLowClouds1'=> $CLCODEOfLowClouds1,
 
-            'TypeOfLowClouds'=> $TypeOfLowClouds, 'OktasOfLowClouds'=> $OktasOfLowClouds,
-            'HeightOfLowClouds'=>$HeightOfLowClouds, 'CLCODEOfLowClouds'=> $CLCODEOfLowClouds,
+            'TypeOfLowClouds2'=> $TypeOfLowClouds2, 'OktasOfLowClouds2'=> $OktasOfLowClouds2,
+            'HeightOfLowClouds2'=>$HeightOfLowClouds2, 'CLCODEOfLowClouds2'=> $CLCODEOfLowClouds2,
 
-            'TypeOfMediumClouds'=> $TypeOfMediumClouds, 'OktasOfMediumClouds'=> $OktasOfMediumClouds,
-            'HeightOfMediumClouds'=>$HeightOfMediumClouds, 'CLCODEOfMediumClouds'=> $CLCODEOfMediumClouds,
+            'TypeOfLowClouds3'=> $TypeOfLowClouds3, 'OktasOfLowClouds3'=> $OktasOfLowClouds3,
+            'HeightOfLowClouds3'=>$HeightOfLowClouds3, 'CLCODEOfLowClouds3'=> $CLCODEOfLowClouds3,
 
-            'TypeOfHighClouds'=> $TypeOfHighClouds, 'OktasOfHighClouds'=> $OktasOfHighClouds,
-            'HeightOfHighClouds'=>$HeightOfHighClouds, 'CLCODEOfHighClouds'=> $CLCODEOfHighClouds,
+            'TypeOfMediumClouds1'=> $TypeOfMediumClouds1, 'OktasOfMediumClouds1'=> $OktasOfMediumClouds1,
+            'HeightOfMediumClouds1'=>$HeightOfMediumClouds1, 'CLCODEOfMediumClouds1'=> $CLCODEOfMediumClouds1,
+
+            'TypeOfMediumClouds2'=> $TypeOfMediumClouds2, 'OktasOfMediumClouds2'=> $OktasOfMediumClouds2,
+            'HeightOfMediumClouds2'=>$HeightOfMediumClouds2, 'CLCODEOfMediumClouds2'=> $CLCODEOfMediumClouds2,
+
+            'TypeOfMediumClouds3'=> $TypeOfMediumClouds3, 'OktasOfMediumClouds3'=> $OktasOfMediumClouds3,
+            'HeightOfMediumClouds3'=>$HeightOfMediumClouds3, 'CLCODEOfMediumClouds3'=> $CLCODEOfMediumClouds3,
+
+            'TypeOfHighClouds1'=> $TypeOfHighClouds1, 'OktasOfHighClouds1'=> $OktasOfHighClouds1,
+            'HeightOfHighClouds1'=>$HeightOfHighClouds1, 'CLCODEOfHighClouds1'=> $CLCODEOfHighClouds1,
+
+            'TypeOfHighClouds2'=> $TypeOfHighClouds2, 'OktasOfHighClouds2'=> $OktasOfHighClouds2,
+            'HeightOfHighClouds2'=>$HeightOfHighClouds2, 'CLCODEOfHighClouds2'=> $CLCODEOfHighClouds2,
+
+            'TypeOfHighClouds3'=> $TypeOfHighClouds3, 'OktasOfHighClouds3'=> $OktasOfHighClouds3,
+            'HeightOfHighClouds3'=>$HeightOfHighClouds3, 'CLCODEOfHighClouds3'=> $CLCODEOfHighClouds3,
 
 
             'CloudSearchLightReading'=> $CloudSearchLightReading,
@@ -393,7 +496,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             'Approved'=>$approved
         );
 
-        $updatesuccess=$this->DbHandler->updateData($updateArchiveObservationSlipFormData,'archiveobservationslipformdata',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateArchiveObservationSlipFormData,"",'archiveobservationslipformdata',$id);
 
 
 
@@ -406,13 +509,13 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+              $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated Archived Observation Slip info',
                 'Details' => $name . ' updated Archived Observation Slip info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -446,13 +549,13 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted Observation Slip info',
                 'Details' => $name . ' deleted Observation Slip info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

@@ -23,7 +23,7 @@ class WeatherSummaryReport extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class WeatherSummaryReport extends CI_Controller {
         $year = $this->input->post('year');
         $month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -103,7 +103,7 @@ class WeatherSummaryReport extends CI_Controller {
         /////Get Data From the OS TABLE,METAR TABLE,MORE FORM FIELDS FORM TABLE TO DISPLAY THE WEATHER SUMMARY FORM.
         //FROM OS TABLE NID DATA FOR 0600Z AND 1200Z.
         //FOR 0600Z
-        $sqlquery1=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFromObservationSlipTableFor0600Z($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $sqlquery1=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFromObservationSlipTable($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"0600Z");  //value,field,table
         if ($sqlquery1) {
             $data['observationslipdataforAMonthAndTime0600Z'] = $sqlquery1;
         } else {
@@ -111,7 +111,7 @@ class WeatherSummaryReport extends CI_Controller {
         }
 
         /////FOR 1200Z
-        $query1=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFromObservationSlipTableFor1200Z($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query1=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFromObservationSlipTable($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"1200Z");  //value,field,table
         if ($query1) {
             $data['observationslipdataforAMonthAndTime1200Z'] = $query1;
         } else {
@@ -120,7 +120,7 @@ class WeatherSummaryReport extends CI_Controller {
 
          //FROM MORE FORM FIELDS TABLE NID DATA FOR 0600Z AND 1200Z.
         //FOR 0600Z
-        $sqlquery2=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFrom_MoreFormFieldsTableFor0600Z($monthAsANumberselected,$year,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $sqlquery2=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFrom_MoreFormFieldsTable($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"0600Z");  //value,field,table
         if ($sqlquery2) {
             $data['moreformfieldsdatatable_forAMonthAndTime0600Z'] = $sqlquery2;
         } else {
@@ -128,7 +128,7 @@ class WeatherSummaryReport extends CI_Controller {
         }
 
         /////FOR 1200Z
-        $query2=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFrom_MoreFormFieldsTableFor1200Z($monthAsANumberselected,$year,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $query2=$this->DbHandler->selectWeatherSummaryDataReportForAMonthFrom_MoreFormFieldsTable($monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"1200Z");  //value,field,table
         if ($query2) {
             $data['moreformfieldsdatatable_forAMonthAndTime1200Z'] = $query2;
         } else {
@@ -140,7 +140,7 @@ class WeatherSummaryReport extends CI_Controller {
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

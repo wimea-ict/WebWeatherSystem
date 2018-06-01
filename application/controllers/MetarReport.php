@@ -21,7 +21,7 @@ class MetarReport extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -40,7 +40,7 @@ class MetarReport extends CI_Controller {
 
 
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -58,28 +58,46 @@ class MetarReport extends CI_Controller {
 
 
         $userstation=$session_data['UserStation'];
+//////////////////////////////////////////////////////////////////////////////////
+        //pick data from Observation slip for the Metar Report.
+         $query = $this->DbHandler->selectMetarReportForSpecificDayFromObservationSlipTable($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
+         if ($query) {
+           $data['metarreportdataforADayFromObservationSlipTable'] = $query;
+          } else {
+            $data['metarreportdataforADayFromObservationSlipTable'] = array();
+          }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+        //prevoius from Metar Table
         //Get Daily Data
         //$query = $this->DbHandler->selectAll($stationName,'StationName','observationslip');  //value,field,table
-        $query = $this->DbHandler->selectMetarReportForSpecificDay($date,$stationName,$stationNumber,'metar');  //value,field,table
+       // $query = $this->DbHandler->selectMetarReportForSpecificDay($date,$stationName,$stationNumber,'metar');  //value,field,table
 
-        if ($query) {
-            $data['metarreportdataforADay'] = $query;
-        } else {
-            $data['metarreportdataforADay'] = array();
-        }
+       // if ($query) {
+        //    $data['metarreportdataforADay'] = $query;
+      //  } else {
+        //    $data['metarreportdataforADay'] = array();
+      //  }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
             $data['stationsdata'] = array();
         }
-
+/////////////////////////////////////////////
+       // NID TO LOAD STATION INDICATORS
+        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,tablename
+        if ($station_indicators_query) {
+            $data['stationIndicatorData'] = $station_indicators_query;
+        } else {
+            $data['stationIndicatorData'] = array();
+        }
 
 
         $this->load->view('metarReport',$data);

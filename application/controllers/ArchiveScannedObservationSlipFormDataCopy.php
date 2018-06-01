@@ -19,8 +19,8 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','scannedarchiveobservationslipformcopydetails');  //value,field,table
-        //  var_dump($query);
+        $query = $this->DbHandler->selectAllscanDaily($userstation,'StationName','scans_daily',"observationslip");  //value,field,table
+
         if ($query) {
             $data['archivedscannedobservationslipformcopydetails'] = $query;
         } else {
@@ -39,11 +39,10 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
 
         //Get all Stations.
         $session_data = $this->session->userdata('logged_in');
-        //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
-        //  var_dump($query);
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
+        //var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
@@ -62,7 +61,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -75,7 +74,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
 
         $scannedobservationslipformid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($scannedobservationslipformid,'id','scannedarchiveobservationslipformcopydetails');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($scannedobservationslipformid,'id','scans_daily');  //$value, $field,$table
         if ($query) {
             $data['scannedobservationslipformcopyidDetails'] = $query;
         } else {
@@ -98,9 +97,12 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
 
         $config['upload_path'] = 'archive/';    //path on the server to store the file
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -113,7 +115,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
             $status = 'error';
             echo   $msg = $this->upload->display_errors('', '');
         }
-        else
+        else if($this->upload->do_upload($file_element_name))
         {
             $data = $this->upload->data();
             $filename = $data['file_name'];
@@ -141,7 +143,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
                 $time=$this->input->post('time_ArchiveScannedObservationSlipForm');
 
 
-                $creationDate= date('Y-m-d H:i:s');
+               // $creationDate= date('Y-m-d H:i:s');
                 $Approved="FALSE";
                 $firstname=$session_data['FirstName'];
                 $surname=$session_data['SurName'];
@@ -152,9 +154,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
                     'StationNumber' => $stationNo, 'TIME'=>$time,
 
                     'Date' => $dateOnScannedObservationSlipForm,'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                    'Description'=>$description,'FileName' => $filename,
-
-                    'CreationDate'=> $creationDate);
+                    'Description'=>$description,'FileName' => $filename);
 
                 //$this->DbHandler->insertInstrument($insertInstrumentData);
                 $insertsuccess= $this->DbHandler->insertData($insertScannedObservationSlipFormDataCopyDetails,'scannedarchiveobservationslipformcopydetails'); //Array for data to insert then  the Table Name
@@ -169,7 +169,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
                     $userstationNo=$session_data['StationNumber'];
                     $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                    $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                    $userlogs = array('User' => $name,
                         'UserRole' => $userrole,'Action' => 'Added new Scanned Observation Slip Form details',
                         'Details' => $name . ' added new Scanned Observation Slip Form details into the system ',
                         'StationName' => $station,
@@ -202,69 +202,75 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
 
-        $file_element_name = 'updatearchievescannedcopy_observationslipform';
+        $file_element_name = 'updatearchievescannedcopy_observationslipform';  //name of the file upload name
 
 
-        $config['upload_path'] = 'archive/';
-        // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
-        $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
-        $config['max_height'] = '768';
-        $config['max_width'] = '1024';
+        if (isset($_FILES[$file_element_name]) && is_uploaded_file($_FILES[$file_element_name]['tmp_name'])) { //file has been uploaded
+            //load upload class with the config, etc...
+            //$this->load->library('upload', $config);
+            $config['upload_path'] = 'archive/';
+            // $config['upload_path'] = '/uploads/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
+            $config['encrypt_name'] = FALSE;
+            // $config['max_size'] = '2GB';
+            //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+            //1MB=1024KB  THEN 2048MB=2097152KB
+            $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            $config['max_height'] = '768';
+            $config['max_width'] = '1024';
 
-        $config['remove_spaces'] = TRUE;
+            $config['remove_spaces'] = TRUE;
 
-        $this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload($file_element_name))
-        {
-            $status = 'error';
-            echo   $msg = $this->upload->display_errors('', '');
+            if (!$this->upload->do_upload($file_element_name))
+            {
+                $status = 'error';
+                echo   $msg = $this->upload->display_errors('', '');
+            }
+            else
+            {
+                $data = $this->upload->data();
+
+                $filename = $data['file_name'];
+            }
+        } else {    //no file has been uploaded.
+
+            $filename= $this->input->post('PreviouslyUploadedFileName_observationSlipForm');
         }
-        else
-        {
-            $data = $this->upload->data();
-            $filename = $data['file_name'];
+         // no file uploaded..
 
 
 
 
 
 
+      // }
 
                 $formname = firstcharuppercase(chgtolowercase($this->input->post('formname')));
 
-
-
-
-                    $station = $this->input->post('station');
+                    $stationId = $this->input->post('stationId');
                     $stationNo = $this->input->post('stationNo');
-            $time=$this->input->post('timeRecorded');
-
-
-
+                    $time=$this->input->post('timeRecorded');
 
             $dateOnScannedObservationSlipForm = $this->input->post('dateOnScannedObservationSlipForm');
 
 
             $description = $this->input->post('description');
 
-                $id = $this->input->post('id');
+            $id = $this->input->post('id');
 
-
-
+        $approved=$this->input->post('approval');
 
 
 
                 $updateScannedObservationFormDataDetails=array(
-                    'Form' => $formname, 'StationName' => $station,
-                    'StationNumber' => $stationNo,'TIME'=>$time,
-                    'Date' => $dateOnScannedObservationSlipForm,
-                    'Description'=>$description,'FileName' => $filename);
+                    'station' => $stationId,'TIME'=>$time,'Approved'=>$approved,
+                    'form_date' => $dateOnScannedObservationSlipForm,
+                    'Description'=>$description,'FileRef' => $filename);
 
                 //$this->DbHandler->insertInstrument($insertInstrumentData);
-                $updatesuccess=$this->DbHandler->updateData($updateScannedObservationFormDataDetails,'scannedarchiveobservationslipformcopydetails',$id);
+                $updatesuccess=$this->DbHandler->updateData($updateScannedObservationFormDataDetails,'','scans_daily',$id);
 
                 //Redirect the user back with  message
                 if($updatesuccess){
@@ -273,14 +279,13 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
                     $session_data = $this->session->userdata('logged_in');
                     $userrole=$session_data['UserRole'];
                     $userstation=$session_data['UserStation'];
-                    $userstationNo=$session_data['StationNumber'];
+                    $userstationId=$session_data['StationId'];
                     $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                    $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                    $userlogs = array('User' => $name,
                         'UserRole' => $userrole,'Action' => 'Updated new Scanned Observation Slip Form details',
                         'Details' => $name . ' updated new Scanned Observation Slip Form details into the system ',
-                        'StationName' => $userstation,
-                        'StationNumber' => $userstationNo ,
+                        'station' => $userstationId ,
                         'IP' => $this->input->ip_address());
                     //  save user logs
                     // $this->DbHandler->saveUserLogs($userlogs);
@@ -297,7 +302,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
                 }
 
             }
-        }
+      //  }
 
 
     public function deleteInformationForArchiveScannedObservationSlipFormDetails() {
@@ -316,7 +321,7 @@ class ArchiveScannedObservationSlipFormDataCopy extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted Observation Slip Form details',
                 'Details' => $name . ' deleted Observation Slip Form details into the system ',
                 'StationName' => $userstation,

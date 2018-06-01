@@ -19,7 +19,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         $year = $this->input->post('year');
         //$month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -56,7 +56,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
         //Get Monthly Report Data for all the Months in a Given Year
         //Get for January
-        $query1 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfJanuary('01',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query1 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('01',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query1) {
             $data['archivedmonthlyrainfallreportdataForMonthOfJanuary'] = $query1;
@@ -66,7 +66,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
         //Get Monthly Report Data for all the Months in a Given Year
         //Get for Month of February
-        $query2 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfFebruary('02',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query2 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('02',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query2) {
             $data['archivedmonthlyrainfallreportdataForMonthOfFebruary'] = $query2;
@@ -75,7 +75,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get for Month of March
-        $query3 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfMarch('03',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query3 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('03',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query3) {
             $data['archivedmonthlyrainfallreportdataForMonthOfMarch'] = $query3;
@@ -84,7 +84,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get for Month of April
-        $query4 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfApril('04',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query4 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('04',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query4) {
             $data['archivedmonthlyrainfallreportdataForMonthOfApril'] = $query4;
@@ -93,7 +93,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get for Month of May
-        $query5 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfMay('05',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query5 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('05',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query5) {
             $data['archivedmonthlyrainfallreportdataForMonthOfMay'] = $query5;
@@ -102,7 +102,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get for Month of June
-        $query6 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfJune('06',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query6 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('06',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query6) {
             $data['archivedmonthlyrainfallreportdataForMonthOfJune'] = $query6;
@@ -111,7 +111,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get for Month of July
-        $query7 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfJuly('07',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query7 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('07',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query7) {
             $data['archivedmonthlyrainfallreportdataForMonthOfJuly'] = $query7;
@@ -121,7 +121,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
 
         //Get for Month of August
-        $query8 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfAugust('08',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query8 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('08',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query8) {
             $data['archivedmonthlyrainfallreportdataForMonthOfAugust'] = $query8;
@@ -131,7 +131,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
 
         //Get for Month of September
-        $query9 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfSeptember('09',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query9 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('09',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query9) {
             $data['archivedmonthlyrainfallreportdataForMonthOfSeptember'] = $query9;
@@ -141,7 +141,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
 
         //Get for Month of October
-        $query10 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfOctober('10',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query10 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('10',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query10) {
             $data['archivedmonthlyrainfallreportdataForMonthOfOctober'] = $query10;
@@ -151,7 +151,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
 
         //Get for Month of November
-        $query11 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfNovember('11',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query11 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('11',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query11) {
             $data['archivedmonthlyrainfallreportdataForMonthOfNovember'] = $query11;
@@ -161,7 +161,7 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
 
 
         //Get for Month of December
-        $query12 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonthOfDecember('12',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
+        $query12 = $this->DbHandler->selectArchivedMonthlyRainfallReportForTheMonth('12',$year,$stationName,$stationNumber,'archivemonthlyrainfallformreportdata');  //value,field,table
 
         if ($query12) {
             $data['archivedmonthlyrainfallreportdataForMonthOfDecember'] = $query12;
@@ -170,21 +170,11 @@ class DisplayArchivedYearlyRainfallFormReportData extends CI_Controller {
         }
 
 
-        $userstation=$session_data['UserStation'];
-
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
-        //  var_dump($query);
-        if ($query) {
-            $data['stationsdata'] = $query;
-        } else {
-            $data['stationsdata'] = array();
-        }
-
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
-        //  var_dump($query);
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations',"");  //value,field,table
+
         if ($query) {
             $data['stationsdata'] = $query;
         } else {

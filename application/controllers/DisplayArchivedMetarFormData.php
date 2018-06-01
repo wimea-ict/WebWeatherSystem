@@ -21,7 +21,7 @@ class DisplayArchivedMetarFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -40,7 +40,7 @@ class DisplayArchivedMetarFormData extends CI_Controller {
 
 
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -72,7 +72,7 @@ class DisplayArchivedMetarFormData extends CI_Controller {
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

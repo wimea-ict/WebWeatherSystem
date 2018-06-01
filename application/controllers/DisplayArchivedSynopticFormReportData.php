@@ -19,7 +19,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         $date = $this->input->post('date');
         //$month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -57,7 +57,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
 
         //FROM THE PICK DATA FROM DIFFERENT TIMES FROM THE DIRECT SYNOPTIC TABLE ARCHIVED.
         //FOR 0000Z
-        $query1= $this->DbHandler->selectArchivedSynopticFormReportDataForTime0000Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query1= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','0000z');  //value,field,table
 
         if ($query1) {
             $data['synopticformreportdataForTime0000Z'] = $query1;
@@ -66,7 +66,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 0300Z
-        $query2= $this->DbHandler->selectArchivedSynopticFormReportDataForTime0300Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query2= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','0300Z');  //value,field,table
 
         if ($query2) {
             $data['synopticformreportdataForTime0300Z'] = $query2;
@@ -75,7 +75,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 0600Z
-        $query3= $this->DbHandler->selectArchivedSynopticFormReportDataForTime0600Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query3= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','0600Z');  //value,field,table
 
         if ($query3) {
             $data['synopticformreportdataForTime0600Z'] = $query3;
@@ -84,7 +84,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 0900Z
-        $query4= $this->DbHandler->selectArchivedSynopticFormReportDataForTime0900Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query4= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','0900Z');  //value,field,table
 
         if ($query4) {
             $data['synopticformreportdataForTime0900Z'] = $query4;
@@ -93,7 +93,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 1200Z
-        $query5= $this->DbHandler->selectArchivedSynopticFormReportDataForTime1200Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query5= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','1200Z');  //value,field,table
 
         if ($query5) {
             $data['synopticformreportdataForTime1200Z'] = $query5;
@@ -102,7 +102,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 1500Z
-        $query6= $this->DbHandler->selectArchivedSynopticFormReportDataForTime1500Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query6= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','1500Z');  //value,field,table
 
         if ($query6) {
             $data['synopticformreportdataForTime1500Z'] = $query6;
@@ -111,7 +111,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 1800Z
-        $query7= $this->DbHandler->selectArchivedSynopticFormReportDataForTime1800Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query7= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','1800Z');  //value,field,table
 
         if ($query7) {
             $data['synopticformreportdataForTime1800Z'] = $query7;
@@ -120,7 +120,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
         }
 
         //FOR 2100Z
-        $query8= $this->DbHandler->selectArchivedSynopticFormReportDataForTime2100Z($date,$stationName,$stationNumber,'archivesynopticformreportdata');  //value,field,table
+        $query8= $this->DbHandler->selectArchivedSynopticFormReportDataForTime($date,$stationName,$stationNumber,'archivesynopticformreportdata','2100Z');  //value,field,table
 
         if ($query8) {
             $data['synopticformreportdataForTime2100Z'] = $query8;
@@ -132,7 +132,7 @@ class DisplayArchivedSynopticFormReportData extends CI_Controller {
 //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

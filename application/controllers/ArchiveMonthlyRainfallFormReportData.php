@@ -28,7 +28,7 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         }
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -49,7 +49,7 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -67,7 +67,7 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -97,30 +97,17 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
 
         $date = $this->input->post('date_archivedailymonthlyrainfalldata');
 
+        $station = firstcharuppercase(chgtolowercase($this->input->post('station_archivedailymonthlyrainfalldata')));
 
-
-
-            $station = firstcharuppercase(chgtolowercase($this->input->post('station_archivedailymonthlyrainfalldata')));
-
-            $stationNumber = $this->input->post('stationNo_archivedailymonthlyrainfalldata');
-
-
-
-
+        $stationNumber = $this->input->post('stationNo_archivedailymonthlyrainfalldata');
 
         $rainfall = $this->input->post('rainfall_archivedailymonthlyrainfalldata');
         $approved="FALSE";
-        $creationDate= date('Y-m-d H:i:s');
-
         $session_data = $this->session->userdata('logged_in');
-
         $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
         $insertDailyPeriodicRainfallData=array('Date'=> $date,'Rainfall'=>$rainfall,
-            'StationName' => $station, 'StationNumber' => $stationNumber,
-            'Approved'=>$approved,'SubmittedBy' => $name,
-            'CreationDate' => $creationDate);
-
+            'station' => $station, 'station' => $stationNumber,
+            'Approved'=>$approved,'SubmittedBy' => $name);
         // $this->DbHandler->insertData($insertDailyPeriodicRainfallData,'dailyperiodicrainfall'); //Array for data to insert then  the Table Name
         $insertsuccess= $this->DbHandler->insertData($insertDailyPeriodicRainfallData,'archivemonthlyrainfallformreportdata'); //Array for data to insert then  the Table Name
 
@@ -135,14 +122,14 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
             $session_data = $this->session->userdata('logged_in');
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
-            $userstationNo=$session_data['StationNumber'];
+           // $userstationNo=$session_data['station'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added archived daily periodic rainfall info',
                 'Details' => $name . ' added archived daily periodic rainfall info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -171,9 +158,8 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
 
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
-            $stationNumber = $this->input->post('stationNo');
-
-
+            $stationNumber = $this->input->post('station');
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
         $rainfall = $this->input->post('rainfall');
         $approved=$this->input->post('approval');;
 
@@ -184,12 +170,12 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
 
 
         $updateDailyPeriodicRainfallData=array('Date'=> $date,
-            'StationName' => $station, 'StationNumber' => $stationNumber,
+            'station' => $stationId,
             'Rainfall'=>$rainfall,'Approved'=>$approved
         );
 
 
-        $updatesuccess=$this->DbHandler->updateData($updateDailyPeriodicRainfallData,'archivemonthlyrainfallformreportdata',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateDailyPeriodicRainfallData,"",'archivemonthlyrainfallformreportdata',$id);
 
 
         //Redirect the user back with  message
@@ -198,15 +184,14 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
             //Create user Logs
             $session_data = $this->session->userdata('logged_in');
             $userrole=$session_data['UserRole'];
-            $userstation=$session_data['UserStation'];
-            $userstationNo=$session_data['StationNumber'];
+           // $userstation=$session_data['station'];
+            $userstationNo=$session_data['station'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated archived periodic rainfall info',
                 'Details' => $name . ' updated archived periodic rainfall info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -243,13 +228,13 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted periodic rainfall  info',
                 'Details' => $name . ' deleted periodic rainfall from the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

@@ -15,13 +15,12 @@ class SearchArchivedScannedMetarFormDataCopy extends CI_Controller {
     public function index(){
         //$this->unsetflashdatainfo();
 
-
         //Get all Stations.
         $session_data = $this->session->userdata('logged_in');
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -29,7 +28,7 @@ class SearchArchivedScannedMetarFormDataCopy extends CI_Controller {
             $data['stationsdata'] = array();
         }
 
-        $this->load->view('searchArchivedScannedMetarFormDataCopy',$data);
+       $this->load->view('searchArchivedScannedMetarFormDataCopy',$data);
     }
     public function displayarchivedscannedmetarform(){
         $session_data = $this->session->userdata('logged_in');
@@ -61,7 +60,7 @@ class SearchArchivedScannedMetarFormDataCopy extends CI_Controller {
 
         //Get Daily Data
         //$query = $this->DbHandler->selectAll($stationName,'StationName','observationslip');  //value,field,table
-        $query = $this->DbHandler->selectArchivedScannedMetarFormForSpecificDay($date,$stationName,$stationNumber,'scannedarchivemetarformcopydetails');  //value,field,table
+        $query = $this->DbHandler->selectArchivedScannedMetarFormForSpecificDay($date,$stationName,$stationNumber,'scans_daily');  //value,field,table
 
         if ($query) {
             $data['archivedscannedmetarformdataforADay'] = $query;
@@ -74,7 +73,7 @@ class SearchArchivedScannedMetarFormDataCopy extends CI_Controller {
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -95,12 +94,22 @@ class SearchArchivedScannedMetarFormDataCopy extends CI_Controller {
     }
     public  function ViewImageFromBrowser($filename = NULL){
 
+    //'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
 
 
+                        header('Content-Type: image/gif');
+                        header('Content-Type: image/jpg');
+                       header('Content-Type: image/png');
 
-                        //header('Content-Type: image/gif');
-                        //header('Content-Type: image/pdf');
-                       // header('Content-Type: image/png');
+        header('Content-Type: image/jpeg');
+        header('Content-Type: application/pdf');
+        header('Content-Type: application/doc');
+
+        header('Content-Type: application/docx');
+        header('Content-Type: application/xlsx');
+        header('Content-Type: application/ppt');
+
+        header('Content-Type: application/pptx');
 
         $image = file_get_contents(base_url('/archive/'.$filename));
                         echo $image;

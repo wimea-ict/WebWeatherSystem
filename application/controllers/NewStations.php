@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Stations extends CI_Controller {
+class NewStations extends CI_Controller {
 
     function __construct() {
 
@@ -19,6 +19,10 @@ class Stations extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
+
+
+
+
         //View Station.Load all the previous Stations
         $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
@@ -28,7 +32,7 @@ class Stations extends CI_Controller {
             $data['stationsdata'] = array();
         }
 
-        $this->load->view('stations', $data);
+        $this->load->view('newstations', $data);
     }
     public function DisplayStationsForm(){
         $this->unsetflashdatainfo();
@@ -36,14 +40,14 @@ class Stations extends CI_Controller {
         $data['displaynewstationsform'] = array('name' => $name);
 
         //On Add New Station
-        //Load table(stations) with all the station Indicators.
+        //Load table(stationlocationindicators) with all the station Indicators.
         //ROLE IS MANAGER
         //$session_data = $this->session->userdata('logged_in');
         $session_data = $this->session->userdata('logged_in');
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'StationNumber ','stations');  //value,field,tablename
+        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,tablename
         if ($station_indicators_query) {
             $data['stationIndicatorData'] = $station_indicators_query;
         } else {
@@ -52,7 +56,7 @@ class Stations extends CI_Controller {
 
         /////////////////////////////////////////////////////////
 
-        $this->load->view('stations', $data);
+        $this->load->view('newstations', $data);
 
     }
     public function DisplayStationsFormForUpdate(){
@@ -71,12 +75,12 @@ class Stations extends CI_Controller {
 
         ///////////////////////////////////////////////////////////////////////
         //On Add New Station
-        //Load table(stations) with all the station Indicators.
+        //Load table(stationlocationindicators) with all the station Indicators.
         //ROLE IS MANAGER
-        //Load table(stations) with all the station Indicators.
+        //Load table(stationlocationindicators) with all the station Indicators.
         //ROLE IS MANAGER
 
-        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'StationNumber ','stations');  //value,field,tablename
+        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'LocationStationName','stationlocationindicators');  //value,field,tablename
         if ($station_indicators_query) {
             $data['stationIndicatorData'] = $station_indicators_query;
         } else {
@@ -87,7 +91,7 @@ class Stations extends CI_Controller {
 
         $stationid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($stationid,'station_id','stations');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($stationid,'id','stations');  //$value, $field,$table
         if ($query) {
             $data['stationdataid'] = $query;
         } else {
@@ -95,7 +99,7 @@ class Stations extends CI_Controller {
         }
 
 
-        $this->load->view('stations', $data);
+        $this->load->view('newstations', $data);
     }
     public function insertStationInformation(){
         $this->unsetflashdatainfo();
@@ -104,7 +108,7 @@ class Stations extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
 
-        if($role=="Manager"){
+        if($role=="ManagerStationNetworks"){
 
 
             $stationname = firstcharuppercase(chgtolowercase($this->input->post('namestation')));
@@ -180,17 +184,26 @@ class Stations extends CI_Controller {
     }
     public function updateStationInformation(){
         $this->unsetflashdatainfo();
+
         $this->load->helper(array('form', 'url'));
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
-        //if($role=="Manager" || $role=="OC" )
+
+        if($role=="ManagerStationNetworks"){
             $stationname = $this->input->post('station_name');
             $stationnumber = $this->input->post('stationNo');
+
+
+
+
 
             $stationlocation = $this->input->post('stationlocation');
             $indicator = chgtouppercase($this->input->post('stationindicator'));
             $region = $this->input->post('stationregion');
             $country = firstcharuppercase(chgtolowercase($this->input->post('stationcountry')));
+
+
+
 
 
             $latitude = $this->input->post('stationlatitude');
@@ -216,7 +229,7 @@ class Stations extends CI_Controller {
                 'Closed'=>$closed,'StationStatus'=>$status,
                 'StationType'=>$type);
 
-            $updatesuccess=$this->DbHandler->updateData($updateStationData,"",'stations',$id);
+            $updatesuccess=$this->DbHandler->updateData($updateStationData,'stations',$id);
 
             //Redirect the user back with  message
             if($updatesuccess){
@@ -236,7 +249,7 @@ class Stations extends CI_Controller {
                     'StationNumber' => $StationNumber,
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                $this->DbHandler->saveUserLogs($userlogs);
 
 
                 $this->session->set_flashdata('success', 'Station info was updated successfully!');
@@ -248,7 +261,7 @@ class Stations extends CI_Controller {
                 $this->index();
 
             }
-
+        }
     }
     public function deleteStation() {
         $this->unsetflashdatainfo();
@@ -298,14 +311,21 @@ class Stations extends CI_Controller {
 
         $stationName = ($stationName == "") ? $this->input->post('stationName') : $stationName;
 //check($value,$field,$table)
-        if ($stationName  == "") {
+        if ($this->input->post('stationName') == "") {
             echo '<span style="color:#f00">Please Input Name. </span>';
         } else {
 
+
             $get_result = $this->DbHandler->getResults($stationName, 'StationName', 'stations');   // $value, $field, $table
 
-            echo json_encode($get_result);
+            if( $get_result){
+                echo json_encode($get_result);
 
+            }
+            else{
+
+                echo json_encode($get_result);
+            }
 
         }
     }
@@ -320,7 +340,7 @@ class Stations extends CI_Controller {
         } else {
 
 
-            $get_result = $this->DbHandler->getResults($StationName, 'StationNumber ', 'stations');   // $value, $field, $table
+            $get_result = $this->DbHandler->getResults($StationName, 'LocationStationName', 'stationlocationindicators');   // $value, $field, $table
 
             if( $get_result){
                 echo json_encode($get_result);

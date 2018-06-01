@@ -19,7 +19,7 @@ class DekadalReport extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -36,7 +36,7 @@ class DekadalReport extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userrole=$session_data['UserRole'];
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager'|| $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -71,7 +71,7 @@ class DekadalReport extends CI_Controller {
         //GET DATA FROM THE OBSERVATION SLIP TABLE.
         //FIRST FOR 0600Z(9.00 AM) THEN 1200Z(3.00PM)
         //FOR 0600Z
-        $sqlquery1=$this->DbHandler->selectDekadalDataReportForAGivenRangeInAMonthFromObservationSlipTableFor0600Z($fromdate,$todate,$monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $sqlquery1=$this->DbHandler->selectDekadalDataReportForAGivenRangeInAMonthFromObservationSlipTable($fromdate,$todate,$monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"0600Z");  //value,field,table
         if ($sqlquery1) {
             $data['DekadalReportDataFromobservationslipTableforAGivenRangeInAMonthAndTime0600Z'] = $sqlquery1;
         } else {
@@ -79,19 +79,16 @@ class DekadalReport extends CI_Controller {
         }
 
         /////FOR 1200Z
-        $query1=$this->DbHandler->selectDekadalDataReportForAGivenRangeInAMonthFromObservationSlipTableFor1200Z($fromdate,$todate,$monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query1=$this->DbHandler->selectDekadalDataReportForAGivenRangeInAMonthFromObservationSlipTable($fromdate,$todate,$monthAsANumberselected,$year,$stationName,$stationNumber,'observationslip',"1200Z");  //value,field,table
         if ($query1) {
             $data['DekadalReportDataFromobservationslipTableforAGivenRangeInAMonthAndTime1200Z'] = $query1;
         } else {
             $data['DekadalReportDataFromobservationslipTableforAGivenRangeInAMonthAndTime1200Z'] = array();
         }
 
-
-
         //Nid to load the stations again
         $userstation=$session_data['UserStation'];
-
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

@@ -43,14 +43,11 @@ class UserLogin extends CI_Controller {
                         'SurName' => $row->SurName,
                         'UserName' => $row->UserName,
                         'UserEmail' => $row->UserEmail,
-                        'UserStation' => $row->UserStation,
+                        'UserStation' => $row->StationName,
                         'StationNumber' => $row->StationNumber,
+                        'StationId' => $row->station_id,
                         'UserRole' => $row->UserRole,
-                        'UserPhone' => $row->UserPhone,
-                        'CreationDate' => $row->CreationDate,
                         'Reset' => $row->Reset
-                        //'logged_in' => TRUE,
-                        //'created' =>$res->created
 
                     );
                 }//end of foreach
@@ -59,6 +56,7 @@ class UserLogin extends CI_Controller {
                 // Add user data in session
                 $this->session->set_userdata('logged_in', $usersessiondata);
                 $session_data = $this->session->userdata('logged_in');
+                $userrole=$session_data['UserRole'];
                 //$this->session->set_userdata($usersessiondata);
 
                 //if Reset value is 1
@@ -78,8 +76,9 @@ class UserLogin extends CI_Controller {
                     //$fname=firstcharuppercase($firstname);
                     $getdays=daysInAMonth('02','2017');
                     $name=$session_data['FirstName'] .' '. $session_data['SurName'];
+                    $StationRegion=$session_data['StationRegion'];
                     $surname=$session_data['SurName'];
-                    $this->session->set_flashdata('success', 'Hi '. $surname. $getdays.' you have logged in successfully!');
+                    $this->session->set_flashdata('success', 'Hi '. $surname. $StationRegion.' you have logged in successfully!');
 
                     //Store User logs.
                     //Create user Logs
@@ -88,11 +87,21 @@ class UserLogin extends CI_Controller {
                         'Details' => $name . ' logged into the system ','StationName' => $session_data['UserStation'],
                         'StationNumber' => $session_data['StationNumber'],
                          'IP' => $this->input->ip_address());
-                    //  save user logs
-                   // $this->DbHandler->saveUserLogs($userloginlogs);
-
 
                     //Load the next page
+                    if($userrole== "OC" || $userrole== "Observer" || $userrole=="ObserverDataEntrant")
+                    redirect(base_url()."index.php/ObservationSlipForm");
+                    elseif($userrole=="WeatherForecaster")
+                    redirect(base_url()."index.php/ObservationSlipForm/showWebmobiledata");
+                    elseif($userrole=="ManagerStationNetworks")
+                    redirect(base_url()."index.php/Stations");
+                    elseif($userrole=="SeniorDataOfficer" || $userrole=="DataOfficer")
+                    redirect(base_url()."index.php/DisplayArchivedObservationSlipFormData");
+                    elseif($userrole=="ZonalOfficer" || $userrole=="SeniorZonalOfficer" || $userrole=="WeatherAnalyst")
+                    redirect(base_url()."index.php/MetarReport");
+                    elseif($userrole=="Manager" || $userrole=="ManagerData" )
+                    redirect(base_url()."index.php/Users");
+                    else
                     $this->load->view('dashboard');
 
                 }  //end of else
@@ -113,33 +122,19 @@ class UserLogin extends CI_Controller {
         // Removing session data
         $this->unsetflashdatainfo();
 
-        // $this->session->unset_userdata('UserName');
-        // $this->session->unset_userdata('FirstName');
-        //$this->session->unset_userdata('SurName');
-        //$this->session->unset_userdata('UserEmail');
-        //$this->session->unset_userdata('UserStation');
-        //$this->session->unset_userdata('UserRole');
-        //$this->session->unset_userdata('UserPhone');
-        //$this->session->unset_userdata('Userid');
-
-        //Store User logs.
-        //Create user Logs
         $session_data = $this->session->userdata('logged_in');
         $userrole=$session_data['UserRole'];
-        $userstation=$session_data['UserStation'];
-        $userstationNo=$session_data['StationNumber'];
+        $userstationId=$session_data['StationId'];
         $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         $userlogoutlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
                                  'UserRole' => $userrole,'Action' => 'Signed Out',
                                   'Details' => $name . ' signed out of the system ',
-                                   'StationName' => $userstation,
-                                   'StationNumber' => $userstationNo ,
+                                   'Station' => $userstationId ,
                                      'IP' => $this->input->ip_address());
         //  save user logs
-       // $this->DbHandler->saveUserLogs($userlogoutlogs);
-
-
+        if($userrole!=NULL || $userrole!="")
+        $this->DbHandler->saveUserLogs($userlogoutlogs);
         //Destroy the Session.
         $this->session->unset_userdata('logged_in');
         //session_destroy();
@@ -377,7 +372,7 @@ class UserLogin extends CI_Controller {
 
 
     }
-    
+
     public function unsetflashdatainfo(){
 
         if(isset($_SESSION['error'])){

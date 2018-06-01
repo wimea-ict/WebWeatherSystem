@@ -21,7 +21,7 @@ class SearchArchivedScannedSynopticFormDataReportCopy extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -72,7 +72,7 @@ class SearchArchivedScannedSynopticFormDataReportCopy extends CI_Controller {
         //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -90,6 +90,30 @@ class SearchArchivedScannedSynopticFormDataReportCopy extends CI_Controller {
         force_download($filename, $data);
 
 
+    }
+    public  function ViewImageFromBrowser($filename = NULL){
+
+        //'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
+
+
+        header('Content-Type: image/gif');
+        header('Content-Type: image/jpg');
+        header('Content-Type: image/png');
+
+        header('Content-Type: image/jpeg');
+        header('Content-Type: application/pdf');
+        header('Content-Type: application/doc');
+
+        header('Content-Type: application/docx');
+        header('Content-Type: application/xlsx');
+        header('Content-Type: application/ppt');
+
+        header('Content-Type: application/pptx');
+
+        $image = file_get_contents(base_url('/archive/'.$filename));
+        echo $image;
+
+        $this->load->view('searchArchivedScannedSynopticFormDataReportCopy');
     }
 
 

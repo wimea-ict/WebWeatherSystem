@@ -19,7 +19,7 @@ class DisplayArchivedDekadalFormReportData extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -36,7 +36,7 @@ class DisplayArchivedDekadalFormReportData extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userrole=$session_data['UserRole'];
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='DataOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -48,15 +48,18 @@ class DisplayArchivedDekadalFormReportData extends CI_Controller {
 
 
         $fromdate=$this->input->post('fromdate');
-        $todate=$this->input->post('todate');
+        $todate=date_create($fromdate);
+        date_add($todate,date_interval_create_from_date_string("9 days"));
+
+        $todate=date_format($todate,"Y-m-d");
 
         // Get the Month From the date selected.
         //$month = date('m', strtotime($loop->date));
         $monthAsANumberselected = date('m', strtotime($fromdate));
         //$range = $this->input->post('range');
-        $monthselected2 = date('m', strtotime($todate));
+        $monthselected2 = date('m', strtotime($fromdate));
 
-        $year = date('Y', strtotime($todate));
+        $year = date('Y', strtotime($fromdate));
 
 
 
@@ -84,7 +87,7 @@ class DisplayArchivedDekadalFormReportData extends CI_Controller {
 //nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

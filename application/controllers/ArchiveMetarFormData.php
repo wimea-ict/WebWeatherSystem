@@ -18,7 +18,7 @@ class ArchiveMetarFormData extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','archivemetarformdata');
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','archivemetarformdata');
 
 
         //  var_dump($query);
@@ -40,7 +40,7 @@ class ArchiveMetarFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -49,6 +49,14 @@ class ArchiveMetarFormData extends CI_Controller {
         }
 
         /////////////////////////////////////////////////////////
+        // NID TO LOAD STATION INDICATORS
+        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,tablename
+        if ($station_indicators_query) {
+            $data['stationIndicatorData'] = $station_indicators_query;
+        } else {
+            $data['stationIndicatorData'] = array();
+        }
+        ///////////////////////////////////////////////////////
 
         $this->load->view('archiveMetarFormData', $data);
 
@@ -59,7 +67,7 @@ class ArchiveMetarFormData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
@@ -67,6 +75,14 @@ class ArchiveMetarFormData extends CI_Controller {
         }
 
         ///////////////////////////////////////////////////////////////////////
+        // NID TO LOAD STATION INDICATORS
+        $station_indicators_query = $this->DbHandler->selectAllFromSystemData($userstation,'LocationStationName','stations');  //value,field,tablename
+        if ($station_indicators_query) {
+            $data['stationIndicatorData'] = $station_indicators_query;
+        } else {
+            $data['stationIndicatorData'] = array();
+        }
+        ////////////////////////////////////////////
 
         $metarid = $this->uri->segment(3);
 
@@ -107,14 +123,11 @@ class ArchiveMetarFormData extends CI_Controller {
         $yyGGgg = $this->input->post('yyGGgg_archivemetarformdata');
         $timeWhenMetarIsTaken=$this->input->post('time_archivemetarformdata');
         $Dddfffmfm = $this->input->post('dddfffmfm_archivemetarformdata');
-        $wwcovak = $this->input->post('wwcovak_archivemetarformdata');
+        $wwcovak = $this->input->post('wwcavok_archivemetarformdata');
         $w1w1 = $this->input->post('w1w1_archivemetarformdata');
         $n1cch1 = $this->input->post('ncc_archivemetarformdata');
 
-        //$airtemperature = $this->input->post('airtemperaturemetar');
-        //$humidity = $this->input->post('humiditymetar');
-       // $dew_temperature = $this->input->post('dewpointmetar');
-        //$wet_bulb = $this->input->post('wetbulbmetar');
+
 
         $tttdtd = $this->input->post('tttdtd_archivemetarformdata');
         $qnhhpa = $this->input->post('qnhhpa_archivemetarformdata');
@@ -124,18 +137,18 @@ class ArchiveMetarFormData extends CI_Controller {
         $rew1w1 = $this->input->post('rew1w1_archivemetarformdata');
 
         $approved="FALSE";
-        $creationDate= date('Y-m-d H:i:s');
+       // $creationDate= date('Y-m-d H:i:s');
         $user=$firstname.' '.$surname;
         //$approved='false';
-
+$stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
         $insertArchiveMetarFormData=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=>$stationNumber,
+            'Date'=>$date,'station'=>$stationId,
             'METARSPECI'=> $metarspeci, 'CCCC'=>$cccc,
             'YYGGgg'=> $yyGGgg,'TIME'=>$timeWhenMetarIsTaken,
-            'Dddfffmfm'=> $Dddfffmfm, 'WWorCOVAK'=> $wwcovak,
+            'Dddfffmfm'=> $Dddfffmfm, 'WWorCAVOK'=> $wwcovak,
             'W1W1'=>$w1w1, 'NlCCNmCCNhCC'=> $n1cch1, 'TTTdTd'=> $tttdtd, 'Qnhhpa'=>$qnhhpa, 'Qnhin'=>$qnhin,
             'Qfehpa'=>$qfehpa, 'Qfein'=>$qfein,'REW1W1'=>$rew1w1,'Approved'=>$approved,
-            'CreationDate'=>$creationDate, 'SubmittedBy'=>$user);
+             'SubmittedBy'=>$user);
 
 
         //Insert New Metar Infor into the Database.
@@ -152,13 +165,13 @@ class ArchiveMetarFormData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added archive metar book info',
                 'Details' => $name . ' added archive metar book info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -195,23 +208,18 @@ class ArchiveMetarFormData extends CI_Controller {
 
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
-
             $stationNumber = $this->input->post('stationNo');
-
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
 
         $metarspeci = $this->input->post('metarspeci');
         $cccc = $this->input->post('cccc');
         $yyGGgg = $this->input->post('yyGGgg');
         $timeWhenMetarIsTaken=$this->input->post('timeRecorded');
         $Dddfffmfm = $this->input->post('dddfffmfm');
-        $wwcovak = $this->input->post('wwcovak');
+        $wwcovak = $this->input->post('wwcavok');
         $w1w1 = $this->input->post('w1w1');
         $n1cch1 = $this->input->post('ncc');
 
-        //$airtemperature = $this->input->post('airtemperature');
-        //$humidity = $this->input->post('humidity');
-       // $dew_temperature = $this->input->post('dewpoint');
-       // $wet_bulb = $this->input->post('wetbulb');
 
         $tttdtd = $this->input->post('tttdtd');
         $qnhhpa = $this->input->post('qnhhpa');
@@ -226,17 +234,16 @@ class ArchiveMetarFormData extends CI_Controller {
 
 
         $updateArchiveMetarFormData=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=>$stationNumber,
+            'Date'=>$date,'station'=>$stationId,
             'METARSPECI'=> $metarspeci, 'CCCC'=>$cccc,
             'YYGGgg'=> $yyGGgg,'TIME'=>$timeWhenMetarIsTaken,
-            'Dddfffmfm'=> $Dddfffmfm, 'WWorCOVAK'=> $wwcovak,
+            'Dddfffmfm'=> $Dddfffmfm, 'WWorCAVOK'=> $wwcovak,
             'W1W1'=>$w1w1, 'NlCCNmCCNhCC'=> $n1cch1,'TTTdTd'=> $tttdtd, 'Qnhhpa'=>$qnhhpa, 'Qnhin'=>$qnhin,
-            'Qfehpa'=>$qfehpa, 'Qfein'=>$qfein,'REW1W1'=>$rew1w1,'Approved'=>$approved
-        );
+            'Qfehpa'=>$qfehpa, 'Qfein'=>$qfein,'REW1W1'=>$rew1w1,'Approved'=>$approved);
 
 
 
-        $updatesuccess=$this->DbHandler->updateData($updateArchiveMetarFormData,'archivemetarformdata',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateArchiveMetarFormData,"",'archivemetarformdata',$id);
 
 
 
@@ -249,13 +256,13 @@ class ArchiveMetarFormData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated  archive metar  info',
                 'Details' => $name . ' Updated  archive metar  info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -291,11 +298,10 @@ class ArchiveMetarFormData extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted metar book info',
                 'Details' => $name . ' deleted metar book info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

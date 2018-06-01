@@ -18,8 +18,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-
-        $query = $this->DbHandler->selectAll($userstation,'StationName','scannedarchivemetarformcopydetails');  //value,field,table
+        $query = $this->DbHandler->selectAllscanDaily($userstation,'StationName','scans_daily',"metarreport");  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['archivedscannedmetarformdetails'] = $query;
@@ -42,7 +41,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -62,7 +61,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -75,7 +74,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
 
         $scannedmetarformid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($scannedmetarformid,'id','scannedarchivemetarformcopydetails');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($scannedmetarformid,'id','scans_daily','');  //$value, $field,$table
         if ($query) {
             $data['scannedmetarformidDetails'] = $query;
         } else {
@@ -97,9 +96,12 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
 
         $config['upload_path'] = 'archive/';    //path on the server to store the file
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -134,7 +136,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
 
 
         $description = $this->input->post('description_metar');
-        $creationDate= date('Y-m-d H:i:s');
+        //$creationDate= date('Y-m-d H:i:s');
         $Approved="FALSE";
         $firstname=$session_data['FirstName'];
         $surname=$session_data['SurName'];
@@ -143,7 +145,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
         $insertScannedMetarFormDataDetails=array(
             'Form' => $formname, 'StationName' => $station,
             'StationNumber' => $stationNo, 'Date' => $dateOnScannedMetarForm,'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-            'Description'=>$description,'FileName' => $filename,'CreationDate'=> $creationDate);
+            'Description'=>$description,'FileName' => $filename);
 
         //$this->DbHandler->insertInstrument($insertInstrumentData);
         $insertsuccess= $this->DbHandler->insertData($insertScannedMetarFormDataDetails,'scannedarchivemetarformcopydetails'); //Array for data to insert then  the Table Name
@@ -158,7 +160,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
                 'Details' => $name . ' added new Scanned Metar Form details into the system ',
                 'StationName' => $userstation,
@@ -192,12 +194,16 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
 
         $file_element_name = 'updatearchievescannedcopy_metarform';
 
+        if (isset($_FILES[$file_element_name]) && is_uploaded_file($_FILES[$file_element_name]['tmp_name'])) { //file has been uploaded
 
-        $config['upload_path'] = 'archive/';
+            $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -214,56 +220,47 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
         {
             $data = $this->upload->data();
             $filename = $data['file_name'];
+        }
+        }else {    //no file has been uploaded.
 
+            $filename= $this->input->post('PreviouslyUploadedFileName_metarform');
+        }
 
 
 
             $formname = firstcharuppercase(chgtolowercase($this->input->post('formname')));
 
-
-
-
-                $station = $this->input->post('station');
+                $stationId = $this->input->post('stationId');
                 $stationNo = $this->input->post('stationNo');
 
 
-
-
             $dateOnScannedMetarForm = $this->input->post('dateOnScannedMetarForm');
-
-
             $description = $this->input->post('description');
-
             $id = $this->input->post('id');
-
-
-
+            $approved=$this->input->post('approval');
 
 
 
             $updateScannedMetarFormDataDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'Date' => $dateOnScannedMetarForm,
-                'Description'=>$description,'FileName' => $filename,);
+                'Approved'=>$approved,
+                'station' => $stationId, 'form_date' => $dateOnScannedMetarForm,
+                'Description'=>$description,'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $updatesuccess=$this->DbHandler->updateData($updateScannedMetarFormDataDetails,'scannedarchivemetarformcopydetails',$id);
+            $updatesuccess=$this->DbHandler->updateData($updateScannedMetarFormDataDetails,"",'scans_daily',$id);
 
             //Redirect the user back with  message
             if($updatesuccess){
-                //Store User logs.
-                //Create user Logs
                 $session_data = $this->session->userdata('logged_in');
                 $userrole=$session_data['UserRole'];
                 $userstation=$session_data['UserStation'];
-                $userstationNo=$session_data['StationNumber'];
+                $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                $userlogs = array('User' => $name,
                     'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
                     'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'StationName' => $userstation,
-                    'StationNumber' => $userstationNo ,
+                    'station' => $userstationId ,
                     'IP' => $this->input->ip_address());
                 //  save user logs
                 // $this->DbHandler->saveUserLogs($userlogs);
@@ -279,7 +276,7 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
 
             }
 
-        }
+       // }
 
     }
     public function deleteInformationForArchiveScannedMetarForm() {
@@ -296,13 +293,13 @@ class ArchiveScannedMetarFormDataCopy extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted instrument details',
                 'Details' => $name . ' deleted instrument details into the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

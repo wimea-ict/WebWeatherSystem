@@ -19,7 +19,7 @@ class YearlyRainfallReport extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class YearlyRainfallReport extends CI_Controller {
         $year = $this->input->post('year');
         //$month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='ManagerData' || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer' || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -55,8 +55,8 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get Monthly Report Data for all the Months in a Given Year
-        //Get for January
-        $query1 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfJanuaryFromObservationSlipTable('01',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        //Get for January    //$monthlyrainfallreportdatafromObservationSlipTableForMonthOfJanuary
+        $query1 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('01',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query1) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfJanuary'] = $query1;
@@ -66,7 +66,7 @@ class YearlyRainfallReport extends CI_Controller {
 
         //Get Monthly Report Data for all the Months in a Given Year
         //Get for Month of February
-        $query2 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfFebruaryFromObservationSlipTable('02',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query2 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('02',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query2) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfFebruary'] = $query2;
@@ -75,7 +75,7 @@ class YearlyRainfallReport extends CI_Controller {
         }
 
         //Get for Month of March
-        $query3 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfMarchFromObservationSlipTable('03',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query3 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('03',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query3) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfMarch'] = $query3;
@@ -84,7 +84,7 @@ class YearlyRainfallReport extends CI_Controller {
         }
 
         //Get for Month of April
-        $query4 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfAprilFromObservationSlipTable('04',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query4 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('04',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query4) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfApril'] = $query4;
@@ -93,7 +93,7 @@ class YearlyRainfallReport extends CI_Controller {
         }
 
         //Get for Month of May
-        $query5 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfMayFromObservationSlipTable('05',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query5 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('05',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query5) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfMay'] = $query5;
@@ -101,8 +101,8 @@ class YearlyRainfallReport extends CI_Controller {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfMay'] = array();
         }
 
-        //Get for Month of June
-        $query6 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfJuneFromObservationSlipTable('06',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        //Get for Month of June   //$monthlyrainfallreportdatafromObservationSlipTableForMonthOfJune
+        $query6 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('06',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query6) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfJune'] = $query6;
@@ -111,7 +111,7 @@ class YearlyRainfallReport extends CI_Controller {
         }
 
         //Get for Month of July
-        $query7 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfJulyFromObservationSlipTable('07',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query7 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('07',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query7) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfJuly'] = $query7;
@@ -121,7 +121,7 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get for Month of August
-        $query8 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfAugustFromObservationSlipTable('08',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query8 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('08',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query8) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfAugust'] = $query8;
@@ -131,7 +131,7 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get for Month of September
-        $query9 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfSeptemberFromObservationSlipTable('09',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query9 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('09',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query9) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfSeptember'] = $query9;
@@ -141,7 +141,7 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get for Month of October
-        $query10 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfOctoberFromObservationSlipTable('10',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query10 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('10',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query10) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfOctober'] = $query10;
@@ -151,7 +151,7 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get for Month of November
-        $query11 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfNovemberFromObservationSlipTable('11',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query11 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('11',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query11) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfNovember'] = $query11;
@@ -161,7 +161,7 @@ class YearlyRainfallReport extends CI_Controller {
 
 
         //Get for Month of December
-        $query12 = $this->DbHandler->selectMonthlyRainfallReportForTheMonthOfDecemberFromObservationSlipTable('12',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
+        $query12 = $this->DbHandler->selectMonthlyRainfallReportForAMonthFromObservationSlipTable('12',$year,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($query12) {
             $data['monthlyrainfallreportdatafromObservationSlipTableForMonthOfDecember'] = $query12;
@@ -172,10 +172,10 @@ class YearlyRainfallReport extends CI_Controller {
 
 
 
-  //Nid to load the stations again
+        //Nid to load the stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

@@ -18,14 +18,14 @@ class StationInstruments extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','instruments');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','instruments','');  //value,field,table
         if ($query) {
             $data['instruments'] = $query;
         } else {
             $data['instruments'] = array();
         }
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','elements');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','elements');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['elements'] = $query;
@@ -33,7 +33,7 @@ class StationInstruments extends CI_Controller {
             $data['elements'] = array();
         }
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -56,7 +56,7 @@ class StationInstruments extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
          if ($query) {
             $data['stationsdata'] = $query;
@@ -66,7 +66,7 @@ class StationInstruments extends CI_Controller {
 
         /////////////////////////////////////////////////////////
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','elements');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','elements');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['elements'] = $query;
@@ -85,14 +85,12 @@ class StationInstruments extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations','');  //value,field,table
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
             $data['stationsdata'] = array();
         }
-
-        ///////////////////////////////////////////////////////////////////////
 
         $instrumentid = $this->uri->segment(3);
 
@@ -103,7 +101,6 @@ class StationInstruments extends CI_Controller {
             $data['stationinstrumentdataid'] = array();
         }
 
-
         $this->load->view('stationInstruments', $data);
     }
 
@@ -111,40 +108,46 @@ class StationInstruments extends CI_Controller {
     public function insertInstrument(){
         $this->unsetflashdatainfo();
         $session_data = $this->session->userdata('logged_in');
-        $role=$session_data['UserRole'];
+        //$UserRole=$session_data['UserRole'];
+        $userrole=$session_data['UserRole'];
 
-       // $firstname =firstcharuppercase(chgtolowercase($this->input->post('userfirstname')));
-        $instrumentname = firstcharuppercase(chgtolowercase($this->input->post('stationinstrumentname')));
+        $instrumentname = firstcharuppercase(chgtolowercase($this->input->post('station_instrumentname')));
 
-        if($role=="Manager"){
-        $station = $this->input->post('stationinstrumentManager');
-        $stationNo = $this->input->post('stationNoinstrumentManager');
+        if($userrole=="Manager" || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){
+            $station = $this->input->post('stationinstrument_insertInstrument');
+            $stationNo = $this->input->post('stationNoinstrument_insertInstrument');
+            //$stationRegion = $this->input->post('stationRegion_insertInstrument');
         }
-        elseif($role=="OC"){
+        else if($userrole=="OC"){
 
-            $station = $this->input->post('stationinstrumentOC');
-            $stationNo = $this->input->post('stationNoinstrumentOC');
+            $station = $this->input->post('stationinstrument_OC');
+            $stationNo = $this->input->post('stationNoinstrument_OC');
+           // $stationRegion = $this->input->post('stationRegion_OC');
 
         }
 
-        $instrumentcode = chgtouppercase($this->input->post('stationinstrumentcode'));
+        $instrumentcode = chgtouppercase($this->input->post('station_instrumentcode'));
 
-        $manufacturer = $this->input->post('stationinstrumentmanufacturer');
+        $manufacturer = $this->input->post('station_instrumentmanufacturer');
 
         //$element = $this->input->post('element');
-        $dateregistered = $this->input->post('stationinstrumentdateregistered');
-        $expirydate = $this->input->post('stationinstrumentexpirydate');
+        $dateregistered = $this->input->post('station_instrumentdateregistered');
+        $expirydate = $this->input->post('station_instrumentexpirydate');
 
 
-        $description = $this->input->post('stationinstrumentdescription');
-        $creationDate= date('Y-m-d H:i:s');
+        $description = $this->input->post('station_instrumentdescription');
+        //$creationDate= date('Y-m-d H:i:s');
+        $firstname=$session_data['FirstName'];
+        $surname=$session_data['SurName'];
+        $user=$firstname.' '.$surname;
 
         $insertInstrumentData=array(
-                'InstrumentName' => $instrumentname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'DateRegistered' => $dateregistered,
-                'ExpirationDate' => $expirydate, 'InstrumentCode' => $instrumentcode,
-                'Manufacturer'=> $manufacturer,'Description'=>$description,'CreationDate'=> $creationDate);
-
+            'InstrumentName' => $instrumentname, 'StationName' => $station,
+            'StationNumber' => $stationNo,
+            'DateRegistered' => $dateregistered,
+            'ExpirationDate' => $expirydate, 'InstrumentCode' => $instrumentcode,
+            'Manufacturer'=> $manufacturer,'Description'=>$description,
+            'SubmittedBy'=>$user);
         //$this->DbHandler->insertInstrument($insertInstrumentData);
         $insertsuccess= $this->DbHandler->insertData($insertInstrumentData,'instruments'); //Array for data to insert then  the Table Name
 
@@ -158,7 +161,7 @@ class StationInstruments extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added new instrument details',
                 'Details' => $name . ' added new instrument details into the system ',
                 'StationName' => $userstation,
@@ -187,19 +190,21 @@ class StationInstruments extends CI_Controller {
 
         $this->load->helper(array('form', 'url'));
         $session_data = $this->session->userdata('logged_in');
-        $role=$session_data['UserRole'];
-
-        // $firstname =firstcharuppercase(chgtolowercase($this->input->post('userfirstname')));
+        $UserRole=$session_data['UserRole'];
+// $firstname =firstcharuppercase(chgtolowercase($this->input->post('userfirstname')));
         $instrumentname = firstcharuppercase(chgtolowercase($this->input->post('instrumentname')));
 
-        if($role=="Manager"){
-            $station = $this->input->post('stationManager');
-            $stationNo = $this->input->post('stationNoManager');
+        if($UserRole=="Manager" || $UserRole=='ZonalOfficer' || $UserRole=='SeniorZonalOfficer'){
+            $station = $this->input->post('station_updateInstrument');
+            $stationNo = $this->input->post('stationNo_updateInstrument');
+            
+           // $stationRegion = $this->input->post('stationRegion_updateInstrument');
         }
-        elseif($role=="OC"){
+        elseif($UserRole=="OC"){
 
-            $station = $this->input->post('stationOC');
-            $stationNo = $this->input->post('stationNoOC');
+            $station = $this->input->post('station_OC');
+            $stationNo = $this->input->post('stationNo_OC');
+           // $stationRegion = $this->input->post('stationRegion_OC_updateInstrument');
 
         }
 
@@ -217,29 +222,27 @@ class StationInstruments extends CI_Controller {
         //ID to update in the table.
         $id = $this->input->post('id');
 
-
         $updateInstrumentData=array(
-            'InstrumentName' => $instrumentname, 'StationName' => $station,
-            'StationNumber' => $stationNo, 'DateRegistered' => $dateregistered,
+            'InstrumentName' => $instrumentname, 'DateRegistered' => $dateregistered,
             'ExpirationDate' => $expirydate, 'InstrumentCode' => $instrumentcode,
             'Manufacturer'=> $manufacturer,'Description'=>$description);
+        $updateInstrumentData2=array('StationName' => $station,
+            'StationNumber' => $stationNo);
+
 
         //$this->DbHandler->updateInstrument($updateInstrumentData,$id);
-
-        $updatesuccess=$this->DbHandler->updateData($updateInstrumentData,'instruments',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateInstrumentData,$updateInstrumentData2, 'instruments',$id);
 
 
         //Redirect the user back with  message
         if($updatesuccess){
-            //Store User logs.
-            //Create user Logs
             $session_data = $this->session->userdata('logged_in');
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated instrument details',
                 'Details' => $name . ' updated instrument details in the system ',
                 'StationName' => $userstation,
@@ -276,7 +279,7 @@ class StationInstruments extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted instrument details',
                 'Details' => $name . ' deleted instrument details into the system ',
                 'StationName' => $userstation,

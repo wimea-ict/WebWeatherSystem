@@ -19,7 +19,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','scannedarchivedekadalformreportcopydetails');  //value,field,table
+        $query = $this->DbHandler->selectAll($userstation,'StationName','scans_dekadals');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['archivedscanneddekadalformreportdetails'] = $query;
@@ -42,7 +42,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -62,7 +62,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -75,7 +75,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
         $scanneddekadalformreportid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($scanneddekadalformreportid,'id','scannedarchivedekadalformreportcopydetails');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($scanneddekadalformreportid,'id','scans_dekadals');  //$value, $field,$table
         if ($query) {
             $data['scanneddekadalformreportidDetails'] = $query;
         } else {
@@ -97,9 +97,12 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
         $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -134,7 +137,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
 
             $description = $this->input->post('description_dekadal');
-            $creationDate= date('Y-m-d H:i:s');
+           // $creationDate= date('Y-m-d H:i:s');
             $Approved="FALSE";
             $firstname=$session_data['FirstName'];
             $surname=$session_data['SurName'];
@@ -144,7 +147,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
                 'Form' => $formname, 'StationName' => $station,
                 'StationNumber' => $stationNo, 'FromDate' => $FromdateOnScannedDekadalFormReport,'ToDate' => $TodateOnScannedDekadalFormReport,
                 'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                'Description'=>$description,'FileName' => $filename,'CreationDate'=> $creationDate);
+                'Description'=>$description,'FileName' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
             $insertsuccess= $this->DbHandler->insertData($insertScannedDekadalFormReportDataDetails,'scannedarchivedekadalformreportcopydetails'); //Array for data to insert then  the Table Name
@@ -157,13 +160,13 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
                 $userrole=$session_data['UserRole'];
                 $userstation=$session_data['UserStation'];
                 $userstationNo=$session_data['StationNumber'];
+                $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                $userlogs = array('User' => $name,
                     'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
                     'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'StationName' => $userstation,
-                    'StationNumber' => $userstationNo ,
+                    'station' => $userstationId,
                     'IP' => $this->input->ip_address());
                 //  save user logs
                 // $this->DbHandler->saveUserLogs($userlogs);
@@ -193,12 +196,17 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
         $file_element_name = 'updatearchievescannedcopy_dekadalformdatareportcopy';
 
+        if (isset($_FILES[$file_element_name]) && is_uploaded_file($_FILES[$file_element_name]['tmp_name'])) { //file has been uploaded
 
-        $config['upload_path'] = 'archive/';
+
+            $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+       // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -216,13 +224,17 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $data = $this->upload->data();
             $filename = $data['file_name'];
 
+        }
+        }else {    //no file has been uploaded.
 
+                $filename= $this->input->post('PreviouslyUploadedFileName_dekadalformdatareportcopy');
+            }
 
 
             $formname = firstcharuppercase(chgtolowercase($this->input->post('formname')));
 
 
-                $station = $this->input->post('station');
+                $stationId = $this->input->post('stationId');
                 $stationNo = $this->input->post('stationNo');
 
 
@@ -235,19 +247,15 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $description = $this->input->post('description');
 
             $id = $this->input->post('id');
-
-
-
-
-
+            $approved=$this->input->post('approval');
 
             $updateScannedDekadalFormReportDataDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'FromDate' => $FromdateOnScannedDekadalFormReport,'ToDate'=>$TodateOnScannedDekadalFormReport,
-                'Description'=>$description,'FileName' => $filename,);
+                'station' => $stationId,'Approved'=>$approved,
+                'from_date' => $FromdateOnScannedDekadalFormReport,'to_date'=>$TodateOnScannedDekadalFormReport,
+                'Description'=>$description,'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $updatesuccess=$this->DbHandler->updateData($updateScannedDekadalFormReportDataDetails,'scannedarchivedekadalformreportcopydetails',$id);
+            $updatesuccess=$this->DbHandler->updateData($updateScannedDekadalFormReportDataDetails,'','scans_dekadals',$id);
 
             //Redirect the user back with  message
             if($updatesuccess){
@@ -257,13 +265,13 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
                 $userrole=$session_data['UserRole'];
                 $userstation=$session_data['UserStation'];
                 $userstationNo=$session_data['StationNumber'];
+                $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+                $userlogs = array('User' => $name,
                     'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
                     'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'StationName' => $userstation,
-                    'StationNumber' => $userstationNo ,
+                    'station' => $userstationId,
                     'IP' => $this->input->ip_address());
                 //  save user logs
                 // $this->DbHandler->saveUserLogs($userlogs);
@@ -279,7 +287,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
             }
 
-        }
+       // }
 
     }
     public function deleteInformationForArchiveScannedDekadalFormReport() {
@@ -296,13 +304,13 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted instrument details',
                 'Details' => $name . ' deleted instrument details into the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

@@ -19,7 +19,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','scannedarchiveweathersummaryformreportcopydetails');  //value,field,table
+        $query = $this->DbHandler->selectAll($userstation,'StationName','scans_monthly');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['archivedscannedweathersummaryformreportdetails'] = $query;
@@ -42,7 +42,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -60,7 +60,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -73,7 +73,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
         $scannedweathersummaryformreportid = $this->uri->segment(3);
 
-        $query = $this->DbHandler->selectById($scannedweathersummaryformreportid,'id','scannedarchiveweathersummaryformreportcopydetails');  //$value, $field,$table
+        $query = $this->DbHandler->selectById($scannedweathersummaryformreportid,'id','scans_monthly');  //$value, $field,$table
         if ($query) {
             $data['scannedweathersummaryformreportidDetails'] = $query;
         } else {
@@ -95,9 +95,12 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
         $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -132,7 +135,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
 
             $description = $this->input->post('description_weathersummaryformreport');
-            $creationDate= date('Y-m-d H:i:s');
+            //$creationDate= date('Y-m-d H:i:s');
             $Approved="FALSE";
             $firstname=$session_data['FirstName'];
             $surname=$session_data['SurName'];
@@ -142,7 +145,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
                 'Form' => $formname, 'StationName' => $station,
                 'StationNumber' => $stationNo, 'Month' => $monthOFScannedWeatherSummaryFormReport,'Year' => $yearOFScannedWeatherSummaryFormReport,
                 'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                'Description'=>$description,'FileName' => $filename,'CreationDate'=> $creationDate);
+                'Description'=>$description,'FileName' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
             $insertsuccess= $this->DbHandler->insertData($insertScannedWeatherSummaryFormReportDataDetails,'scannedarchiveweathersummaryformreportcopydetails'); //Array for data to insert then  the Table Name
@@ -157,9 +160,9 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
                 $userstationNo=$session_data['StationNumber'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
-                    'Details' => $name . ' added new Scanned Metar Form details into the system ',
+                $userlogs = array('User' => $name,
+                    'UserRole' => $userrole,'Action' => 'Added new Scanned Weather Summary Form details',
+                    'Details' => $name . ' added new Scanned Weather Summary Form details into the system ',
                     'StationName' => $userstation,
                     'StationNumber' => $userstationNo ,
                     'IP' => $this->input->ip_address());
@@ -167,7 +170,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
                 // $this->DbHandler->saveUserLogs($userlogs);
 
 
-                $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
+                $this->session->set_flashdata('success', 'New Scanned Weather Summary Form details info was added successfully!');
                 $this->index();
 
             }
@@ -191,12 +194,15 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
         $file_element_name = 'updatearchievescannedcopy_weathersummaryformdatareportcopy';
 
-
-        $config['upload_path'] = 'archive/';
+        if (isset($_FILES[$file_element_name]) && is_uploaded_file($_FILES[$file_element_name]['tmp_name'])) { //file has been uploaded
+            $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
-        $config['max_size'] = '2048000';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
+        // $config['max_size'] = '2GB';
+        //IMB=1024KB  2MB=2048KB   1GB=1024MB   2GB=2048MB
+        //1MB=1024KB  THEN 2048MB=2097152KB
+        $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
 
@@ -213,7 +219,11 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
         {
             $data = $this->upload->data();
             $filename = $data['file_name'];
+        }
+        }else {    //no file has been uploaded.
 
+            $filename= $this->input->post('PreviouslyUploadedFileName_weathersummaryformdatareportcopy');
+        }
 
 
 
@@ -222,32 +232,27 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
 
 
-                $station = $this->input->post('station');
+                $station = $this->input->post('stationId');
                 $stationNo = $this->input->post('stationNo');
-
-
-
 
             $monthOFScannedWeatherSummaryFormReport = $this->input->post('monthOfScannedWeatherSummaryFormReport');
             $yearOFScannedWeatherSummaryFormReport = $this->input->post('yearOfScannedWeatherSummaryFormReport');
 
 
             $description = $this->input->post('description');
-
             $id = $this->input->post('id');
-
-
+            $approved=$this->input->post('approval');
 
 
 
 
             $updateScannedWeatherSummaryFormReportDataDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'Month' => $monthOFScannedWeatherSummaryFormReport,'Year'=> $yearOFScannedWeatherSummaryFormReport,
-                'Description'=>$description,'FileName' => $filename,);
+                'Approved'=>$approved,
+                'station' => $station, 'month' => $monthOFScannedWeatherSummaryFormReport,'year'=> $yearOFScannedWeatherSummaryFormReport,
+                'Description'=>$description,'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $updatesuccess=$this->DbHandler->updateData($updateScannedWeatherSummaryFormReportDataDetails,'scannedarchiveweathersummaryformreportcopydetails',$id);
+            $updatesuccess=$this->DbHandler->updateData($updateScannedWeatherSummaryFormReportDataDetails,'','scans_monthly',$id);
 
             //Redirect the user back with  message
             if($updatesuccess){
@@ -259,9 +264,9 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
                 $userstationNo=$session_data['StationNumber'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
-                    'Details' => $name . ' added new Scanned Metar Form details into the system ',
+                $userlogs = array('User' => $name,
+                    'UserRole' => $userrole,'Action' => 'Added new Scanned Weather Summary Form details',
+                    'Details' => $name . ' added new Scanned Weather Summary Form details into the system ',
                     'StationName' => $userstation,
                     'StationNumber' => $userstationNo ,
                     'IP' => $this->input->ip_address());
@@ -269,7 +274,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
                 // $this->DbHandler->saveUserLogs($userlogs);
 
 
-                $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
+                $this->session->set_flashdata('success', 'New Scanned Weather Summary Form details info was added successfully!');
                 $this->index();
 
             }
@@ -279,7 +284,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
 
             }
 
-        }
+       // }
 
     }
     public function deleteInformationForArchiveScannedWeatherSummaryFormReport() {
@@ -298,7 +303,7 @@ class ArchiveScannedWeatherSummaryFormDataReportCopy extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted instrument details',
                 'Details' => $name . ' deleted instrument details into the system ',
                 'StationName' => $userstation,

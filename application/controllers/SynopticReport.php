@@ -19,7 +19,7 @@ class SynopticReport extends CI_Controller {
         $userstation=$session_data['UserStation'];
 
         //Get all Stations.
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -39,7 +39,7 @@ class SynopticReport extends CI_Controller {
         $date = $this->input->post('date');
         //$month = $this->input->post('month');
 
-        if($userrole=='Manager'){
+        if($userrole=='Manager' || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){
             $stationName =  $this->input->post('stationManager');
             $stationNumber =  $this->input->post('stationNoManager');
 
@@ -132,16 +132,16 @@ class SynopticReport extends CI_Controller {
 
         //FROM THE MORE FORM FIELDS TABLE KIP DATA FROM DIFFERENT TIMES.
         //FOR 0000Z
-        $more_form_fields_table_query1= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0000Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query1= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0000Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query1) {
-            $data['synopticreportdataforADayFrom_MoreFormFieldsTable0000Z'] = $more_form_fields_table_query1;
+            $data['synopticreportdataforADayFrom_observationslipTable0000Z'] = $more_form_fields_table_query1;
         } else {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable0000Z'] = array();
         }
 
         //FOR 0300Z
-        $more_form_fields_table_query2= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0300Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query2= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0300Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query2) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable0300Z'] = $more_form_fields_table_query2;
@@ -150,7 +150,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 0600Z
-        $more_form_fields_table_query3= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0600Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query3= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0600Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query3) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable0600Z'] = $more_form_fields_table_query3;
@@ -159,7 +159,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 0900Z
-        $more_form_fields_table_query4= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0900Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query4= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable0900Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query4) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable0900Z'] = $more_form_fields_table_query4;
@@ -168,7 +168,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 1200Z
-        $more_form_fields_table_query5= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1200Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query5= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1200Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query5) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable1200Z'] = $more_form_fields_table_query5;
@@ -177,7 +177,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 1500Z
-        $more_form_fields_table_query6= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1500Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query6= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1500Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query6) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable1500Z'] = $more_form_fields_table_query6;
@@ -186,7 +186,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 1800Z
-        $more_form_fields_table_query7= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1800Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query7= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable1800Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query7) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable1800Z'] = $more_form_fields_table_query7;
@@ -195,7 +195,7 @@ class SynopticReport extends CI_Controller {
         }
 
         //FOR 2100Z
-        $more_form_fields_table_query8= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable2100Z($date,$stationName,$stationNumber,'moreformfields');  //value,field,table
+        $more_form_fields_table_query8= $this->DbHandler->selectSynopticReportForSpecificDayFrom_MoreFormFieldsTable2100Z($date,$stationName,$stationNumber,'observationslip');  //value,field,table
 
         if ($more_form_fields_table_query8) {
             $data['synopticreportdataforADayFrom_MoreFormFieldsTable2100Z'] = $more_form_fields_table_query8;
@@ -207,7 +207,7 @@ class SynopticReport extends CI_Controller {
         //nid to load stations again
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;

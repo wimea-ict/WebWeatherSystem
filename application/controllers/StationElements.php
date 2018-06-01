@@ -18,14 +18,14 @@ class StationElements extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','elements');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','elements');  //value,field,table
         if ($query) {
             $data['elements'] = $query;
         } else {
             $data['elements'] = array();
         }
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -46,7 +46,7 @@ class StationElements extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -56,7 +56,7 @@ class StationElements extends CI_Controller {
 
         /////////////////////////////////////////////////////////
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','instruments');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','instruments');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['elements'] = $query;
@@ -75,7 +75,7 @@ class StationElements extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         if ($query) {
             $data['stationsdata'] = $query;
         } else {
@@ -102,48 +102,55 @@ class StationElements extends CI_Controller {
         $this->load->helper(array('form', 'url'));
 
         $session_data = $this->session->userdata('logged_in');
-        $role=$session_data['UserRole'];
+        $UserRole=$session_data['UserRole'];
 
         //$firstname =firstcharuppercase(chgtolowercase($this->input->post('userfirstname')));
 
-        $elementname = firstcharuppercase(chgtolowercase($this->input->post('nameelement')));
+        $elementname = firstcharuppercase(chgtolowercase($this->input->post('name_element')));
 
-        if($role=="Manager"){
+        if($UserRole=="Manager" || $UserRole=='ZonalOfficer' || $UserRole=='SeniorZonalOfficer'){
 
-            $station = firstcharuppercase(chgtolowercase($this->input->post('stationManagerelement')));
+            $station = firstcharuppercase(chgtolowercase($this->input->post('station_insertElement_element')));
 
 
 
-            $stationNo = $this->input->post('stationNoManagerelement');
+            $stationNo = $this->input->post('stationNo_insertElement_element');
+            //$stationRegion = $this->input->post('stationRegion_insertElement_element');
 
 
 
 
         }
-        else if($role=="OC"){
+        else if($UserRole=="OC"){
 
-            $station = firstcharuppercase(chgtolowercase($this->input->post('stationOCelement')));
+            $station = firstcharuppercase(chgtolowercase($this->input->post('station_OC_element')));
 
 
-            $stationNo = $this->input->post('stationNoOCelement');
+            $stationNo = $this->input->post('stationNo_OC_element');
+            //$stationRegion = $this->input->post('stationRegion_OC_element');
+
         }
 
 
-        $instrumentName = firstcharuppercase(chgtolowercase($this->input->post('instrumentnameelement')));
-        $abbrev = $this->input->post('abbrevelement');
-        $type = $this->input->post('typeelement');
-        $units = $this->input->post('unitselement');
-        $scale = $this->input->post('scaleelement');
-        $limits = $this->input->post('limitselement');
-        $description = $this->input->post('descriptionelement');
-        $creationDate= date('Y-m-d H:i:s');
+        $instrumentName = firstcharuppercase(chgtolowercase($this->input->post('instrumentname_element')));
+        $abbrev = $this->input->post('abbrev_element');
+        $type = $this->input->post('type_element');
+        $units = $this->input->post('units_element');
+        $scale = $this->input->post('scale_element');
+        $limits = $this->input->post('limits_element');
+        $description = $this->input->post('description_element');
+        //$creationDate= date('Y-m-d H:i:s');
+        $firstname=$session_data['FirstName'];
+        $surname=$session_data['SurName'];
+        $user=$firstname.' '.$surname;
 
         $insertElementData=array(
             'ElementName' => $elementname, 'InstrumentName' => $instrumentName,
             'StationName' => $station, 'StationNumber' => $stationNo,
             'Abbrev' => $abbrev, 'Type' => $type,
             'Units'=>$units,'Scale'=> $scale,
-            'Limits'=> $limits,'Description'=> $description,'CreationDate'=> $creationDate);
+            'Limits'=> $limits,'Description'=> $description,
+            'SubmittedBy'=>$user);
 
         $insertsuccess= $this->DbHandler->insertData($insertElementData,'elements'); //Array for data to insert then  the Table Name
 
@@ -157,18 +164,14 @@ class StationElements extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Inserted new element details',
                 'Details' => $name . ' inserted element details in the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
-            //  save user logs
-            // $this->DbHandler->saveUserLogs($userlogs);
-
-
 
             $this->session->set_flashdata('success', 'New Element info was added successfully!');
             $this->index();
@@ -190,37 +193,39 @@ class StationElements extends CI_Controller {
 
 
         $session_data = $this->session->userdata('logged_in');
-        $role=$session_data['UserRole'];
+        $UserRole=$session_data['UserRole'];
 
         //$firstname =firstcharuppercase(chgtolowercase($this->input->post('userfirstname')));
 
-        $elementname = firstcharuppercase(chgtolowercase($this->input->post('elementname')));
+        $elementname = firstcharuppercase(chgtolowercase($this->input->post('elementName')));
 
-        if($role=="Manager"){
+        if($UserRole=="Manager" || $UserRole=='ZonalOfficer' || $UserRole=='SeniorZonalOfficer'){
 
-            $station = firstcharuppercase(chgtolowercase($this->input->post('stationManager')));
-
-
-
-            $stationNo = $this->input->post('stationNoManager');
+            $station = firstcharuppercase(chgtolowercase($this->input->post('station_updateElement')));
 
 
 
+            $stationNo = $this->input->post('stationNo_updateElement');
+           // $stationRegion = $this->input->post('stationRegion_updateElement');
 
 
-        }
-        else if($role=="OC"){
 
-            $station = firstcharuppercase(chgtolowercase($this->input->post('stationOC')));
-
-
-            $stationNo = $this->input->post('stationNoOC');
 
 
         }
+        else if($UserRole=="OC"){
+
+            $station = firstcharuppercase(chgtolowercase($this->input->post('station_OC')));
 
 
-        $instrumentName = firstcharuppercase(chgtolowercase($this->input->post('instrumentname')));
+            $stationNo = $this->input->post('stationNo_OC');
+           // $stationRegion = $this->input->post('stationRegion_OC');
+
+
+        }
+
+
+        $instrumentName = firstcharuppercase(chgtolowercase($this->input->post('instrumentname__element_Update')));
 
         $abbrev = $this->input->post('abbrev');
         $type = $this->input->post('type');
@@ -234,15 +239,15 @@ class StationElements extends CI_Controller {
         $id = $this->input->post('id');
 
 
-                $updateElementData=array(
-                    'ElementName' => $elementname, 'InstrumentName' => $instrumentName,
-                    'StationName' => $station, 'StationNumber' => $stationNo,
-                    'Abbrev' => $abbrev, 'Type' => $type,
-                    'Units'=>$units,'Scale'=> $scale,
-                    'Limits'=> $limits,'Description'=> $description);
+        $updateElementData=array(
+            'ElementName' => $elementname, 'InstrumentName' => $instrumentName,
+            'Abbrev' => $abbrev, 'Type' => $type,
+            'Units'=>$units,'Scale'=> $scale,
+            'Limits'=> $limits,'Description'=> $description);
+          $updateElementData2=array('StationName' => $station, 'StationNumber' => $stationNo);
 
         //$updatesuccess=$this->DbHandler->updateData($updateElementData,'elements',$id);
-        $updatesuccess=$this->DbHandler->updateData($updateElementData,'elements',$id);
+        $updatesuccess=$this->DbHandler->updateData($updateElementData,$updateElementData2,'elements',$id);
 
 
 
@@ -255,13 +260,13 @@ class StationElements extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated element details',
                 'Details' => $name . ' updated element details in the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);
@@ -293,13 +298,13 @@ class StationElements extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted element details',
                 'Details' => $name . ' deleted element details in the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);

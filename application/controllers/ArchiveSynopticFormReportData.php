@@ -41,7 +41,7 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -59,7 +59,7 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
 
-        $query = $this->DbHandler->selectAll($userstation,'StationName','stations');  //value,field,table
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
         if ($query) {
             $data['stationsdata'] = $query;
@@ -98,13 +98,8 @@ class ArchiveSynopticFormReportData extends CI_Controller {
 
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station_archivesynopticformreportdata')));
-
             $stationNumber = $this->input->post('stationNo_archivesynopticformreportdata');
-
-
-
-
-
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
 
         $unitofwindspeed = $this->input->post('unitows_archivesynopticformreportdata');
         $blockNo = $this->input->post('blockNo_archivesynopticformreportdata');
@@ -262,16 +257,23 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $vpressure = $this->input->post('vapourpressure_archivesynopticformreportdata');
 
 
+$remarks = $this->input->post('remarks');
+$time_ = $this->input->post('time_');
+$ObserverOnDuty = $this->input->post('ObserverOnDuty');
+$to = $this->input->post('to');
+$from = $this->input->post('from');
+
+
         $Approved = "FALSE";
-        $creationDate= date('Y-m-d H:i:s');
+       // $creationDate= date('Y-m-d H:i:s');
         $SubmittedBy=$name;
 
 
 
         $insertSynopticFormData=array(
             'Date'=>$date,'Time'=>$ztime,'UWS'=>$unitofwindspeed,'BN'=>$blockNo,
-            'StationName'=>$station,'StationNumber'=> $stationNumber,
-            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,'CreationDate'=>$creationDate,
+            'station'=>$stationId,
+            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
             'IOOP'=> $incorommissionofprecipitation, 'TSPPW'=>$typeofstation,
 
             'HLC'=>$heightoflowestcloud,'HV'=>$horizontalvisibility,
@@ -315,8 +317,8 @@ class ArchiveSynopticFormReportData extends CI_Controller {
             'GI9'=>$groupindicator9,'Supp_Info'=>$supplementaryinformation,'Section_Indicator555'=>$sectionindicator555,
             'GI1_3'=>$groupindicator1_3,'SignOfData_5'=>$signofdata5,
             'Wetbulb_Temp'=>$wetbulbtemp,'R_Humidity'=>$rhumidity,
-            'V_Pressure'=>$vpressure,
-
+            'V_Pressure'=>$vpressure, 'remarks'=>$remarks, 'time_'=>$time_,
+            'ObserverOnDuty'=>$ObserverOnDuty, 'to_'=>$to, 'from_'=>$from,
 
             'ThunderStorm'=>$thunderstorm,'HailStorm'=>$hailstorm,
             'Fog'=>$fog,
@@ -337,13 +339,13 @@ class ArchiveSynopticFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId = $session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Added archived synoptic info',
                 'Details' => $name . ' added archived synoptic info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -372,15 +374,10 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $date = $this->input->post('date');
         //$time=$this->input->post('timesynoptic');
         $ztime=$this->input->post('timeRecorded');
-        //$month = date("F");
-        //$year = date("Y");
-
-
-
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
-
             $stationNumber = $this->input->post('stationNo');
+            $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
 
 
         $unitofwindspeed = $this->input->post('unitofwindspeed');
@@ -480,10 +477,6 @@ class ArchiveSynopticFormReportData extends CI_Controller {
 
         $groupindicator1_2 = $this->input->post('gindicator1_2');
         $signofdata3 = $this->input->post('signdata3');
-
-
-
-
         $maxtemptx = $this->input->post('maxtemptx');
         $groupindicator2_2 = $this->input->post('gindicator2_2');
         $signofdata4 = $this->input->post('signdata4');
@@ -537,7 +530,11 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $wetbulbtemp = $this->input->post('wetbulbtemperature');
         $rhumidity = $this->input->post('rhumidity');
         $vpressure = $this->input->post('vpressure');
-
+        $remarks = $this->input->post('remarks');
+        $time_ = $this->input->post('time_');
+        $ObserverOnDuty = $this->input->post('ObserverOnDuty');
+        $to = $this->input->post('to');
+        $from = $this->input->post('from');
 
         $Approved = $this->input->post('approval');
 
@@ -546,7 +543,7 @@ class ArchiveSynopticFormReportData extends CI_Controller {
 
         $updateSynopticFormData=array(
             'Date'=>$date,'Time'=>$ztime,'UWS'=>$unitofwindspeed,'BN'=>$blockNo,
-            'StationName'=>$station,'StationNumber'=> $stationNumber,
+            'station'=>$stationId,
             'Approved'=>$Approved,
             'IOOP'=> $incorommissionofprecipitation, 'TSPPW'=>$typeofstation,
 
@@ -591,7 +588,8 @@ class ArchiveSynopticFormReportData extends CI_Controller {
             'GI9'=>$groupindicator9,'Supp_Info'=>$supplementaryinformation,'Section_Indicator555'=>$sectionindicator555,
             'GI1_3'=>$groupindicator1_3,'SignOfData_5'=>$signofdata5,
             'Wetbulb_Temp'=>$wetbulbtemp,'R_Humidity'=>$rhumidity,
-            'V_Pressure'=>$vpressure,
+            'V_Pressure'=>$vpressure, 'remarks'=>$remarks, 'time_'=>$time_,
+            'ObserverOnDuty'=>$ObserverOnDuty, 'to_'=>$to, 'from_'=>$from,
 
 
             'ThunderStorm'=>$thunderstorm,'HailStorm'=>$hailstorm,
@@ -603,7 +601,7 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $id = $this->input->post('id');
 
         //$this->DbHandler->insertInstrument($insertInstrumentData);
-        $updatesuccess= $this->DbHandler->updateData($updateSynopticFormData,'archivesynopticformreportdata',$id); //Array for data to insert then  the Table Name
+        $updatesuccess= $this->DbHandler->updateData($updateSynopticFormData,"",'archivesynopticformreportdata',$id); //Array for data to insert then  the Table Name
 
 
 
@@ -615,13 +613,13 @@ class ArchiveSynopticFormReportData extends CI_Controller {
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
             $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Update archieve Synoptic info',
                 'Details' => $name . ' updated  archieve  Synoptic info in the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -655,11 +653,10 @@ class ArchiveSynopticFormReportData extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('Date'=>date('Y-m-d H:i:s'),'User' => $name,
+            $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Deleted archieve info',
                 'Details' => $name . ' deleted archieve info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
             // $this->DbHandler->saveUserLogs($userlogs);
