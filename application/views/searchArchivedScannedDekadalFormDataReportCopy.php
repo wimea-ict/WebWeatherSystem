@@ -37,7 +37,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -70,7 +70,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -83,24 +83,41 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     </div>
                 <?php }?>
 
-
                 <div class="col-xs-3">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">From Date</span>
-                            <input type="text" name="fromdate" id="date" class="form-control summonth" placeholder="Please select the date" >
-                        </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">Select Month</span>
+                        <input type="text" name="month" id="month" class="form-control summonth" placeholder="Please select month" >
                     </div>
                 </div>
-
-                <div class="col-xs-3">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"> ToDate</span>
-                            <input type="text" name="todate" id="expdate" class="form-control summonth" placeholder="Please select the date" >
-                        </div>
-                    </div>
                 </div>
+
+        <div class="col-xs-3">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Select Year</span>
+                    <input type="text" name="year" id="year" class="form-control sumyear" placeholder="Please select year" >
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xs-5">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Select Dekadal Number</span>
+                    <!-- <input type="text" name="day" id="day" class="form-control sumyear" placeholder="Please select the day" > -->
+                    <select name="DekadalNumber" id="DekadalNumber" required class="form-control">
+                        <option value="">--Select DekadalNumber Options--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+
+                    </select>
+
+                </div>
+            </div>
+        </div>
                 <div class="col-xs-2">
                     <input type="submit" name="searchArchivedScannedDekadalFormReport_button" id="searchArchivedScannedDekadalFormReport_button" class="btn btn-primary" value="Search" >
                 </div>
@@ -120,14 +137,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         $stationNumber=$displayArchivedScannedDekadalFormReportDetails['stationNumber'];
 
         //$monthAsANumber=0;
-        $FromDate= $displayArchivedScannedDekadalFormReportDetails['FromDate'];
-        $ToDate= $displayArchivedScannedDekadalFormReportDetails['ToDate'];
+        $Month= $displayArchivedScannedDekadalFormReportDetails['Month'];
+        $Year= $displayArchivedScannedDekadalFormReportDetails['Year'];
+    $DekadalNumber= $displayArchivedScannedDekadalFormReportDetails['DekadalNumber'];
 
 
         //$monthInWords= $displayDekadalReportHeaderFields['monthInWords'];
-        $monthAsANumber= $displayArchivedScannedDekadalFormReportDetails['monthAsANumberselected'];
+        //$monthAsANumber= $displayArchivedScannedDekadalFormReportDetails['monthAsANumberselected'];
 
-        $year= $displayArchivedScannedDekadalFormReportDetails['year'];
+       // $year= $displayArchivedScannedDekadalFormReportDetails['year'];
 
 
         ///php
@@ -135,8 +153,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         // $year = date('Y',$dateValue);
         // $monthName = date('F',$dateValue);
         //date('m', strtotime($fromdate));
-        $FromDatemonthDay = date('d',strtotime($FromDate));
-        $ToDatemonthDay = date('d',strtotime($ToDate));
+      //  $FromDatemonthDay = date('d',strtotime($FromDate));
+      //  $ToDatemonthDay = date('d',strtotime($ToDate));
 
 
         // $splt_range = split("-",$range);
@@ -163,8 +181,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <td class="main">Form</td>
             <td class="main">Station Name</td>
             <td class="main">Station Number</td>
-            <td class="main">From Date</td>
-            <td class="main">To Date</td>
+            <td class="main">Month</td>
+            <td class="main">Year</td>
+            <td class="main">Dekadal Number</td>
             <td class="main">Description</td>
             <td class="main">FileName</td>
 
@@ -185,12 +204,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <td ><?php echo $data->Form;?></td>
                         <td ><?php echo $data->StationName;?></td>
                         <td ><?php echo $data->StationNumber;?></td>
-                        <td ><?php echo $data->FromDate;?></td>
-                        <td ><?php echo $data->ToDate;?></td>
+                        <td ><?php echo $data->Month;?></td>
+                        <td ><?php echo $data->Year;?></td>
+                        <td ><?php echo $data->Dekadal_Number;?></td>
                         <td><?php echo $data->Description;?></td>
                         <td>
-                            <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/DownloadArchivedScannedDekadalFormReport/<?php echo $data->FileName; ?>">Download Image</a>
-
+                          <!--  <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileName; ?>">View Image</a> -->
+                            <?php echo $data->FileName;?>
                         </td>
 
 
@@ -200,13 +220,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
             ?>
         </table>
-        <br><br><br><br>
+        <br><br>
+
+    <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
+    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+    <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
 
 
-        <div style="width:500px; height:200px; margin-bottom:4px; max-height:120px; overflow:hidden; border:2px solid; position:relative" class="pull-left">
-            <img id="blah" src="<?php echo base_url().'archive/'. $data->FileName ?>" alt="your image" class="img-responsive" />
-            <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="name"></label>
-        </div>
         <div class="clearfix"></div>
 
         <br><br><br><br>
@@ -226,18 +246,23 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     $stationName=$displayArchivedScannedDekadalFormReportDetails['stationName'];
     $stationNumber=$displayArchivedScannedDekadalFormReportDetails['stationNumber'];
 
+
+        $Month= $displayArchivedScannedDekadalFormReportDetails['Month'];
+        $Year= $displayArchivedScannedDekadalFormReportDetails['Year'];
+        $DekadalNumber= $displayArchivedScannedDekadalFormReportDetails['DekadalNumber'];
+
     //$monthAsANumber=0;
-    $FromDate= $displayArchivedScannedDekadalFormReportDetails['FromDate'];
-    $ToDate= $displayArchivedScannedDekadalFormReportDetails['ToDate'];
+    //$FromDate= $displayArchivedScannedDekadalFormReportDetails['FromDate'];
+    //$ToDate= $displayArchivedScannedDekadalFormReportDetails['ToDate'];
 
 
     //$monthInWords= $displayDekadalReportHeaderFields['monthInWords'];
-    $monthAsANumber= $displayArchivedScannedDekadalFormReportDetails['monthAsANumberselected'];
+    //$monthAsANumber= $displayArchivedScannedDekadalFormReportDetails['monthAsANumberselected'];
 
-    $year= $displayArchivedScannedDekadalFormReportDetails['year'];   ?>
+   // $year= $displayArchivedScannedDekadalFormReportDetails['year'];   ?>
 
         <center>
-            <?php echo "No Archived Scanned Dekadal Report  for ".$stationName.' '.'From Date'.' '.$FromDate. ' '.'and To Date'.$ToDate.'   From the DB'; ?>
+            <?php echo "No Archived Scanned Dekadal Report  for ".$stationName.' '.'Month'.' '.$Month. ' '.'Year'.$Year.'  '.' for   Dekadal Number'.$DekadalNumber.'   From the DB'; ?>
         </center>
 
     <?php }?>
@@ -295,87 +320,34 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
 
                 }
-                //////////////////////////////////////////////////////////////////////////////////////////////               //////////////////////////////////////////////////////////////////////////////////////////////////
-                //Check that the MONTH is selected from the list of MONTHS
-                var fromdate=$('#date').val();
-                if(fromdate==''){  // returns true if the variable does NOT contain a valid number
-                    alert("From Date Not Selected");
-                    $('#date').val("");  //Clear the field.
-                    $("#date").focus();
+                //Check that Month selected
+                var month=$('#month').val();
+                if(month==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Please select the Month");
+                    $('#month').val("");  //Clear the field.
+                    $("#month").focus();
                     return false;
 
                 }
-///////////////////////////////////////////////////////////////////////////////////////////////
-                //Check that the YEAR is selected from the list of Year
-                var todate=$('#expdate').val();
-                if(todate==''){  // returns true if the variable does NOT contain a valid number
-                    alert("To Date not Selected");
-                    $('#expdate').val("");  //Clear the field.
-                    $("#expdate").focus();
+                //Check that Year selected
+                var year=$('#year').val();
+                if(year==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Please select the Year");
+                    $('#year').val("");  //Clear the field.
+                    $("#year").focus();
                     return false;
 
                 }
-/////////////////////////////////////////////////////////////////////
 
-                var fromdateforDekadalreport=new Date($('#date').val());
-                var todateforDekadalreport=new Date($('#expdate').val());
-
-                //NID TO CHECK THAT THE FROM DATE AND TO DATE HAVE THE SAME YEAR
-                var getyearFromThefromDate=fromdateforDekadalreport.getFullYear();
-                var getyearFromThetoDate=todateforDekadalreport.getFullYear();
-
-                if(getyearFromThefromDate!=getyearFromThetoDate){
-                    alert("Please Select A range within the same year");
-                    $('#date').val("");  //Clear the field.
-                    $('#expdate').val("");  //Clear the field.
+                //Check that Dekadal Number is selected
+                var DekadalNumber=$('#DekadalNumber').val();
+                if(DekadalNumber==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Please select the Dekadal Number");
+                    $('#DekadalNumber').val("");  //Clear the field.
+                    $("#DekadalNumber").focus();
                     return false;
+
                 }
-
-                ////NID TO CHECK THAT THE FROM DATE AND TO DATE HAVE THE SAME MONTH
-                var getmonthFromThefromDate=fromdateforDekadalreport.getMonth() + 1;
-                var getmonthFromThetoDate=todateforDekadalreport.getMonth() + 1;
-
-
-                if(getmonthFromThefromDate!=getmonthFromThetoDate){
-                    alert("Please Select A range within the same Month");
-                    $('#date').val("");  //Clear the field.
-                    $('#expdate').val("");  //Clear the field.
-                    return false;
-                }
-
-                ///NID TO GET THE TEN DAY COUNT OF A MONTH.
-                var getdayFrom_ThefromDate=parseInt(fromdateforDekadalreport.getDate());  //get the date like 12 of the month
-                var getdayFrom_ThetoDate=parseInt(todateforDekadalreport.getDate());
-
-
-                //FROM DATE RANGE(1,11,21)
-                if(((getdayFrom_ThefromDate!=1)  &&  (getdayFrom_ThetoDate!=10))
-                    &&
-                    ((getdayFrom_ThefromDate!=11) && (getdayFrom_ThetoDate!=20))
-
-                    &&
-                    ((getdayFrom_ThefromDate!=21) &&(getdayFrom_ThetoDate!=28))
-
-                    &&
-                    ((getdayFrom_ThefromDate!=21) &&(getdayFrom_ThetoDate!=29))
-
-
-                    &&
-                    ((getdayFrom_ThefromDate!=21) &&(getdayFrom_ThetoDate!=30))
-
-                    &&
-
-                    ((getdayFrom_ThefromDate!=21) &&(getdayFrom_ThetoDate!=31))
-                    ){
-                    alert("Please Select a Range of 10 days");
-                    $('#date').val("");  //Clear the field.
-                    $('#expdate').val("");  //Clear the field.
-                    //$("#date").focus();
-                    return false;
-                }
-
-
-
 
             });
         });
@@ -384,6 +356,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         //Once the Admin selects the Station the Station Number should be picked from the DB.
         // For Add Update Daily
         $(document).on('change','#stationManager',function(){
+          alert();
             $('#stationNoManager').val("");  //Clear the field.
             var stationName = this.value;
 

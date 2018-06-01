@@ -40,7 +40,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole=='DataOfficer'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -73,7 +73,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole=='DataOfficer'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -90,7 +90,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">Select Month</span>
-                            <input type="text" name="month" id="month" class="form-control summonth" placeholder="Please select month" >
+                            <input type="text" name="month" id="month" required class="form-control summonth" required placeholder="Please select month" >
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">Select Year</span>
-                            <input type="text" name="year" id="year" class="form-control sumyear" placeholder="Please select year" >
+                            <input type="text" name="year" id="year" required class="form-control sumyear" required placeholder="Please select year" >
                         </div>
                     </div>
                 </div>
@@ -133,13 +133,14 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         $stationName=$displayArchivedWeatherSummaryFormReportHeaderFields['stationName'];
         $stationNumber=$displayArchivedWeatherSummaryFormReportHeaderFields['stationNumber'];
         ?>
+
         <h3>UGANDA NATIONAL METEOROLOGY AUTHORITY</h3>
         <span><strong>FORM 10 (REV 2003)</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span><strong>(WEATHER SUMMARY FORM)</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span><strong>STATION NO.</strong></span> <span class="dotted-line"><?php echo $stationNumber;?></span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span><strong>REG NO.</strong></span>
-        <span class="dotted-line"> <?php echo $getNumberOfdaysInAMonth;?></span>
+        <span class="dotted-line"> <?php echo $getNumberOfdaysInAMonth;   ?></span>
         <div class="clearfix"></div>
 
         <span><strong>STATION</strong></span> <span class="dotted-line"><?php echo $stationName;?>
@@ -310,15 +311,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             //Cal the Total And Mean of each column with data.If no data i do not count it.
-            $TotalRowswithDataCountForMaxTemp=0;
+
             $TotalMaxTemp=0.0;
-            //$TotalRowswithDataCountForMaxTemp=0;
+           $TotalRowswithDataCountForMaxTemp=0;
+
 
             $TotalMinTemp=0.0;
             $TotalRowswithDataCountForMinTemp=0;
 
-            $TotalRowswithDataCountForSunshine=0;
+
             $TotalSunshine=0.0;
+            $TotalRowswithDataCountForSunshine=0;
 
 
             $TotalDB_0600Z=0.0;
@@ -376,25 +379,45 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $TotalFF_1200Z=0.0;
             $TotalRowswithDataCountForFF_1200Z=0;
 
+
+        //////////////////////////TOTAL WIND RUN
+             $TotalWindRun=0.0;
+             $TotalRowswithDataCountForWindRun=0;
+
             /////////////////////////////////////TOTAL RAINFALL
+              $TotalRainfall=0.0;
+              $TotalRowswithDataCountForRainfall=0;
 
-            $TotalRainfall=0.0;
-            $TotalRowswithDataCountForRainfall=0;
+        //////////////////////////TOTAL R/DAY
+        $TotalRowswithDataCountForR_DAY=0;
 
-            //////////////////////////TOTAL WIND RUN
-            $TotalWindRun=0.0;
-            $TotalRowswithDataCountForWindRun=0;
+        //////////////////////////TOTAL Thunderstorm
+        $TotalRowswithDataCountForThunderStorm=0;
+
+        //////////////////////////TOTAL Fog
+        $TotalRowswithDataCountForFog=0;
+
+        //////////////////////////TOTAL Haze
+        $TotalRowswithDataCountForHaze=0;
+
+        //////////////////////////TOTAL HailStorm
+        $TotalRowswithDataCountForHailStorm=0;
+
+        //////////////////////////TOTAL EarthQuake
+        $TotalRowswithDataCountForEarthQuake=0;
+
+
 
             //loop thr the array to carry out some cals before display
 
             foreach($array_archivedweathersummaryformreportdataforAMonth as $data){
 
                 //TOTAL MAX TEMPERATURE
-                if($data['Max_Temperature']!=''){  //not null ,not null
+                if($data['Max_Temperature']!=''){  //not null
 
                     $TotalMax+=$data['Max_Temperature'];
                     $TotalRowswithDataCountForMaxTemp+=1;
-                }elseif($data['Max_Temperature']==''){
+                }elseif($data['Max_Temperature']==''){    //null
 
                     $TotalMax+=0.0;
                     $TotalRowswithDataCountForMaxTemp+=0;
@@ -437,7 +460,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 /////TOTAL WB FOR 0600Z
                 if($data['WB_0600Z']!=''){
 
-                    $TotalDB_0600Z+=$data['WB_0600Z'];
+                    $TotalWB_0600Z+=$data['WB_0600Z'];
                     $TotalRowswithDataCountForWB_0600Z+=1;
                 }
                 elseif($data['WB_0600Z']==''){
@@ -547,7 +570,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 if($data['WB_1200Z']!=''){
 
                     $TotalWB_1200Z+=$data['WB_1200Z'];
-                    $TotalRowswithDataCountForWB_200Z+=1;
+                    $TotalRowswithDataCountForWB_1200Z+=1;
                 }
                 elseif($data['WB_1200Z']==''){
 
@@ -640,7 +663,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
                 /////TOTAL WIND RUN
-                if($data['WIND_RUN']!='' ){
+                if($data['WIND_RUN']!=''){
 
                     $TotalWindRun+=$data['WIND_RUN'];
                     $TotalRowswithDataCountForWindRun+=1;
@@ -652,16 +675,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
                 /////TOTAL RAINFALL
-                if($data['R_F']!='' ){
 
-                    $TotalRainfall+=$data['R_F'];
-                    $TotalRowswithDataCountForRainfall+=1;
-                }
-                elseif($data['R_F']==''){
 
-                    $TotalRainfall+=0.0;
-                    $TotalRowswithDataCountForRainfall+=0;
-                }
 
             }//END OF FOREACH
             //loop thru the array to display the data
@@ -705,31 +720,89 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                     <?php
                     if($data['R_F']!=''){
-                        if($data['R_F'] < 0.1){
+                        if(($data['R_F'] ==0) || ($data['R_F'] =='NIL') || empty($data['R_F']) ){
                             ?>
-                            <td class="main"><?php echo 'TR';?></td>
-                            <td class="main"></td>
-                        <?php
-                        }elseif($data['R_F'] > 0.1){
+                            <td class="main"><?php echo 'NIL';?></td>  <!-- R/F -->
+                            <td class="main"></td>   <!-- R/DAY -->
+                        <?php   $TotalRowswithDataCountForRainfall+=0;
+                        }elseif(($data['R_F'] < 0.1) || ($data['R_F'] =='TR')){
                             ?>
-                            <td class="main"><?php echo $data['R_F'];?></td>
-                            <td class="main"><?php echo '|';?></td>
-                        <?php
+                            <td class="main"><?php echo 'TR';?></td>  <!-- R/F -->
+                            <td class="main"></td>   <!-- R/DAY -->
+                        <?php    $TotalRowswithDataCountForRainfall+=0;
+                        }
+                        elseif(($data['R_F'] >= 0.1) && ($data['R_F'] <= 0.9)){
+                        ?>
+                        <td class="main"><?php echo $data['R_F'];?></td>  <!-- R/F -->
+                        <td class="main"></td>   <!-- R/DAY -->
+                       <?php   $TotalRainfall+=$data['R_F'];
+                            $TotalRowswithDataCountForRainfall+=0;
+                         }
+                        elseif(($data['R_F'] >= 1.0)){
+                            ?>
+                            <td class="main"><?php echo $data['R_F'];?></td>  <!-- R/F -->
+                            <td class="main"><?php echo 1 ;?></td>   <!-- R/DAY -->
+                        <?php     $TotalRainfall+=$data['R_F'];
+                            $TotalRowswithDataCountForRainfall+=1;
+                            $TotalRowswithDataCountForR_DAY+=1;
                         }
 
-                    }elseif($data['R_F']=='') {
+                    }
+                    else{
                         ?>
-                        <td class="main"></td>
-                        <td class="main"></td>
+                        <td class="main"></td> <!-- R/F -->
+                        <td class="main"></td>  <!-- R/DAY -->
                     <?php } ?>
 
 
 
-                    <td class="main"></td>
-                    <td class="main"></td>
-                    <td class="main"></td>
-                    <td class="main"></td>
-                    <td class="main"></td>
+                    <?php if($data['ThunderStorm']=="true"){
+                     $TotalRowswithDataCountForThunderStorm+=1;
+                     ?>
+                    <td class="main"><?php echo 1 ;?></td>  <!-- Ts -->
+
+                    <?php }elseif($data['ThunderStorm']=="false"){  ?>
+                    <td class="main"></td>  <!-- Ts -->
+                    <?php } ?>
+
+
+                    <?php if($data['Fog']=="true"){
+                        $TotalRowswithDataCountForFog+=1;
+                        ?>
+                        <td class="main"><?php echo 1 ;?></td>  <!-- Fg -->
+                    <?php }elseif($data['Fog']=="false"){  ?>
+                        <td class="main"></td>  <!-- Fg -->
+                    <?php } ?>
+
+
+
+                    <?php if($data['Haze']=="true"){
+                        $TotalRowswithDataCountForHaze+=1;
+                        ?>
+                        <td class="main"><?php echo 1 ;?></td>  <!-- Hz -->
+                    <?php }elseif($data['Haze']=="false"){  ?>
+                        <td class="main"></td>  <!-- Hz -->
+                    <?php } ?>
+
+
+
+                    <?php if($data['HailStorm']=="true"){
+                        $TotalRowswithDataCountForHailStorm+=1;
+                        ?>
+                        <td class="main"><?php echo 1 ;?></td>  <!-- Hail -->
+                    <?php }elseif($data['HailStorm']=="false"){  ?>
+                        <td class="main"></td>  <!-- Hail -->
+                    <?php } ?>
+
+                    <?php if($data['EarthQuake']=="true"){
+                        $TotalRowswithDataCountForEarthQuake+=1;
+                        ?>
+                        <td class="main"><?php echo 1 ;?></td>  <!-- EarthQuake -->
+                    <?php }elseif($data['EarthQuake']=="false"){  ?>
+                        <td class="main"></td>  <!-- EarthQuake -->
+                    <?php } ?>
+
+
 
 
                 </tr>
@@ -762,14 +835,19 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <td class="main"><?php echo round($TotalFF_1200Z,2) ;?> </td>
 
 
-                <td class="main"><?php echo round($TotalWIND_RUN,2) ;?> </td>
+                <td class="main"><?php echo round($TotalWindRun,2) ;?> </td>
                 <td class="main"><?php echo round($TotalRainfall,2) ;?> </td>
-                <td class="main"> </td>
-                <td class="main"> </td>
-                <td class="main"> </td>
-                <td class="main"> </td>
-                <td class="main"> </td>
-                <td class="main"> </td>
+                <td class="main"><?php echo $TotalRowswithDataCountForR_DAY;?></td>
+                <td class="main"><?php if($TotalRowswithDataCountForThunderStorm!=0){
+                                     echo $TotalRowswithDataCountForThunderStorm;}?></td>
+                <td class="main"><?php if($TotalRowswithDataCountForFog!=0){
+                    echo $TotalRowswithDataCountForFog;}?> </td>
+                <td class="main"><?php if($TotalRowswithDataCountForHaze!=0){
+                    echo $TotalRowswithDataCountForHaze;}?> </td>
+                <td class="main"><?php if($TotalRowswithDataCountForHailStorm!=0){
+                    echo $TotalRowswithDataCountForHailStorm; }?> </td>
+                <td class="main"><?php if($TotalRowswithDataCountForEarthQuake!=0){
+                    echo $TotalRowswithDataCountForEarthQuake;}?> </td>
 
             </tr>
             <tr>
@@ -821,6 +899,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         ?>
         <br><br>
+        <br><br>
+       </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+       <span><strong>Report Generated BY:</strong></span> <span class="dotted-line"><?php echo $name;?></span>
+        <br><br><br><br>
         <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
         <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
         <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-print"></i> Export to csv</button>
@@ -869,7 +951,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 //Check that the a station is selected from the list of stations(Manager)
                 var stationOC=$('#stationOC').val();
-                if(stationManager==""){  // returns true if the variable does NOT contain a valid number
+                if(stationOC==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station not picked");
                     $('#stationOC').val("");  //Clear the field.
                     $("#stationOC").focus();

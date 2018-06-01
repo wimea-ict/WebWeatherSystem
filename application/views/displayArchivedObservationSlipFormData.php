@@ -40,7 +40,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole=='DataOfficer'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -73,14 +73,14 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole=='DataOfficer'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
                                 <input type="hidden" name="page" value="monthly_rainfall_report" >
 
                                 <span class="input-group-addon">Station Number</span>
-                                <input type="text" name="stationNoManager"  id="stationNoManager" required class="form-control" value=""  readonly class="form-control"  >
+                                <input type="text" name="stationNoManager"  id="stationNoManager" required class="form-control" value=""  readonly   >
                             </div>
                         </div>
                     </div>
@@ -221,24 +221,63 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 </tr>
 
-                <tr>
-                    <td class="main"><?php echo $data->TypeOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfLowClouds;?></td>
+               <tr>
+                   <td class="main"><?php echo $data->TypeOfLowClouds1;?></td>
+                   <td class="main"><?php echo $data->OktasOfLowClouds1;?></td>
+                   <td class="main"><?php echo $data->HeightOfLowClouds1;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfLowClouds1;?></td>
 
 
-                    <td class="main"><?php echo $data->TypeOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfMediumClouds;?></td>
+                   <td class="main"><?php echo $data->TypeOfMediumClouds1;?></td>
+                   <td class="main"><?php echo $data->OktasOfMediumClouds1;?></td>
+                   <td class="main"><?php echo $data->HeightOfMediumClouds1;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfMediumClouds1;?></td>
 
-                    <td class="main"><?php echo $data->TypeOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfHighClouds;?></td>
+                   <td class="main"><?php echo $data->TypeOfHighClouds1;?></td>
+                   <td class="main"><?php echo $data->OktasOfHighClouds1;?></td>
+                   <td class="main"><?php echo $data->HeightOfHighClouds1;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfHighClouds1;?></td>
 
-                </tr>
+               </tr>
+
+               <tr>
+                   <td class="main"><?php echo $data->TypeOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfLowClouds2;?></td>
+
+
+                   <td class="main"><?php echo $data->TypeOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfMediumClouds2;?></td>
+
+                   <td class="main"><?php echo $data->TypeOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfHighClouds2;?></td>
+
+               </tr>
+
+            <tr>
+                <td class="main"><?php echo $data->TypeOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfLowClouds3;?></td>
+
+
+                <td class="main"><?php echo $data->TypeOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfMediumClouds3;?></td>
+
+                <td class="main"><?php echo $data->TypeOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfHighClouds3;?></td>
+
+            </tr>
+
 
                 <tr>
 
@@ -411,17 +450,18 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 </tr>
             </table>
-
-
         </table>
-
-
-
-
          <?php
                 }
         ?>
-        <br><br>
+       <br><br><br>
+    <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
+    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+    <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
+
+
+    <br><br><br>
+
         <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
         <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
         <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-print"></i> Export to csv</button>
@@ -489,7 +529,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 //Check that the a station is selected from the list of stations(Manager)
                 var stationOC=$('#stationOC').val();
-                if(stationManager==""){  // returns true if the variable does NOT contain a valid number
+                if(stationOC==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station not picked");
                     $('#stationOC').val("");  //Clear the field.
                     $("#stationOC").focus();
@@ -554,7 +594,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                             $('#stationNoManager').empty();
 
-                            // alert(data);
+                            //alert(data);
                             $("#stationNoManager").val(json[0].StationNumber);
 
                         }

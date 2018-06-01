@@ -11,18 +11,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Stations
+           New Stations
             <small> Page</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Stations</li>
-
-
+            <li class="active">New Stations</li>
         </ol>
     </section>
 
-    <!-- Main content -->
     <section class="content">
     <?php require_once(APPPATH . 'views/error.php'); ?>
     <?php
@@ -30,7 +27,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     if(is_array($displaynewstationsform) && count($displaynewstationsform)) {
         ?>
         <div class="row">
-            <form action="<?php echo base_url(); ?>index.php/Stations/insertStationInformation/" method="post" enctype="multipart/form-data">
+            <form action="<?php echo base_url(); ?>index.php/NewStations/insertStationInformation/" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div id="output"></div>
                     <script language="javascript">
@@ -54,17 +51,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"> Station Name</span>
-                                <select name="namestation" id="namestation" onkeyup="allowCharactersInputOnly(this)"  required class="form-control"  placeholder="Enter Station name" >
-                                    <option value="">--Select Station Name--</option>
-                                    <?php
-                                    if (is_array($stationIndicatorData) && count($stationIndicatorData)) {
-                                        foreach($stationIndicatorData as $station){?>
-                                            <option value="<?php echo $station->LocationStationName;?>"><?php echo $station->LocationStationName;?></option>
+                                <input type="text" name="namestation" id="namestation" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" required placeholder="Enter Station name" >
 
-                                        <?php }
-                                    } ?>
-                                  </select>
-                                    <input type="hidden" name="checkduplicateEntryOnAddNewStationInformation_hiddentextfield" id="checkduplicateEntryOnAddNewStationInformation_hiddentextfield">
+                                <input type="hidden" name="checkduplicateEntryOnAddNewStationsInformation_hiddentextfield" id="checkduplicateEntryOnAddNewStationsInformation_hiddentextfield">
 
                             </div>
                         </div>
@@ -72,21 +61,21 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Station Number</span>
-                                <input type="text" name="numberstation" id="numberstation" value="" readonly class="form-control" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter station number" >
+                                <input type="text" name="numberstation" id="numberstation"  onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter station number" >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Station Registration Number</span>
-                                <input type="text" name="registrationnumberstation" id="registrationnumberstation" value="" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter the Station Registration Number" >
+                                <input type="text" name="registrationnumberstation" id="registrationnumberstation"  onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter the Station Registration Number" >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Location</span>
-                                <input type="text" name="locationstation" id="locationstation" value=""  readonly class="form-control" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder="Enter Station Location">
+                                <input type="text" name="locationstation" id="locationstation"    onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder="Enter Station Location">
 
                             </div>
                         </div>
@@ -95,7 +84,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Indicator</span>
-                                <input type="text" name="indicatorstation" id="indicatorstation" value="" readonly class="form-control" onkeyup="allowIntegerInputOnly(this)"   class="form-control"   placeholder="Enter Station Indicator">
+                                <input type="text" name="indicatorstation" id="indicatorstation"   onkeyup="allowCharactersInputOnly(this)"   class="form-control"   placeholder="Enter Station Indicator">
                             </div>
                         </div>
 
@@ -186,12 +175,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Type Of Station</span>
-                                <select name="typestation" id="typestation" onkeyup="allowCharactersInputOnly(this)" required class="form-control"  placeholder="Enter type" >
+                                <select name="typestation" id="typestation" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder="Enter type" >
                                     <option value="">--Select Type Of Station--</option>
                                     <option value="Synoptic">Synoptic</option>
                                     <option value="Agrometeorological">Agrometeorological</option>
                                     <option value="Rainfall">Rainfall</option>
-                                    <option value="Hydrometeorological">Hydrometeorological</option>
+                                    <option value="Hygrometeorological">Hygrometeorological</option>
                                     <option value="Climatological">Climatological</option>
 
 
@@ -204,22 +193,22 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <center>
+                <div class="modal-footer clearfix">
 
-                    <a href="<?php echo base_url(); ?>index.php/Stations/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
+                    <a href="<?php echo base_url(); ?>index.php/NewStations/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 
-                    <button type="submit" id="post_stationInformation" name="post_stationInformation" class="btn btn-primary"><i class="fa fa-plus"></i> SUBMIT </button>
-                </center>
+                    <button type="submit" id="post_stationInformation" name="post_stationInformation" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Add Station</button>
+                </div>
             </form>
         </div>
     <?php
     }elseif((is_array($stationdataid) && count($stationdataid))) {
         foreach($stationdataid as $stationdata){
-             //echo $userrole;
+            //echo $userrole;
             $stationsdataformid = $stationdata->id;
             ?>
             <div class="row">
-                <form action="<?php echo base_url(); ?>index.php/Stations/updateStationInformation" method="post" enctype="multipart/form-data">
+                <form action="<?php echo base_url(); ?>index.php/NewStations/updateStationInformation" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div id="output"></div>
                         <script language="javascript">
@@ -245,7 +234,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station Name</span>
-                                    <input type="text" name="station_name"  id="station_name" required class="form-control" value="<?php echo $stationdata->StationName;?>"   class="form-control"  >
+                                    <input type="text" name="station_name"  id="station_name" required class="form-control" value="<?php echo $stationdata->StationName;?>"  readonly class="form-control"  >
 
                                 </div>
                             </div>
@@ -253,8 +242,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNo" required class="form-control" id=stationNo" value="<?php echo $stationdata->StationNumber;?>"  class="form-control"  >
-                                    <input type="hidden" name="id" id="id" value="<?php echo $stationdata->station_id;?>">
+                                    <input type="text" name="stationNo" required class="form-control" id=stationNo" value="<?php echo $stationdata->StationNumber;?>" readonly class="form-control"  >
+                                    <input type="hidden" name="id" id="id" value="<?php echo $stationdata->id;?>">
                                 </div>
                             </div>
 
@@ -262,7 +251,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station Registration Number</span>
-                                    <input type="text" name="stationRegNo" id="stationRegNo" value="<?php echo $stationdata->StationRegNumber;?>"   class="form-control" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter the Station Registration Number" >
+                                    <input type="text" name="stationRegNo" id="stationRegNo" value="<?php echo $stationdata->StationRegNumber;?>"  readonly class="form-control" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter the Station Registration Number" >
                                 </div>
                             </div>
 
@@ -270,7 +259,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Location</span>
-                                    <input type="text" name="stationlocation" id="stationlocation"  value="<?php echo $stationdata->Location;?>"  class="form-control" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required placeholder="Enter the Station Location">
+                                    <input type="text" name="stationlocation" id="stationlocation"  value="<?php echo $stationdata->Location;?>" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required placeholder="Enter the Station Location">
 
                                 </div>
                             </div>
@@ -278,29 +267,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Indicator</span>
-                                    <input type="text" name="stationindicator" id="stationindicator" value="<?php echo $stationdata->Indicator;?>"  class="form-control" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter the Station Indicator">
+                                    <input type="text" name="stationindicator" id="stationindicator" value="<?php echo $stationdata->Indicator;?>" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required placeholder="Enter the Station Indicator">
                                 </div>
                             </div>
 
-
-
-
-                               <div class="form-group">
-                                   <div class="input-group">
-                                       <span class="input-group-addon">Station Region</span>
-                                        <select name="stationregion" id="stationregion" onkeyup="allowCharactersInputOnly(this)" required class="form-control">
-                                         <option value="<?php echo $stationdata->StationRegion;?>"><?php echo $stationdata->StationRegion;?></option>
-                                         <option value="">--Select REGION--</option>
-                                         <option value="Central">Central</option>
-                                         <option value="Northern">Northern</option>
-                                         <option value="Southern">Southern</option>
-                                         <option value="Eastern">Eastern</option>
-                                         <option value="Western">Western</option>
-
-                                     </select>
-
-                                   </div>
-                               </div>
 
 
 
@@ -308,8 +278,26 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                             <div class="form-group">
                                 <div class="input-group">
+                                    <span class="input-group-addon">Station Region</span>
+                                    <select name="stationregion" id="stationregion" onkeyup="allowCharactersInputOnly(this)" required class="form-control">
+                                        <option value="<?php echo $stationdata->StationRegion;?>"><?php echo $stationdata->StationRegion;?></option>
+                                        <option value="">--Select REGION--</option>
+                                        <option value="Central">Central</option>
+                                        <option value="Northern">Northern</option>
+                                        <option value="Southern">Southern</option>
+                                        <option value="Eastern">Eastern</option>
+                                        <option value="Western">Western</option>
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="input-group">
                                     <span class="input-group-addon">Country</span>
-                                    <input type="text" name="stationcountry" id="stationcountry"  class="form-control" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" required value="<?php echo $stationdata->Country;?>" placeholder="Enter country" >
+                                    <input type="text" name="stationcountry" id="stationcountry" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" required value="<?php echo $stationdata->Country;?>" placeholder="Enter country" >
                                 </div>
                             </div>
 
@@ -352,50 +340,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
 
 
-                           <?php if($userrole=="OC"){  ?>
+
+
+
+
+
+
+
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Status</span>
-                                    <input type="text" name="stationstatus" id="stationstatus" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" required value="<?php echo $stationdata->StationStatus;?>" placeholder="Enter country" >
-                                    <!--  <select name="stationstatus" id="stationstatus" onkeyup="allowCharactersInputOnly(this)" required class="form-control"   required placeholder="Enter Status" >
-                                          <option value="<?php echo $stationdata->StationStatus;?>"><?php echo $stationdata->StationStatus;?></option>
-                                          <option value="">--Select Status--</option>
-                                          <option value="Active">Active</option>
-                                          <option value="InActive">InActive</option>
-
-
-                                      </select>  -->
-                                </div>
-                            </div>
-
-
-
-
-                               <div class="form-group">
-                                   <div class="input-group">
-                                       <span class="input-group-addon">Station Type</span>
-                                       <input type="text" name="stationtype" id="stationtype" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" required value="<?php echo $stationdata->StationType;?>" placeholder="Enter country" >
-
-                                       <!--   <select name="stationtype" id="stationtype" required class="form-control" onkeyup="allowCharactersInputOnly(this)" required placeholder="Enter type" >
-                                              <option value="<?php echo $stationdata->StationType;?>"><?php echo $stationdata->StationType;?></option>
-                                              <option value="">--Select Type Of Station--</option>
-                                              <option value="Synoptic">Synoptic</option>
-                                              <option value="Agrometeorological">Agrometeorological</option>
-                                              <option value="Rainfall">Rainfall</option>
-                                              <option value="Hydrometeorological">Hydrometeorological</option>
-                                              <option value="Climatological">Climatological</option>
-
-
-
-                                          </select>  -->
-                                   </div>
-                               </div>
-                                <?php }elseif($userrole=="Manager"){ ?>
-
-                               <div class="form-group">
-                                   <div class="input-group">
-                                       <span class="input-group-addon"> Station Status</span>
-                                         <select name="stationstatus" id="stationstatus" onkeyup="allowCharactersInputOnly(this)" required class="form-control"   required placeholder="Enter Status" >
+                                    <select name="stationstatus" id="stationstatus" onkeyup="allowCharactersInputOnly(this)" required class="form-control"   required placeholder="Enter Status" >
                                         <option value="<?php echo $stationdata->StationStatus;?>"><?php echo $stationdata->StationStatus;?></option>
                                         <option value="">--Select Status--</option>
                                         <option value="Active">Active</option>
@@ -403,13 +358,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                                     </select>
-                                   </div>
-                               </div>
+                                </div>
+                            </div>
 
 
 
 
-                               <div class="form-group">
+                            <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station Type</span>
                                     <select name="stationtype" id="stationtype" required class="form-control" onkeyup="allowCharactersInputOnly(this)" required placeholder="Enter type" >
@@ -418,7 +373,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <option value="Synoptic">Synoptic</option>
                                         <option value="Agrometeorological">Agrometeorological</option>
                                         <option value="Rainfall">Rainfall</option>
-                                        <option value="Hydrometeorological">Hydrometeorological</option>
+                                        <option value="Hygrometeorological">Hygrometeorological</option>
                                         <option value="Climatological">Climatological</option>
 
 
@@ -427,28 +382,28 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
                             </div>
 
-                          <?php } ?>
+
                         </div>
 
                     </div>
                     <div class="clearfix"></div>
             </div>
-            <center>
+            <div class="modal-footer clearfix">
 
-                <a  href="<?php echo base_url(); ?>index.php/Stations/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
+                <a  href="<?php echo base_url(); ?>index.php/NewStations/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 
-                <button type="submit" name="update_stationInformation" id="update_stationInformation" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE </button>
-            </center>
+                <button type="submit" name="update_stationInformation" id="update_stationInformation" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Station</button>
+            </div>
             </form>
             </div>
         <?php
         }
     }else{
         ?>
-        <?php  if($userrole=='Manager'){ ?>
+        <?php  if($userrole=='ManagerStationNetworks'){ ?>
             <div class="row">
                 <div class="col-xs-3"><a class="btn btn-primary no-print"
-                                         href="<?php echo base_url(); ?>index.php/Stations/DisplayStationsForm/">
+                                         href="<?php echo base_url(); ?>index.php/NewStations/DisplayStationsForm/">
                         <i class="fa fa-plus"></i> Add new Station</a>
 
                 </div>
@@ -472,6 +427,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Station Name</th>
                                 <th>Station Number</th>
                                 <th>Station Reg No</th>
+                                <th>Station Status</th>
                                 <th>Location</th>
                                 <th>Indicator </th>
 
@@ -484,8 +440,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Altitude</th>
 
 
-                                    <th class="no-print">Action</th>
+                                <?php if($userrole=='ManagerStationNetworks'){ ?>
 
+                                    <th class="no-print">Action</th>
+                                <?php }?>
                             </tr>
                             </thead>
                             <tbody>
@@ -502,6 +460,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $stationdata->StationName;?></td>
                                         <td ><?php echo $stationdata->StationNumber;?></td>
                                         <td><?php echo $stationdata->StationRegNumber;?></td>
+                                        <td><?php echo $stationdata->StationStatus;?></td>
                                         <td ><?php echo $stationdata->Location;?></td>
                                         <td ><?php echo $stationdata->Indicator;?></td>
 
@@ -514,11 +473,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $stationdata->Altitude;?></td>
 
 
-                                        <td class="no-print">
+                                        <?php if($userrole=='ManagerStationNetworks'){ ?><td class="no-print">
 
-                                            <a href="<?php echo base_url() . "index.php/Stations/DisplayStationsFormForUpdate/" .$stationdata->station_id;?>" style="cursor:pointer;">Edit</a>
-                                            <!--  or <a href="<?php echo base_url() . "index.php/Stations/deleteStation/" .$stationid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $stationdata->StationName;?>');">Delete</a></td>-->
+                                            <a href="<?php echo base_url() . "index.php/NewStations/DisplayStationsFormForUpdate/" .$stationid ;?>" style="cursor:pointer;">Edit</a>
+                                            <!--  or <a href="<?php echo base_url() . "index.php/NewStations/deleteStation/" .$stationid ;?>"
+                                                  onClick="return confirm('Are you sure you want to delete <?php echo $stationdata->StationName;?>');">Delete</a></td><?php }?> -->
                                     </tr>
 
                                 <?php
@@ -528,7 +487,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </tbody>
                         </table>
                         <br><br>
-                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT </button>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
@@ -539,7 +498,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     </section><!-- /.content -->
     </aside><!-- /.right-side -->
     </div><!-- ./wrapper -->
-    <!-- jQuery 2.0.2
+
 <script src="js/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
@@ -550,29 +509,59 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             //Post metar form data into the DB
             //Validate each field before inserting into the DB
             $('#post_stationInformation').click(function(event) {
+              alert("hello");
+
                 //Check for duplicate Entry Data when adding new archive metar form.
-                var returntruthvalue=checkDuplicateEntryData_OnAddNewStationInformationData();
-                //if true there is already an entry
-                if(returntruthvalue=="true"){
+                var   stationName = $('#namestation').val();
+                var   stationNumber= $('#numberstation').val();
+                var   stationLocation = $('#locationstation').val();
+                var   stationIndicator= $('#indicatorstation').val();
 
-                    alert("Station Record With the station Name,station Number  exists already in the db");
-                    return false;
-                }else if(returntruthvalue=="Missing"){
+                $('#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield').val("");
 
-                    alert("Station Name or Number not picked");
-                    return false;
+                if ( (stationName != undefined) && (stationNumber != undefined) && (stationLocation != undefined) && (stationIndicator != undefined)   ) {
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>"+"index.php/NewStations/checkInDBIfStationNameAndStationNumberRecordExistsAlready",
+                        type: "POST",
+                        data:{'StationName': stationName,'StationNumber':stationNumber,'Location':stationLocation,'Indicator':stationIndicator},
+                        cache: false,
+                        async: false,
+
+                        success: function(data){
+
+                            if(data=="true"){
+
+                                $('#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield').empty();
+
+                                 alert(data);
+                                $("#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield").val(data);
+
+                            }
+                            else if(data=="false"){
+                                $('#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield').empty();
+
+                                alert("value not 0picked");
+                                $("#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield").val(data);
+
+                            }
+                        }
+
+                    });//end of ajax
+
+                    var truthvalue=$("#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield").val();
+
+                }else{
+                  alert("unknowns");
+                } //end of else
+
+                else if( (stationName == undefined) || (stationNumber == undefined) || (stationLocation == undefined) || (stationIndicator == undefined)  ){
+
+                    alert("Missing");
                 }
 
 
-                //Check value of the hidden text field.That stores whether a row is duplicate
-                var hiddenvalue=$('#checkduplicateEntryOnAddNewStationInformation_hiddentextfield').val();
-                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Value not picked");
-                    $('#checkduplicateEntryOnAddNewStationInformation_hiddentextfield').val("");  //Clear the field.
-                    $("#checkduplicateEntryOnAddNewStationInformation_hiddentextfield").focus();
-                    return false;
 
-                }
+
 
                 //Check that Country is selected
                 var namestation=$('#namestation').val();
@@ -685,75 +674,27 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
 
                 }
-///////////////////////////////////////////////////////////////////////////////////
+
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddNewStationsInformation_hiddentextfield").focus();
+                    return false;
+
+                }
+
 
             }); //button
             //  return false;
 
+
         });  //document
-    </script>
-    <script>
-        //CHECK DB IF THE METAR ALREADY EXISTS
-        function checkDuplicateEntryData_OnAddNewStationInformationData(){
-
-            //Check against the date,stationName,StationNumber,Time and Metar Option.
-
-            var  stationName = $('#namestation').val();
-            var   stationNumber= $('#numberstation').val();
-            var  stationLocation = $('#locationstation').val();
-            var   stationIndicator= $('#indicatorstation').val();
-
-
-
-
-
-
-            $('#checkduplicateEntryOnAddNewStationInformation_hiddentextfield').val("");
-
-            if ( (stationName != undefined) && (stationNumber != undefined) && (stationLocation != undefined) && (stationIndicator != undefined)   ) {
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/checkInDBIfStationNameAndStationNumberRecordExistsAlready",
-                    type: "POST",
-                    data:{'stationName': stationName,'stationNumber':stationNumber,'stationLocation':stationLocation,'stationIndicator':stationIndicator},
-                    cache: false,
-                    async: false,
-                    success: function(data){
-
-                        if(data=="true"){
-                            $('#checkduplicateEntryOnAddNewStationInformation_hiddentextfield').empty();
-
-                            $("#checkduplicateEntryOnAddNewStationInformation_hiddentextfield").val(data);
-
-                        }
-                        else if(data=="false"){
-                            $('#checkduplicateEntryOnAddNewStationInformation_hiddentextfield').empty();
-
-                            $("#checkduplicateEntryOnAddNewStationInformation_hiddentextfield").val(data);
-
-                        }
-                    }
-
-                });//end of ajax
-
-                var truthvalue=$("#checkduplicateEntryOnAddNewStationInformation_hiddentextfield").val();
-
-            }//end of if
-
-            else if( (stationName == undefined) || (stationNumber == undefined) || (stationLocation == undefined) || (stationIndicator == undefined)  ){
-
-                var truthvalue="Missing";
-            }
-
-
-
-
-            return truthvalue;
-
-
-        }//end of check duplicate values in the DB
 
 
     </script>
+
     <script>
         $(document).ready(function() {
             //Update  Archive metar form data into the DB
@@ -761,7 +702,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $('#update_stationInformation').click(function(event) {
 
 
-               //Check that id of the row is picked
+                //Check that id of the row is picked
                 var rowid=$('#id').val();
                 if(rowid==""){  // returns true if the variable does NOT contain a valid number
                     alert("Row id not picked");
@@ -893,65 +834,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         });  //document
     </script>
-    <script type="text/javascript">
-        //Once the Manager selects the Station Name,The Station Number,Station Location and  the Indicator should be picked from the DB.
-        //Add Station.
-        $(document.body).on('change','#namestation',function(){
-            $('#numberstation').val("");  //Clear the field.
-            $('#locationstation').val("");  //Clear the field.
-            $('#indicatorstation').val("");  //Clear the field.
-            var StationName = this.value;
-            if (StationName != "") {
-                //alert(station);
-                $('#numberstation').val("");
-                $('#locationstation').val("");
-                $('#indicatorstation').val("");
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationDetails",
-                    type: "POST",
-                    data: {'StationName': StationName},
-                    cache: false,
-                    //dataType: "JSON",
-                    success: function(data){
-                        if (data)
-                        {
-                            var json = JSON.parse(data);
 
-                            $('#numberstation').empty();
-                            $('#locationstation').empty();
-                            $('#indicatorstation').empty();
-
-                            // alert(data);
-                            $("#numberstation").val(json[0].LocationStationNumber);
-                            $("#locationstation").val(json[0].LocationStationName);
-                            $("#indicatorstation").val(json[0].Indicator);
-
-                        }
-                        else{
-
-                            $('#numberstation').empty();
-                            $('#locationstation').empty();
-                            $('#indicatorstation').empty();
-
-                            $('#numberstation').val("");
-                            $('#locationstation').val("");
-                            $('#indicatorstation').val("");
-                        }
-                    }
-                });
-            }
-            else {
-
-                $('#numberstation').empty();
-                $('#locationstation').empty();
-                $('#indicatorstation').empty();
-
-                $('#numberstation').val("");
-                $('#locationstation').val("");
-                $('#indicatorstation').val("");
-            }
-        })
-    </script>
     <script>
         //Inform the user if they want to really update this textfield with a new value.
         //On Editing
@@ -1054,147 +937,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         //Inform the user if they want to really update this textfield with a new value.
         //On Editing
         $(document).ready(function(){
-          ///////////////////////////////////////////////////////////////////////////////////////////
-          var newValue_stationindicator;
-          var oldValue_stationindicator= $('#stationindicator').val()
-
-          $('#stationindicator').live('change paste', function(){
-              newValue_stationindicator = $(this).val();
-
-              var retVal = confirm("Do you want to make updates to this field ?");
-              if( retVal == true ){
-                  //document.write ("User wants to continue!");
-
-                  $('#stationindicator').val(newValue_stationindicator);
-                  //alert("HI");
-                  return true;
-              }
-              else{
-                  $('#stationindicator').val(oldValue_stationindicator);
-                  return false;
-              }
-          });
-          ///////////////////////////////////////////////////////////////////////////////////////////
-          var newValue_closed;
-          var oldValue_closed= $('#closed').val()
-
-          $('#closed').live('change paste', function(){
-              newValue_closed = $(this).val();
-
-              var retVal = confirm("Do you want to make updates to this field ?");
-              if( retVal == true ){
-                  //document.write ("User wants to continue!");
-
-                  $('#closed').val(newValue_closed);
-                  //alert("HI");
-                  return true;
-              }
-              else{
-                  $('#closed').val(oldValue_closed);
-                  return false;
-              }
-          });
-          ///////////////////////////////////////////////////////////////////////////////////////////
-          var newValue_opened;
-          var oldValue_opened= $('#opened').val()
-
-          $('#opened').live('change paste', function(){
-              newValue_opened = $(this).val();
-
-              var retVal = confirm("Do you want to make updates to this field ?");
-              if( retVal == true ){
-                  //document.write ("User wants to continue!");
-
-                  $('#opened').val(newValue_opened);
-                  //alert("HI");
-                  return true;
-              }
-              else{
-                  $('#opened').val(oldValue_opened);
-                  return false;
-              }
-          });
-          ///////////////////////////////////////////////////////////////////////////////////////////
-          var newValue_stationcountry;
-          var oldValue_stationcountry= $('#stationcountry').val()
-
-          $('#stationcountry').live('change paste', function(){
-              newValue_stationcountry = $(this).val();
-
-              var retVal = confirm("Do you want to make updates to this field ?");
-              if( retVal == true ){
-                  //document.write ("User wants to continue!");
-
-                  $('#stationcountry').val(newValue_stationcountry);
-                  //alert("HI");
-                  return true;
-              }
-              else{
-                  $('#stationcountry').val(oldValue_stationcountry);
-                  return false;
-              }
-          });
-          ///////////////////////////////////////////////////////////////////////////////////////////
-          var newValue_stationlocation;
-          var oldValue_stationlocation= $('#stationlocation').val()
-
-          $('#stationlocation').live('change paste', function(){
-              newValue_stationlocation = $(this).val();
-
-              var retVal = confirm("Do you want to make updates to this field ?");
-              if( retVal == true ){
-                  //document.write ("User wants to continue!");
-
-                  $('#stationlocation').val(newValue_stationlocation);
-                  //alert("HI");
-                  return true;
-              }
-              else{
-                  $('#stationlocation').val(oldValue_stationlocation);
-                  return false;
-              }
-          });
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            var newValue_stationNo;
-            var oldValue_stationNo= $('#stationNo').val()
-
-            $('#stationNo').live('change paste', function(){
-                newValue_stationNo = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#stationNo').val(newValue_stationNo);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    $('#stationNo').val(oldValue_stationNo);
-                    return false;
-                }
-            });
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            var newValue_station_name;
-            var oldValue_station_name= $('#station_name').val()
-
-            $('#station_name').live('change paste', function(){
-                newValue_station_name = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#station_name').val(newValue_station_name);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    $('#station_name').val(oldValue_station_name);
-                    return false;
-                }
-            });
-
             ///////////////////////////////////////////////////////////////////////////////////////////
             var newValue_stationlatitude;
             var oldValue_stationlatitude= $('#stationlatitude').val()
@@ -1212,6 +954,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return true;
                 }
                 else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
                     $('#stationlatitude').val(oldValue_stationlatitude);
                     return false;
                 }

@@ -40,7 +40,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -73,7 +73,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -233,12 +233,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSDayNumber"]=$data->DayOfTheMonth;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Max_Read"]=$data->Max_Read;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Min_Read"]=$data->Min_Read;
+                        $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_DurationOfSunshine"]=$data->DurationOfSunshine;
+
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Dry_Bulb"]=$data->Dry_Bulb;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wet_Bulb"]=$data->Wet_Bulb;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Direction"]=$data->Wind_Direction;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Speed"]=$data->Wind_Speed;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_CLP"]=$data->CLP;
+
+                        $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Run"]=$data->Wind_Run;
                         $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Rainfall"]=$data->Rainfall;
+
 
                         $print=1; //IF IT EXISTS PRINT CHGS TO 1
 
@@ -256,11 +261,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSDayNumber"]=$daynum;
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Max_Read"]='';
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Min_Read"]='';
+                    $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_DurationOfSunshine"]='';
+
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Dry_Bulb"]='';
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wet_Bulb"]='';
+                    $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_CLP"]='';
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Direction"]='';
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Speed"]='';
-                    $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_CLP"]='';
+
+
+
+                    $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Wind_Run"]='';
                     $array_observationslipdataOfAMonthAndforTime0600Z[$daynum-1]["OSTime0600Z_Rainfall"]='';
 
                 }//end of if
@@ -279,11 +290,18 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSDayNumber1"]=$data->DayOfTheMonth;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Max_Read"]=$data->Max_Read;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Min_Read"]=$data->Min_Read;
+                        $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_DurationOfSunshine"]=$data->DurationOfSunshine;
+
+
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Dry_Bulb"]=$data->Dry_Bulb;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wet_Bulb"]=$data->Wet_Bulb;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Direction"]=$data->Wind_Direction;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Speed"]=$data->Wind_Speed;
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_CLP"]=$data->CLP;
+
+
+                        $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Run"]=$data->Wind_Run;
+
                         $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Rainfall"]=$data->Rainfall;
 
                         $print1=1;
@@ -301,12 +319,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSDayNumber1"]=$daynum;
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Max_Read"]='';
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Min_Read"]='';
+                    $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_DurationOfSunshine"]='';
+
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Dry_Bulb"]='';
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wet_Bulb"]='';
 
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Direction"]='';
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Speed"]='';
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_CLP"]='';
+
+                    $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Wind_Run"]='';
+
                     $array_observationslipdataOfAMonthAndforTime1200Z[$daynum-1]["OSTime1200Z_Rainfall"]='';
 
                 }//end of if
@@ -323,7 +346,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                         $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_DayNumber"]=$data->DayOfTheMonth;
                         $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_GPM"]=$data->StandardIsobaricSurface;
-                        $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_DURATION_OF_SUNSHINE"]=$data->DurationOfSunshine;
 
                         $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_VapourPressure"]=$data->VapourPressure;
 
@@ -340,7 +362,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 if($print2==0){
                     $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_DayNumber"]=$daynum;
                     $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_GPM"]='';
-                    $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_DURATION_OF_SUNSHINE"]='';
 
                     $array_moreformfieldsdataOfAMonthAndforTime0600Z[$daynum-1]["MOREFORMFIEDSTABLE_Time0600Z_VapourPressure"]='';
 
@@ -358,7 +379,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                         $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_DayNumber2"]=$data->DayOfTheMonth;
                         $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_GPM"]=$data->StandardIsobaricSurface;
-                        $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_DURATION_OF_SUNSHINE"]=$data->DurationOfSunshine;
 
                         $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_VapourPressure"]=$data->VapourPressure;
 
@@ -375,7 +395,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 if($print3==0){
                     $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_DayNumber2"]=$daynum;
                     $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_GPM"]='';
-                    $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_DURATION_OF_SUNSHINE"]='';
 
                     $array_moreformfieldsdataOfAMonthAndforTime1200Z[$daynum-1]["MOREFORMFIEDSTABLE_Time1200Z_VapourPressure"]='';
 
@@ -393,7 +412,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $finalarraymerge [$i]["Date"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSDayNumber'];
                 $finalarraymerge [$i]["OSTime0600Z_Max_Read"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Max_Read'];
                 $finalarraymerge [$i]["OSTime0600Z_Min_Read"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Min_Read'];
-                $finalarraymerge [$i]["Sunshine_0600Z"]= $array_moreformfieldsdataOfAMonthAndforTime0600Z[$i]["MOREFORMFIEDSTABLE_Time0600Z_DURATION_OF_SUNSHINE"];
+                $finalarraymerge [$i]["OSTime0600Z_DurationOfSunshine"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]["OSTime0600Z_DurationOfSunshine"];
 
                 $finalarraymerge [$i]["OSTime0600Z_Dry_Bulb"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Dry_Bulb'];
                 $finalarraymerge [$i]["OSTime0600Z_Wet_Bulb"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Wet_Bulb'];
@@ -429,6 +448,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $finalarraymerge [$i]["OSTime0600Z_Wind_Direction"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Wind_Direction'];
                 $finalarraymerge [$i]["OSTime0600Z_Wind_Speed"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Wind_Speed'];
+
+
+
+                $finalarraymerge [$i]["OSTime0600Z_Wind_Run"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]["OSTime0600Z_Wind_Run"];
                 $finalarraymerge [$i]["OSTime0600Z_Rainfall"]= $array_observationslipdataOfAMonthAndforTime0600Z[$i]['OSTime0600Z_Rainfall'];
 
 
@@ -439,7 +462,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $finalarraymerge [$i]["OSTime1200Z_Max_Read"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Max_Read'];
                 $finalarraymerge [$i]["OSTime1200Z_Min_Read"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Min_Read'];
-                $finalarraymerge [$i]["Sunshine_1200Z"]= $array_moreformfieldsdataOfAMonthAndforTime1200Z[$i]["MOREFORMFIEDSTABLE_Time1200Z_DURATION_OF_SUNSHINE"];
+                $finalarraymerge [$i]["OSTime1200Z_DurationOfSunshine"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]["OSTime1200Z_DurationOfSunshine"];
 
                 $finalarraymerge [$i]["OSTime1200Z_Dry_Bulb"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Dry_Bulb'];
                 $finalarraymerge [$i]["OSTime1200Z_Wet_Bulb"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Wet_Bulb'];
@@ -477,7 +500,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $finalarraymerge [$i]["OSTime1200Z_Wind_Direction"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Wind_Direction'];
                 $finalarraymerge [$i]["OSTime1200Z_Wind_Speed"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Wind_Speed'];
-                 $finalarraymerge [$i]["OSTime1200Z_Rainfall"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Rainfall'];
+
+                $finalarraymerge [$i]["OSTime1200Z_Wind_Run"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]["OSTime1200Z_Wind_Run"];
+
+                $finalarraymerge [$i]["OSTime1200Z_Rainfall"]= $array_observationslipdataOfAMonthAndforTime1200Z[$i]['OSTime1200Z_Rainfall'];
 
 
                 $i++;
@@ -493,6 +519,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $TotalSunshine=0.0;
             $TotalRowswithDataCountForSunshine=0;
+
+            //////////////////////////////////////////////////
+
 
             $TotalDB_0600Z=0.0;
             $TotalRowswithDataCountForDB_0600Z=0;
@@ -548,9 +577,20 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $TotalFF_1200Z=0.0;
             $TotalRowswithDataCountForFF_1200Z=0;
+////////////////////////////////////////////////////////////////////////////////////////
 
-            $TotalRainfall=0.0;
+            $TotalWind_Run=0.0;
+            $TotalRowswithDataCountForWind_Run=0;
+
+
+            $TotalRainfall+=0.0;
             $TotalRowswithDataCountForRainfall=0;
+
+
+            $TotalRowswithDataCountForR_DAY=0;
+
+
+
 
             foreach($finalarraymerge as $data){
 
@@ -599,15 +639,26 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
                 //////////////TOTAL SUNSHINE
-                if($data['Sunshine_0600Z']!=''){
+                if($data['OSTime0600Z_DurationOfSunshine']!='' && $data['OSTime1200Z_DurationOfSunshine'] !='' ){  //not null ,not null
 
-                    $TotalSunshine+=$data['Sunshine_0600Z'];
+                    $TotalSunshine+=$data['OSTime0600Z_DurationOfSunshine'];
                     $TotalRowswithDataCountForSunshine+=1;
-                }
-                elseif($data['Sunshine_0600Z']==''){
 
-                    $TotalSunshine+=0.0;
+                }elseif($data['OSTime0600Z_DurationOfSunshine'] =='' && $data['OSTime1200Z_DurationOfSunshine'] !=''){ //null , not null
+
+                    $TotalSunshine+=$data['OSTime1200Z_DurationOfSunshine'];
+                    $TotalRowswithDataCountForSunshine+=1;
+
+                }elseif($data['OSTime0600Z_DurationOfSunshine'] !='' && $data['OSTime1200Z_DurationOfSunshine'] ==''){  //not null, null
+
+                    $TotalSunshine+=$data['OSTime0600Z_DurationOfSunshine'];
+                    $TotalRowswithDataCountForSunshine+=1;
+
+                }
+                elseif($data['OSTime0600Z_DurationOfSunshine'] =='' && $data['OSTime1200Z_DurationOfSunshine'] ==''){  //null,null
+                    $TotalSunshine+=0;
                     $TotalRowswithDataCountForSunshine+=0;
+
                 }
 
                 /////TOTAL DB FOR 0600Z
@@ -718,6 +769,18 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $TotalRowswithDataCountForFF_0600Z+=0;
                 }
 
+                /////TOTAL WIND RUN FOR 0600Z
+                if($data['OSTime0600Z_Wind_Run']!=''){
+
+                    $TotalWind_Run_0600Z+=$data['OSTime0600Z_Wind_Run'];
+                    $TotalRowswithDataCountForWind_Run_0600Z+=1;
+                }
+                elseif($data['OSTime0600Z_Wind_Run']==''){
+
+                    $TotalWind_Run_0600Z+=0.0;
+                    $TotalRowswithDataCountForWind_Run_0600Z+=0;
+                }
+
                 ///////////////////////////////////TOTALS FOR 1200Z.
                 /////TOTAL DB FOR 1200Z
                 if($data['OSTime1200Z_Dry_Bulb']!=''){
@@ -826,28 +889,31 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $TotalFF_1200Z+=0.0;
                     $TotalRowswithDataCountForFF_1200Z+=0;
                 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /////TOTAL WIND RUN
+                if($data['OSTime0600Z_Wind_Run']!='' && $data['OSTime1200Z_Wind_Run']!=''){
 
-                /////TOTAL RAINFALL
-                if($data['OSTime0600Z_Rainfall']!='' && $data['OSTime1200Z_Rainfall']!=''){
-
-                    $TotalRainfall+=$data['OSTime0600Z_Rainfall'];
-                    $TotalRowswithDataCountForRainfall+=1;
+                    $TotalWind_Run+=$data['OSTime0600Z_Wind_Run'];
+                    $TotalRowswithDataCountForWind_Run+=1;
                 }
-                elseif($data['OSTime0600Z_Rainfall']=='' && $data['OSTime1200Z_Rainfall']!=''){
+                elseif($data['OSTime0600Z_Wind_Run']=='' && $data['OSTime1200Z_Wind_Run']!=''){
 
-                    $TotalRainfall+=$data['OSTime1200Z_Rainfall']!='';
-                    $TotalRowswithDataCountForRainfall+=1;
+                    $TotalWind_Run+=$data['OSTime1200Z_Wind_Run']!='';
+                    $TotalRowswithDataCountForWind_Run+=1;
 
-                }elseif($data['OSTime0600Z_Rainfall']!='' && $data['OSTime1200Z_Rainfall']==''){
+                }elseif($data['OSTime0600Z_Wind_Run']!='' && $data['OSTime1200Z_Wind_Run']==''){
 
-                    $TotalRainfall+=$data['OSTime0600Z_Rainfall']!='';
-                    $TotalRowswithDataCountForRainfall+=1;
+                    $TotalWind_Run+=$data['OSTime0600Z_Wind_Run']!='';
+                    $TotalRowswithDataCountForWind_Run+=1;
 
-                }elseif($data['OSTime0600Z_Rainfall']=='' && $data['OSTime1200Z_Rainfall']==''){
+                }elseif($data['OSTime0600Z_Wind_Run']=='' && $data['OSTime1200Z_Wind_Run']==''){
 
-                    $TotalRainfall+=0.0;
-                    $TotalRowswithDataCountForRainfall+=0;
+                    $TotalWind_Run+=0.0;
+                    $TotalRowswithDataCountForWind_Run+=0;
                 }
+
+
+
 
             }//END OF FOREACH
             //loop thru the array
@@ -880,7 +946,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }//end of else if for MAX TEMP
                     ?>
 
-                    <?php   //min Temp
+                    <?php   //MIN TEMP
                     if($data['OSTime0600Z_Min_Read']!='' && $data['OSTime1200Z_Min_Read']!='' ){
                         //not null,not null
                         ?>
@@ -904,7 +970,29 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }//end of else if FOR MIN TEMP
                     ?>
 
-                    <td class="main"><?php echo $data['Sunshine_0600Z'];?></td>
+                    <?php   //SUNSHINE
+                    if($data['OSTime0600Z_DurationOfSunshine']!='' && $data['OSTime1200Z_DurationOfSunshine']!='' ){
+                        //not null,not null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime0600Z_DurationOfSunshine'];?></td>
+                    <?php
+                    }elseif($data['OSTime0600Z_DurationOfSunshine']=='' && $data['OSTime1200Z_DurationOfSunshine']!='') {
+                        //null,not null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime1200Z_DurationOfSunshine'];?></td>
+                    <?php
+                    }elseif($data['OSTime0600Z_DurationOfSunshine']!='' && $data['OSTime1200Z_DurationOfSunshine']=='') {
+                        //not null,null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime0600Z_DurationOfSunshine'];?></td>
+                    <?php
+                    }elseif($data['OSTime0600Z_DurationOfSunshine']=='' && $data['OSTime1200Z_DurationOfSunshine']=='') {
+                        //null,null
+                        ?>
+                        <td class="main"></td>
+                    <?php
+                    }//end of else if FOR SUNSHINE
+                    ?>
 
 
 
@@ -933,55 +1021,63 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                    <td class="main"></td>
-
-
-
+                    <?php   //WIND RUN
+                    if($data['OSTime0600Z_Wind_Run']!='' && $data['OSTime1200Z_Wind_Run']!='' ){
+                        //not null,not null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime0600Z_Wind_Run'];?></td>
                     <?php
-                    if($data['OSTime0600Z_Rainfall']!='' && $data['OSTime1200Z_Rainfall'] !='' ){
-                        if($data['OSTime0600Z_Rainfall'] < 0.1){
-                            ?>
-                            <td class="main"><?php echo 'TR';?></td>
-                            <td class="main"></td>
-                        <?php
-                        }elseif($data['OSTime0600Z_Rainfall'] > 0.1){
-                            ?>
-                            <td class="main"><?php echo $data['OSTime0600Z_Rainfall'];?></td>
-                            <td class="main"><?php echo '|';?></td>
-                        <?php
-                        }
-
-                    }
-                    elseif($data['OSTime0600Z_Rainfall']=='' && $data['OSTime1200Z_Rainfall']!='') {
-                        if($data['OSTime1200Z_Rainfall'] < 0.1){
-                            ?>
-                            <td class="main"><?php echo 'TR';?></td>
-                            <td class="main"></td>
-                        <?php
-                        }elseif($data['OSTime1200Z_Rainfall'] > 0.1){ ?>
-                            <td class="main"><?php echo $data['OSTime1200Z_Rainfall'];?></td>
-                            <td class="main"><?php echo '|';?></td>
-                        <?php }
-                    }
-                    elseif($data['OSTime0600Z_Rainfall']!='' && $data['OSTime1200Z_Rainfall']==''){
-                        if($data['OSTime0600Z_Rainfall'] < 0.1){
-                            ?>
-                            <td class="main"><?php echo 'TR';?></td>
-                            <td class="main"></td>
-                        <?php
-                        }elseif($data['OSTime0600Z_Rainfall'] > 0.1){
-                            ?>
-                            <td class="main"><?php echo $data['OSTime0600Z_Rainfall'];?></td>
-                            <td class="main"><?php echo '|';?></td>
-
-                        <?php }
-                    }
-                    elseif($data['OSTime0600Z_Rainfall']=='' && $data['OSTime1200Z_Rainfall']=='') {
+                    }elseif($data['OSTime0600Z_Wind_Run']=='' && $data['OSTime1200Z_Wind_Run']!='') {
+                        //null,not null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime1200Z_DurationOfSunshine'];?></td>
+                    <?php
+                    }elseif($data['OSTime0600Z_Wind_Run']!='' && $data['OSTime1200Z_Wind_Run']=='') {
+                        //not null,null
+                        ?>
+                        <td class="main"><?php echo $data['OSTime0600Z_Wind_Run'];?></td>
+                    <?php
+                    }elseif($data['OSTime0600Z_Wind_Run']=='' && $data['OSTime1200Z_Wind_Run']=='') {
+                        //null,null
                         ?>
                         <td class="main"></td>
-                        <td class="main"></td>
-                    <?php } ?>
+                    <?php
+                    }//end of else if FOR SUNSHINE
+                    ?>
 
+
+
+                    <?php   //RAINFALL(R/F) AND R/DAY
+
+                     if(($data['OSTime0600Z_Rainfall'] == 0) || ($data['OSTime0600Z_Rainfall'] == 'NIL') || empty($data['OSTime0600Z_Rainfall'])){
+                            ?>
+                            <td class="main"><?php echo 'NIL';?></td>  <!-- R/F -->
+                            <td class="main"></td>   <!-- R/DAY -->
+                        <?php    $TotalRowswithDataCountForRainfall+=0;
+                                 //$TotalRowswithDataCountForFF_1200Z+=1;
+                     }else if(($data['OSTime0600Z_Rainfall'] < 0.1) || ($data['OSTime0600Z_Rainfall'] == 'TR') ){
+                            ?>
+                            <td class="main"><?php echo 'TR';?></td>   <!-- R/F -->
+                            <td class="main"></td>   <!-- R/DAY -->
+                        <?php     $TotalRowswithDataCountForRainfall+=0;
+                      }else if(($data['OSTime0600Z_Rainfall'] >= 0.1)  &&  ($data['OSTime0600Z_Rainfall'] <= 0.9) ){
+                          ?>
+                         <td class="main"><?php echo $data['OSTime0600Z_Rainfall'];?></td>   <!-- R/F -->
+                         <td class="main"></td>   <!-- R/DAY -->
+                     <?php      $TotalRainfall+=$data['OSTime0600Z_Rainfall'];
+                                $TotalRowswithDataCountForRainfall+=0;
+                      }elseif($data['OSTime0600Z_Rainfall'] >= 1.0){
+                            ?>
+                            <td class="main"><?php echo $data['OSTime0600Z_Rainfall'];?></td>
+                            <td class="main"><?php echo 1;?></td>   <!-- R/DAY -->
+                        <?php    $TotalRowswithDataCountForR_DAY+=1;
+                                 $TotalRainfall+=$data['OSTime0600Z_Rainfall'];
+                                  $TotalRowswithDataCountForRainfall+=1;
+
+                     }else{?>
+                         <td class="main"></td>
+                         <td class="main"></td>
+                      <?php } ?>
 
 
                     <td class="main"></td>
@@ -995,7 +1091,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <?php }?>
             <tr>
                 <td class="main"> TOTAL</td>
-                <td class="main"><?php echo round($TotalMax,2);?> </td>
+                <td class="main"><?php echo round($TotalMax,2);?> </td>  <!--Round off to two dps  -->
                 <td class="main"> <?php echo round($TotalMin,2) ;?></td>
                 <td class="main"><?php echo round($TotalSunshine,2) ;?> </td>
 
@@ -1021,9 +1117,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <td class="main"><?php echo round($TotalFF_1200Z,2) ;?> </td>
 
 
-                <td class="main"><?php echo round($TotalWIND_RUN,2) ;?> </td>
+                <td class="main"><?php echo round($TotalWind_Run,2) ;?> </td>
                 <td class="main"><?php echo round($TotalRainfall,2) ;?> </td>
-                <td class="main"> </td>
+                <td class="main"><?php echo $TotalRowswithDataCountForR_DAY ;?></td>
                 <td class="main"> </td>
                 <td class="main"> </td>
                 <td class="main"> </td>
@@ -1064,7 +1160,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <td class="main"><?php echo round(($TotalFF_1200Z/$TotalRowswithDataCountForFF_1200Z),2) ;?> </td>
 
 
-                <td class="main"><?php echo round($TotalWIND_RUN/$rowcountwithdata,2) ;?> </td>
+                <td class="main"><?php echo round($TotalWind_Run/$TotalRowswithDataCountForWind_Run,2) ;?> </td>
                 <td class="main"><?php echo round(($TotalRainfall/$TotalRowswithDataCountForRainfall),2) ;?> </td>
                 <td class="main"> </td>
                 <td class="main"> </td>
@@ -1080,6 +1176,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         ?>
         <br><br>
+
+
+       </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+       <span><strong>Report Generated BY:</strong></span> <span class="dotted-line"><?php echo $name;?></span>
+        <br><br><br><br>
         <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
         <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
         <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-print"></i> Export to csv</button>

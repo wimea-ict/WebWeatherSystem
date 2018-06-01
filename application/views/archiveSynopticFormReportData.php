@@ -28,9 +28,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     if(is_array($displaynewsynopticForm) && count($displaynewsynopticForm)) {
         ?>
         <div class="row">
-        <form action="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/insertSynopticData/" method="post" enctype="multipart/form-data">
-        <div class="modal-body">
-        <div id="output"></div>
+        <form action="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/insertSynopticData/" name="regForm"  id="regForm" method="post" enctype="multipart/form-data">
+
+
         <script language="javascript">
             function allowIntegerInputOnly(inputvalue) {
                 //var invalidChars = /[^0-9]/gi
@@ -48,627 +48,727 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
             }
         </script>
-        <div class="col-lg-6">
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Select Date</span>
-                <input type="text" name="date_archivesynopticformreportdata" class="form-control" placeholder="Enter select date" id="date">
-                <input type="hidden" name="checkduplicateEntryOnAddArchieveSynopticFormReportData_hiddentextfield" id="checkduplicateEntryOnAddArchieveSynopticFormReportData_hiddentextfield">
 
-            </div>
-        </div>
+			<!-- Section1 -->
+		   <div class = "tab">
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <?php if($userrole=='SeniorDataOfficer' || $userrole=='DataOfficer'){ ?>
+         <td >
+
+             <div class="input-group">
+               <span class="input-group-addon">Station Name</span>
+             <select name="station_archivesynopticformreportdata" id="stationManager"   class="form-control" placeholder="Select Station">
+                   <option value="">Select Stations</option>
+                   <?php
+                   if (is_array($stationsdata) && count($stationsdata)) {
+                       foreach($stationsdata as $station){?>
+                           <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                       <?php }
+                   } ?>
+               </select>
+             </div>
+
+         </td>
+         <td >
+
+           <div class="input-group">
+             <span class="input-group-addon"> Station Number</span>
+              <input type="text" name="stationNo_archivesynopticformreportdata"  class="form-control" id="stationNoManager" readonly class="form-control" value="" readonly="readonly" >
+           </div>
+
+         </td>
+       <?php } else{ ?>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Station</span>
+								<input type="text" name="station_archivesynopticformreportdata" id="station_archivesynopticformreportdata" required class="form-control" required value="<?php echo $userstation;?>"  readonly class="form-control" >
+
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								<input type="text" name="stationNo_archivesynopticformreportdata" required class="form-control" id="stationNo_archivesynopticformreportdata" readonly class="form-control" required value="<?php echo $userstationNo;?>" readonly="readonly" >
+							</div>
+						</td>
+          <?php }?>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Select Date</span>
+								<input type="text" name="date_archivesynopticformreportdata"  class="form-control compulsory"  placeholder="Enter select date" id="date">
+
+
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME</span>
+								<select name="time_archivesynopticformreportdata" id="time_archivesynopticformreportdata"  class="form-control compulsory">
+									<option value="">--Select Time Options</option>
+									<option value="0000Z">0000Z</option>
+									<option value="0300Z">0300Z</option>
+									<option value="0600Z">0600Z</option>
+									<option value="0900Z">0900Z</option>
+									<option value="1200Z">1200Z</option>
+									<option value="1500Z">1500Z</option>
+									<option value="1800Z">1800Z</option>
+									<option value="2100Z">2100Z</option>
+								</select>
+
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Unit of wind speed</span>
+								<input type="text" name="unitows_archivesynopticformreportdata"  id="unitows_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"   placeholder="Enter unit of wind speed" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Block Number</span>
+								<input type="text" name="blockNo_archivesynopticformreportdata" value="63" id="blockNo_archivesynopticformreportdata" readonly class="form-control" required class="form-control" required placeholder="Enter block number" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Ind. or ommission of precipitation</span>
+								<input type="text" name="precipitation_archivesynopticformreportdata" id="precipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Ind. or ommission of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Type of station/present & past weather</span>
+								<input type="text" name="typeofstation_archivesynopticformreportdata" id="typeofstation_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Type of station/present & past weather" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of lowest cloud</span>
+								<input type="text" name="hlowestcloud_archivesynopticformreportdata" id="hlowestcloud_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Height of lowest cloud" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Horizontal Visibility</span>
+								<input type="text" name="hvisibility_archivesynopticformreportdata" id="hvisibility_archivesynopticformreportdata"  class="form-control" placeholder="Horizontal Visibility" onkeyup="allowIntegerInputOnly(this)" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Total cloud cover</span>
+								<input type="text" name="tcloudcover_archivesynopticformreportdata" id="tcloudcover_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Total cloud cover" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Wind Direction</span>
+								<input type="text" name="winddirection_archivesynopticformreportdata" id="winddirection_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Wind Direction" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Wind Speed</span>
+								<input type="text" name="windspeed_archivesynopticformreportdata" id="windspeed_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"   class="form-control" placeholder="Wind Speed" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator</span>
+								<input type="text" name="groupindicator1_archivesynopticformreportdata"  id="groupindicator1_archivesynopticformreportdata" value="1" readonly class="form-control" required class="form-control" required placeholder="Group Indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signofdata1_archivesynopticformreportdata"  id="signofdata1_archivesynopticformreportdata" value="0" readonly class="form-control" required class="form-control" placeholder="Sign of the data" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Air temperature</span>
+								<input type="text" name="airtemperature_archivesynopticformreportdata" id="airtemperature_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Air Temperature " >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 2 -->
+			<div class = "tab"><h2>More Data Input:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Group Indicator 2</span>
+								<input type="text" name="groupindicator2_archivesynopticformreportdata" id="groupindicator2_archivesynopticformreportdata" value="2" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sign of the data </span>
+								<input type="text" name="signofdata2_archivesynopticformreportdata" id="signofdata2_archivesynopticformreportdata" value="0" readonly class="form-control" required class="form-control" placeholder="Sign of the data" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Dew point temperature</span>
+								<input type="text" name="dewpointtemp_archivesynopticformreportdata" id="dewpointtemp_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Dew point temperature" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 3</span>
+								<input type="text" name="groupindicator3_archivesynopticformreportdata" id="groupindicator3_archivesynopticformreportdata" value="3" readonly class="form-control" required class="form-control" required placeholder="Group Indicator 3" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Pressure station level</span>
+								<input type="text" name="pressureatstationlevel_archivesynopticformreportdata" id="pressureatstationlevel_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Pressure at station level" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 4</span>
+								<input type="text" name="groupindicator4_archivesynopticformreportdata" id="groupindicator4_archivesynopticformreportdata" value="4" readonly class="form-control" required class="form-control" placeholder="Group Indicator 4" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Standard isobaric surface</span>
+								<input type="text" name="sisobaricsurface_archivesynopticformreportdata" id="sisobaricsurface_archivesynopticformreportdata" value="8" readonly class="form-control" required class="form-control" placeholder="Standard isobaric surface" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Geopotential of SIS</span>
+								<input type="text" name="geopotential_archivesynopticformreportdata" id="geopotential_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Geopotential of isobaric surface" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 6</span>
+								<input type="text" name="groupindicator6_archivesynopticformreportdata" id="groupindicator6_archivesynopticformreportdata" value="6" readonly class="form-control" required class="form-control" placeholder="Group Indicator 6" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of precipitation</span>
+								<input type="text" name="amtofprecipitation_archivesynopticformreportdata" id="amtofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Duration period of precipitation</span>
+								<input type="text" name="durationofprecipitation_archivesynopticformreportdata" id="durationofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Duration period of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 7</span>
+								<input type="text" name="groupindicator7_archivesynopticformreportdata" id="groupindicator7_archivesynopticformreportdata"  value="7"  readonly class="form-control" required class="form-control" placeholder="Group Indicator 7" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Present weather</span>
+								<input type="text" name="presentweather_archivesynopticformreportdata" id="presentweather_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Present weather" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Past weather</span>
+								<input type="text" name="pastweather_archivesynopticformreportdata" id="pastweather_archivesynopticformreportdata" onkeyup="" class="form-control"  placeholder="Past weather" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="groupindicator8_archivesynopticformreportdata" id="groupindicator8_archivesynopticformreportdata" value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 8" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of clouds</span>
+								<input type="text" name="amountofclouds_archivesynopticformreportdata" id="amountofclouds_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of clouds" >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 3 -->
+			<div class = "tab"><h2>Weather Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera  Sc. St. Cu. Cb</span>
+								<input type="text" name="cloudsgenera1_archivesynopticformreportdata" id="cloudsgenera1_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Clouds of the general Sc. St. Cu, Cb" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera Ac. As. Ns</span>
+								<input type="text" name="cloudsgenera2_archivesynopticformreportdata" id="cloudsgenera2_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Clouds of the general Ac As Ns" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera Cl Cc Cs</span>
+								<input type="text" name="cloudsgenera3_archivesynopticformreportdata" id="cloudsgenera3_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Clouds of the general C Cc Cs" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Section Indicator</span>
+								<input type="text" name="sectionindicator333_archivesynopticformreportdata" id="sectionindicator333_archivesynopticformreportdata" value="333" readonly class="form-control" required class="form-control" required placeholder="Section Indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 0</span>
+								<input type="text" name="groupindicator0_archivesynopticformreportdata" id="groupindicator0_archivesynopticformreportdata"  value="0"  readonly class="form-control" required class="form-control" required placeholder="General Indicator" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Grass minimum temperature</span>
+								<input type="text" name="gmtemperature_archivesynopticformreportdata" id="gmtemperature_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Grass minimum temperature" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Character & intensity of precipitation</span>
+								<input type="text" name="characterintensity_archivesynopticformreportdata" id="characterintensity_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Character & Intensity of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Beginning or end of precipitation</span>
+								<input type="text" name="begendofprecipitation_archivesynopticformreportdata" id="begendofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="beginning or end of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan = "2" align = "center">
+							<div class="form-group">
+								<label><span>Did we have: </span></label><br>
+								<label><input type="checkbox" name="thunderstorm_archivesynopticformreportdata" class="form-control" value="true"> Thunderstorm (Ts)</label>
+								<label><input type="checkbox" name="hailstorm_archivesynopticformreportdata" class="form-control" value="true"> Hailstorm (Hs)</label>
+								<label><input type="checkbox" name="fog_archivesynopticformreportdata" class="form-control" value="true"> Fog (Fg)</label>
+								<label><input type="checkbox" name="earthquake_archivesynopticformreportdata" class="form-control" value="true"> EarthQuake</label>
+								<label><input type="checkbox" name="anemometerReading_archivesynopticformreportdata" class="form-control" value="true"> Anemometer Reading(KM)</label>
+								<label><input type="checkbox" name="actualrainfall_archivesynopticformreportdata" class="form-control" value="true"> Actual Rainfall</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 1</span>
+								<input type="text" name="groupindicator1_2_archivesynopticformreportdata" id="groupindicator1_2_archivesynopticformreportdata" value="1" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signofdata3_archivesynopticformreportdata" id="signofdata3_archivesynopticformreportdata" value="0" readonly class="form-control" class="form-control" required placeholder="Sign of the data" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Minimum temperature</span>
+								<input type="text" name="maxtemperaturetx_archivesynopticformreportdata" id="maxtemperaturetx_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Minimum temperature" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 2</span>
+								<input type="text" name="groupindicator2_2_archivesynopticformreportdata" id="groupindicator2_2_archivesynopticformreportdata" value="2" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signofdata4_archivesynopticformreportdata" id="signofdata4_archivesynopticformreportdata" value="0" readonly class="form-control" class="form-control" required placeholder="Sign of the data" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Maximum temperature</span>
+								<input type="text" name="maxtemperaturetn_archivesynopticformreportdata" id="maxtemperaturetn_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Maximum temperature" >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 4 -->
+			<div class = "tab"><h2>More Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 5</span>
+								<input type="text" name="groupindicator5_archivesynopticformreportdata" id="groupindicator5_archivesynopticformreportdata" value="5" readonly class="form-control" required class="form-control" required placeholder="Group Indicator" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of evapouration</span>
+								<input type="text" name="amtofevapouration_archivesynopticformreportdata" id="amtofevapouration_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of evapouration" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Indicator of type of instrumentation</span>
+								<input type="text" name="indtypeofin_archivesynopticformreportdata" id="indtypeofin_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Indicator of type of instrumentation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 55</span>
+								<input type="text" name="groupindicator55_archivesynopticformreportdata" id="groupindicator55_archivesynopticformreportdata" value="55" readonly class="form-control" required class="form-control" placeholder="Group Indicator 10" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Duration of sunshine</span>
+								<input type="text" name="durationofsunshine_archivesynopticformreportdata" id="durationofsunshine_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Duration of sunshine" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 5</span>
+								<input type="text" name="groupindicator5_2_archivesynopticformreportdata" id="groupindicator5_2_archivesynopticformreportdata" value="5" readonly class="form-control" class="form-control" required placeholder="General Indicator 11" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of pressure change</span>
+								<input type="text" name="signofpressurechg_archivesynopticformreportdata" id="signofpressurechg_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Sign of pressure change" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Pressure change in 24</span>
+								<input type="text" name="pressurechange24_archivesynopticformreportdata" id="pressurechange24_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Pressure change in 24 hrs" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 6</span>
+								<input type="text" name="groupindicator6_2_archivesynopticformreportdata" id="groupindicator6_2_archivesynopticformreportdata" value="6" readonly class="form-control"  class="form-control" required placeholder="Group Indicator" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of precipitation</span>
+								<input type="text" name="amtofprecipitation2_archivesynopticformreportdata" id="amtofprecipitation2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Amount of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Duration of period of precipitation</span>
+								<input type="text" name="durationofprecipitation2_archivesynopticformreportdata" id="durationofprecipitation2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Duration of period of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="groupindicator8_2_archivesynopticformreportdata" id="groupindicator8_2_archivesynopticformreportdata" value="8" readonly class="form-control"  required class="form-control" required placeholder="General Indicator 13" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer</span>
+								<input type="text" name="amtofcloudlayer_archivesynopticformreportdata" id="amtofcloudlayer_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud</span>
+								<input type="text" name="genuscloud_archivesynopticformreportdata" id="genuscloud_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Height of base cloud layer or mass</span>
+								<input type="text" name="hofbasecloud_archivesynopticformreportdata" id="hofbasecloud_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Height of base cloud layer or mass" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="groupindicator8_3_archivesynopticformreportdata" id="groupindicator8_3_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 14" >
+							</div>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<!--section 5 -->
+			<div class = "tab"><h2>Cloud Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer</span>
+								<input type="text" name="amtofcloudlayer2_archivesynopticformreportdata" id="amtofcloudlayer2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud</span>
+								<input type="text" name="genuscloud2_archivesynopticformreportdata" id="genuscloud2_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of cloud base layer or mass</span>
+								<input type="text" name="hofbasecloud2_archivesynopticformreportdata" id="hofbasecloud2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Height of cloud base layer or mass" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="groupindicator8_4_archivesynopticformreportdata" id="groupindicator8_4_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 8" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer 3</span>
+								<input type="text" name="amtofcloudlayer3_archivesynopticformreportdata" id="amtofcloudlayer3_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of individual cloud layer 3" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud 3</span>
+								<input type="text" name="genuscloud3_archivesynopticformreportdata" id="genuscloud3_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Genus of cloud 3" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of cloud base layer or mass 3</span>
+								<input type="text" name="hofbasecloud3_archivesynopticformreportdata" id="hofbasecloud3_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Height of cloud base layer or mass 3" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Group Indicator 8</span>
+							<input type="text" name="groupindicator8_5_archivesynopticformreportdata" id="groupindicator8_5_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 16" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer 4</span>
+								<input type="text" name="amtofcloudlayer4_archivesynopticformreportdata" id="amtofcloudlayer4_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Amount of individual cloud layer 4" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud 4</span>
+								<input type="text" name="genuscloud4_archivesynopticformreportdata" id="genuscloud4_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Genus of cloud 4" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Height of cloud base layer or mass 4</span>
+							<input type="text" name="hofbasecloud4_archivesynopticformreportdata" id="hofbasecloud4_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Height of cloud base layer or mass 4" >
+						</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Group Indicator 9</span>
+								<input type="text" name="groupindicator9_archivesynopticformreportdata" id="groupindicator9_archivesynopticformreportdata" value="9" readonly class="form-control" required class="form-control" required placeholder="Group Indicator 17" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Suplementary information</span>
+								<input type="text" name="supplementaryinfo_archivesynopticformreportdata" id="supplementaryinfo_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control"  placeholder="Suplementary information" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Section Indicator 555</span>
+								<input type="text" name="sectionindicator555_archivesynopticformreportdata" id="sectionindicator555_archivesynopticformreportdata" value="555" readonly class="form-control" required class="form-control" required placeholder="Section indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 1</span>
+								<input type="text" name="groupindicator1_3_archivesynopticformreportdata" id="groupindicator1_3_archivesynopticformreportdata" value="1" readonly class="form-control"  required class="form-control" required placeholder="Group Indicator 18" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of data 5</span>
+								<input type="text" name="signofdata5_archivesynopticformreportdata" id="signofdata5_archivesynopticformreportdata"  value="0" readonly class="form-control" required class="form-control" required placeholder="Sign of data 3" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Wet bulb temperature</span>
+								<input type="text" name="wetbulbtemp_archivesynopticformreportdata"  id="wetbulbtemp_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder="Wetbulb temperature" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Relative humidity</span>
+								<input type="text" name="relativehumidity_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Relative humidity" >
+							</div>
+						</td>
+
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Vapour pressure</span>
+								<input type="text" name="vapourpressure_archivesynopticformreportdata" id="vapourpressure_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Vapour Pressure" >
+							</div>
+						</td>
+						<td>
+						</td>
+					</tr>
+          <tr>
+						<td colspan="2">
+								<span style="text-align:centre;">Comment section</span>
+						</td>
+					</tr>
+          <tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Remarks</span>
+								<input type="text" name="remarks"  id="remarks" class="form-control"  placeholder=" remarks" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Time</span>
+								<input type="time" name="time_"   class="form-control"  placeholder="" >
+							</div>
+						</td>
+
+					</tr>
+          <tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Observer on duty</span>
+								<input type="text" name="ObserverOnDuty"  id="ObserverOnDuty"  class="form-control"  placeholder="observer on duty" >
+							</div>
+						</td>
+						<td>
+
+						</td>
+
+					</tr>
+          <tr>
+            <td>
+               <div class="input-group">
+                <span class="input-group-addon">To</span>
+                <input type="text" name="to"  id="to"  class="form-control"  placeholder="" >
+              </div>
+            </td>
+            <td>
+              <div class="input-group">
+               <span class="input-group-addon">From</span>
+               <input type="text" name="from"  id="from"  class="form-control"  placeholder="" >
+             </div>
+            </td>
+
+          </tr>
+				</table>
+			</div>
+
+
+		 <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="postarchivesynopticformreportdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+	<span class="step"></span>
+  </div>
 
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Time</span>
-                <select name="time_archivesynopticformreportdata" id="time_archivesynopticformreportdata" class="form-control">
-                    <option value="">--Select Time Options</option>
-                    <option value="0000Z">0000Z</option>
-                    <option value="0300Z">0300Z</option>
-                    <option value="0600Z">0600Z</option>
-                    <option value="0900Z">0900Z</option>
-                    <option value="1200Z">1200Z</option>
-                    <option value="1500Z">1500Z</option>
-                    <option value="1800Z">1800Z</option>
-                    <option value="2100Z">2100Z</option>
-                </select>
-
-            </div>
-        </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Station</span>
-                    <input type="text" name="station_archivesynopticformreportdata" id="station_archivesynopticformreportdata" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
-
-                </div>
-            </div>
-
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"> Station Number</span>
-                    <input type="text" name="stationNo_archivesynopticformreportdata" required class="form-control" id="stationNo_archivesynopticformreportdata" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
-                </div>
-            </div>
-
-
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Unit of wind speed</span>
-                <input type="text" name="unitows_archivesynopticformreportdata"  id="unitows_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  required placeholder="Enter unit of wind speed" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Block Number</span>
-                <input type="text" name="blockNo_archivesynopticformreportdata" value="63" id="blockNo_archivesynopticformreportdata" readonly class="form-control" required class="form-control" required placeholder="Enter block number" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Ind. or ommission of precipitation</span>
-                <input type="text" name="precipitation_archivesynopticformreportdata" id="precipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Ind. or ommission of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Type of station/present & past weather</span>
-                <input type="text" name="typeofstation_archivesynopticformreportdata" id="typeofstation_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Type of station/present & past weather" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Height of lowest cloud</span>
-                <input type="text" name="hlowestcloud_archivesynopticformreportdata" id="hlowestcloud_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Height of lowest cloud" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Horizontal Visibility</span>
-                <input type="text" name="hvisibility_archivesynopticformreportdata" id="hvisibility_archivesynopticformreportdata" required class="form-control" placeholder="Horizontal Visibility" onkeyup="allowIntegerInputOnly(this)" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Total cloud cover</span>
-                <input type="text" name="tcloudcover_archivesynopticformreportdata" id="tcloudcover_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Total cloud cover" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Wind Direction</span>
-                <input type="text" name="winddirection_archivesynopticformreportdata" id="winddirection_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Wind Direction" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Wind Speed</span>
-                <input type="text" name="windspeed_archivesynopticformreportdata" id="windspeed_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" placeholder="Wind Speed" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator</span>
-                <input type="text" name="groupindicator1_archivesynopticformreportdata"  id="groupindicator1_archivesynopticformreportdata" value="1" readonly class="form-control" required class="form-control" placeholder="Group Indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of the data</span>
-                <input type="text" name="signofdata1_archivesynopticformreportdata"  id="signofdata1_archivesynopticformreportdata" value="0" readonly class="form-control" required class="form-control" placeholder="Sign of the data" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Air temperature</span>
-                <input type="text" name="airtemperature_archivesynopticformreportdata" id="airtemperature_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Air Temperature " >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 2</span>
-                <input type="text" name="groupindicator2_archivesynopticformreportdata" id="groupindicator2_archivesynopticformreportdata" value="2" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of the data </span>
-                <input type="text" name="signofdata2_archivesynopticformreportdata" id="signofdata2_archivesynopticformreportdata" value="0" readonly class="form-control" required class="form-control" placeholder="Sign of the data" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Dew point temperature</span>
-                <input type="text" name="dewpointtemp_archivesynopticformreportdata" id="dewpointtemp_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Dew point temperature" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 3</span>
-                <input type="text" name="groupindicator3_archivesynopticformreportdata" id="groupindicator3_archivesynopticformreportdata" value="3" readonly class="form-control" required class="form-control" placeholder="Group Indicator 3" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Pressure station level</span>
-                <input type="text" name="pressureatstationlevel_archivesynopticformreportdata" id="pressureatstationlevel_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Pressure at station level" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 4</span>
-                <input type="text" name="groupindicator4_archivesynopticformreportdata" id="groupindicator4_archivesynopticformreportdata" value="4" readonly class="form-control" required class="form-control" placeholder="Group Indicator 4" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Standard isobaric surface</span>
-                <input type="text" name="sisobaricsurface_archivesynopticformreportdata" id="sisobaricsurface_archivesynopticformreportdata" value="8" readonly class="form-control" required class="form-control" placeholder="Standard isobaric surface" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Geopotential of SIS</span>
-                <input type="text" name="geopotential_archivesynopticformreportdata" id="geopotential_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" required placeholder="Geopotential of isobaric surface" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 6</span>
-                <input type="text" name="groupindicator6_archivesynopticformreportdata" id="groupindicator6_archivesynopticformreportdata" value="6" readonly class="form-control" required class="form-control" placeholder="Group Indicator 6" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of precipitation</span>
-                <input type="text" name="amtofprecipitation_archivesynopticformreportdata" id="amtofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Duration period of precipitation</span>
-                <input type="text" name="durationofprecipitation_archivesynopticformreportdata" id="durationofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Duration period of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 7</span>
-                <input type="text" name="groupindicator7_archivesynopticformreportdata" id="groupindicator7_archivesynopticformreportdata"  value="7"  readonly class="form-control" required class="form-control" placeholder="Group Indicator 7" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Present weather</span>
-                <input type="text" name="presentweather_archivesynopticformreportdata" id="presentweather_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly()InputOnly(this)" class="form-control" required placeholder="Present weather" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Past weather</span>
-                <input type="text" name="pastweather_archivesynopticformreportdata" id="pastweather_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Past weather" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 8</span>
-                <input type="text" name="groupindicator8_archivesynopticformreportdata" id="groupindicator8_archivesynopticformreportdata" value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 8" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of clouds</span>
-                <input type="text" name="amountofclouds_archivesynopticformreportdata" id="amountofclouds_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of clouds" >
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Clouds of the Genera  Sc. St. Cu. Cb</span>
-                <input type="text" name="cloudsgenera1_archivesynopticformreportdata" id="cloudsgenera1_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Clouds of the general Sc. St. Cu, Cb" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Clouds of the Genera Ac. As. Ns</span>
-                <input type="text" name="cloudsgenera2_archivesynopticformreportdata" id="cloudsgenera2_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Clouds of the general Ac As Ns" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Clouds of the Genera Cl Cc Cs</span>
-                <input type="text" name="cloudsgenera3_archivesynopticformreportdata" id="cloudsgenera3_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Clouds of the general C Cc Cs" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Section Indicator</span>
-                <input type="text" name="sectionindicator333_archivesynopticformreportdata" id="sectionindicator333_archivesynopticformreportdata" value="333" readonly class="form-control" required class="form-control" required placeholder="Section Indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 0</span>
-                <input type="text" name="groupindicator0_archivesynopticformreportdata" id="groupindicator0_archivesynopticformreportdata"  value="0"  readonly class="form-control" required class="form-control" required placeholder="General Indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Grass minimum temperature</span>
-                <input type="text" name="gmtemperature_archivesynopticformreportdata" id="gmtemperature_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Grass minimum temperature" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Character & intensity of precipitation</span>
-                <input type="text" name="characterintensity_archivesynopticformreportdata" id="characterintensity_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Character & Intensity of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Beginning or end of precipitation</span>
-                <input type="text" name="begendofprecipitation_archivesynopticformreportdata" id="begendofprecipitation_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="beginning or end of precipitation" >
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <label><span>Did we have: </span></label><br>
-            <label><input type="checkbox" name="thunderstorm_archivesynopticformreportdata" class="form-control" value="true"> Thunderstorm (Ts)</label>
-            <label><input type="checkbox" name="hailstorm_archivesynopticformreportdata" class="form-control" value="true"> Hailstorm (Hs)</label>
-            <label><input type="checkbox" name="fog_archivesynopticformreportdata" class="form-control" value="true"> Fog (Fg)</label>
-            <label><input type="checkbox" name="earthquake_archivesynopticformreportdata" class="form-control" value="true"> EarthQuake</label>
-            <label><input type="checkbox" name="anemometerReading_archivesynopticformreportdata" class="form-control" value="true"> Anemometer Reading(KM)</label>
-            <label><input type="checkbox" name="actualrainfall_archivesynopticformreportdata" class="form-control" value="true"> Actual Rainfall</label>
-        </div>
-
-        </div>
-        <div class="col-lg-6">
-
-
-
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 1</span>
-                <input type="text" name="groupindicator1_2_archivesynopticformreportdata" id="groupindicator1_2_archivesynopticformreportdata" value="1" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of the data</span>
-                <input type="text" name="signofdata3_archivesynopticformreportdata" id="signofdata3_archivesynopticformreportdata" value="0" readonly class="form-control" class="form-control" required placeholder="Sign of the data" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Maximum temperature</span>
-                <input type="text" name="maxtemperaturetx_archivesynopticformreportdata" id="maxtemperaturetx_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Maximum temperature" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 2</span>
-                <input type="text" name="groupindicator2_2_archivesynopticformreportdata" id="groupindicator2_2_archivesynopticformreportdata" value="2" readonly class="form-control" required class="form-control" placeholder="Group Indicator 2" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of the data</span>
-                <input type="text" name="signofdata4_archivesynopticformreportdata" id="signofdata4_archivesynopticformreportdata" value="0" readonly class="form-control" class="form-control" required placeholder="Sign of the data" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Maximum temperature</span>
-                <input type="text" name="maxtemperaturetn_archivesynopticformreportdata" id="maxtemperaturetn_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Maximum temperature" >
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 5</span>
-                <input type="text" name="groupindicator5_archivesynopticformreportdata" id="groupindicator5_archivesynopticformreportdata" value="5" readonly class="form-control" required class="form-control" required placeholder="Group Indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of evapouration</span>
-                <input type="text" name="amtofevapouration_archivesynopticformreportdata" id="amtofevapouration_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of evapouration" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Indicator of type of instrumentation</span>
-                <input type="text" name="indtypeofin_archivesynopticformreportdata" id="indtypeofin_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Indicator of type of instrumentation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 55</span>
-                <input type="text" name="groupindicator55_archivesynopticformreportdata" id="groupindicator55_archivesynopticformreportdata" value="55" readonly class="form-control" required class="form-control" placeholder="Group Indicator 10" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Duration of sunshine</span>
-                <input type="text" name="durationofsunshine_archivesynopticformreportdata" id="durationofsunshine_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Duration of sunshine" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 5</span>
-                <input type="text" name="groupindicator5_2_archivesynopticformreportdata" id="groupindicator5_2_archivesynopticformreportdata" value="5" readonly class="form-control" class="form-control" required placeholder="General Indicator 11" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of pressure change</span>
-                <input type="text" name="signofpressurechg_archivesynopticformreportdata" id="signofpressurechg_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Sign of pressure change" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Pressure change in 24</span>
-                <input type="text" name="pressurechange24_archivesynopticformreportdata" id="pressurechange24_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Pressure change in 24 hrs" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 6</span>
-                <input type="text" name="groupindicator6_2_archivesynopticformreportdata" id="groupindicator6_2_archivesynopticformreportdata" value="6" readonly class="form-control" required class="form-control" required placeholder="Group Indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of precipitation</span>
-                <input type="text" name="amtofprecipitation2_archivesynopticformreportdata" id="amtofprecipitation2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Amount of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Duration of period of precipitation</span>
-                <input type="text" name="durationofprecipitation2_archivesynopticformreportdata" id="durationofprecipitation2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Duration of period of precipitation" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 8</span>
-                <input type="text" name="groupindicator8_2_archivesynopticformreportdata" id="groupindicator8_2_archivesynopticformreportdata" value="8" readonly class="form-control"  required class="form-control" required placeholder="General Indicator 13" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of individual cloud layer</span>
-                <input type="text" name="amtofcloudlayer_archivesynopticformreportdata" id="amtofcloudlayer_archivesynopticformreportdata"  onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Amount of individual cloud layer" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Genus of cloud</span>
-                <input type="text" name="genuscloud_archivesynopticformreportdata" id="genuscloud_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required placeholder="Genus of cloud" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Height of base cloud layer or mass</span>
-                <input type="text" name="hofbasecloud_archivesynopticformreportdata" id="hofbasecloud_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Height of base cloud layer or mass" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 8</span>
-                <input type="text" name="groupindicator8_3_archivesynopticformreportdata" id="groupindicator8_3_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 14" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of individual cloud layer</span>
-                <input type="text" name="amtofcloudlayer2_archivesynopticformreportdata" id="amtofcloudlayer2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of individual cloud layer" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Genus of cloud</span>
-                <input type="text" name="genuscloud2_archivesynopticformreportdata" id="genuscloud2_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Genus of cloud" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Height of cloud base layer or mass</span>
-                <input type="text" name="hofbasecloud2_archivesynopticformreportdata" id="hofbasecloud2_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Height of cloud base layer or mass" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 8</span>
-                <input type="text" name="groupindicator8_4_archivesynopticformreportdata" id="groupindicator8_4_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 8" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of individual cloud layer 3</span>
-                <input type="text" name="amtofcloudlayer3_archivesynopticformreportdata" id="amtofcloudlayer3_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of individual cloud layer 3" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Genus of cloud 3</span>
-                <input type="text" name="genuscloud3_archivesynopticformreportdata" id="genuscloud3_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Genus of cloud 3" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Height of cloud base layer or mass 3</span>
-                <input type="text" name="hofbasecloud3_archivesynopticformreportdata" id="hofbasecloud3_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Height of cloud base layer or mass 3" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 8</span>
-                <input type="text" name="groupindicator8_5_archivesynopticformreportdata" id="groupindicator8_5_archivesynopticformreportdata"  value="8" readonly class="form-control" required class="form-control" placeholder="Group Indicator 16" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Amount of individual cloud layer 4</span>
-                <input type="text" name="amtofcloudlayer4_archivesynopticformreportdata" id="amtofcloudlayer4_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Amount of individual cloud layer 4" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Genus of cloud 4</span>
-                <input type="text" name="genuscloud4_archivesynopticformreportdata" id="genuscloud4_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Genus of cloud 4" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Height of cloud base layer or mass 4</span>
-                <input type="text" name="hofbasecloud4_archivesynopticformreportdata" id="hofbasecloud4_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Height of cloud base layer or mass 4" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 9</span>
-                <input type="text" name="groupindicator9_archivesynopticformreportdata" id="groupindicator9_archivesynopticformreportdata" value="9" readonly class="form-control" required class="form-control" required placeholder="Group Indicator 17" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Suplementary information</span>
-                <input type="text" name="supplementaryinfo_archivesynopticformreportdata" id="supplementaryinfo_archivesynopticformreportdata" onkeyup="allowCharactersInputOnly(this)" class="form-control" required placeholder="Suplementary information" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Section Indicator 555</span>
-                <input type="text" name="sectionindicator555_archivesynopticformreportdata" id="sectionindicator555_archivesynopticformreportdata" value="555" readonly class="form-control" required class="form-control" required placeholder="Section indicator" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Group Indicator 1</span>
-                <input type="text" name="groupindicator1_3_archivesynopticformreportdata" id="groupindicator1_3_archivesynopticformreportdata" value="1" readonly class="form-control"  required class="form-control" required placeholder="Group Indicator 18" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Sign of data 5</span>
-                <input type="text" name="signofdata5_archivesynopticformreportdata" id="signofdata5_archivesynopticformreportdata"  value="0" readonly class="form-control" required class="form-control" required placeholder="Sign of data 3" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Wet bulb temperature</span>
-                <input type="text" name="wetbulbtemp_archivesynopticformreportdata"  id="wetbulbtemp_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" required placeholder="Wetbulb temperature" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Relative humidity</span>
-                <input type="text" name="relativehumidity_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" required placeholder="Relative humidity" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Vapour pressure</span>
-                <input type="text" name="vapourpressure_archivesynopticformreportdata" id="vapourpressure_archivesynopticformreportdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" required placeholder="Vapour Pressure" >
-            </div>
-        </div>
-
-        </div>
-        <div class="clearfix"></div>
-        </div>
-        <div class="modal-footer clearfix">
-
-            <a href="<?php echo base_url()."index.php/ArchiveSynopticFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-            <button type="submit" id="postarchivesynopticformreportdata_button" name="postarchivesynopticformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Add synoptic</button>
-        </div>
         </form>
         <br><br>
         </div>
@@ -679,9 +779,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $synopticid = $synoptic->id;
             ?>
             <div class="row">
-            <form action="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/updateSynopticFormData" method="post" enctype="multipart/form-data">
-            <div class="modal-body">
-            <div id="output"></div>
+            <form action="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/updateSynopticFormData" id="regForm" method="post" enctype="multipart/form-data">
+
+
             <script language="javascript">
                 function allowIntegerInputOnly(inputvalue) {
                     //var invalidChars = /[^0-9]/gi
@@ -699,642 +799,737 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }
                 }
             </script>
-            <div class="col-lg-6">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Select Date</span>
-                    <input type="text" name="date" required class="form-control" value="<?php echo $synoptic->Date;?>" placeholder="Enter select date" id="expdate" readonly class="form-control">
-                    <input type="hidden" name="id" value="<?php echo $synoptic->id;?>">
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Time</span>
-                    <input type="text" name="timeRecorded" id="timeRecorded"  required class="form-control" value="<?php echo $synoptic->TIME;?>" placeholder="Enter time" readonly class="form-control">
+							<!-- Section1 -->
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <?php if($userrole=='SeniorDataOfficer' || $userrole=='DataOfficer'){ ?>
+         <td >
+
+             <div class="input-group">
+               <span class="input-group-addon">Station Name</span>
+             <select name="station" id="stationManager"   class="form-control" placeholder="Select Station">
+                   <option value="<?php echo $synoptic->StationName;?>"><?php echo $synoptic->StationName;?></option>
+                   <?php
+                   if (is_array($stationsdata) && count($stationsdata)) {
+                       foreach($stationsdata as $station){?>
+                           <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                       <?php }
+                   } ?>
+               </select>
+             </div>
+
+         </td>
+         <td >
+
+           <div class="input-group">
+             <span class="input-group-addon"> Station Number</span>
+              <input type="text" name="stationNo"  class="form-control" id="stationNoManager" readonly class="form-control" value="<?php echo $synoptic->StationNumber;?>" readonly="readonly" >
+           </div>
+
+         </td>
+       <?php } else{ ?>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Station</span>
+								 <input type="text" name="station" id="station" required class="form-control" required value="<?php echo $synoptic->StationName;?>"  readonly class="form-control" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								 <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $synoptic->StationNumber;?>" readonly="readonly" >
+							</div>
+						</td>
+          <?php }?>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Select Date</span>
+								 <input type="text" name="date" required class="form-control" value="<?php echo $synoptic->Date;?>" placeholder="Enter select date" id="expdate" readonly class="form-control">
+								<input type="hidden" name="id" value="<?php echo $synoptic->id;?>">
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME</span>
+								 <input type="text" name="timeRecorded" id="timeRecorded"  class="form-control" value="<?php echo $synoptic->TIME;?>" placeholder="Enter time" readonly class="form-control">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Unit of wind speed</span>
+								 <input type="text" name="unitofwindspeed" id="unitofwindspeed" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->UWS;?>"  placeholder="Enter unit of wind speed" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Block Number</span>
+								<input type="text" name="blockNumber" id="blockNumber"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->BN;?>"   placeholder="Enter block number" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Ind. or ommission of precipitation</span>
+								<input type="text" name="ioprecipitation" id="ioprecipitation"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->IOOP;?>"  placeholder="Ind. or ommission of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Type of station/present & past weather</span>
+								<input type="text" name="typeofstat" id="typeofstat" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->TSPPW;?>"  placeholder="Type of station/present & past weather" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of lowest cloud</span>
+								 <input type="text" name="lowestcloudheight" id="lowestcloudheight" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->HLC;?>" placeholder="Height of west cloud" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Horizontal Visibility</span>
+								<input type="text" name="horizontalvisibility" id="horizontalvisibility" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->HV;?>" placeholder="Horizontal Visibility" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Total cloud cover</span>
+								<input type="text" name="cloudcovertotal" id="cloudcovertotal" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->TCC;?>" placeholder="Total cloud cover" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Wind Direction</span>
+								<input type="text" name="wdirection" id="wdirection" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->WD;?>" placeholder="Wind Direction" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Wind Speed</span>
+								<input type="text" name="wspeed" id="wspeed" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->WS;?>" placeholder="Wind Speed" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator</span>
+								 <input type="text" name="gindicator1" id="gindicator1"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI1_1;?>" placeholder="Group Indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signdata1" id="signdata1" readonly class="form-control"    class="form-control" value="<?php echo $synoptic->SignOfData_1;?>" placeholder="Sign of the data" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Air temperature</span>
+								<input type="text" name="airtemp" id="airtemp" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->Air_temperature;?>" placeholder="Air Temperature " >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 2 -->
+			<div class = "tab"><h2>More Data Input:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Group Indicator 2</span>
+								<input type="text" name="gindicator2" id="gindicator2" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI2_1;?>" placeholder="Group Indicator 2" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sign of the data </span>
+								<input type="text" name="signdata2" id="signdata2" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->SignOfData_2;?>" placeholder="Sign of the data" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Dew point temperature</span>
+								 <input type="text" name="dewpointtemperature" id="dewpointtemperature" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->Dewpoint_temperature;?>" placeholder="Dew point temperature" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 3</span>
+								<input type="text" name="gindicator3" id="gindicator3" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI3_1;?>" placeholder="Group Indicator 3" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Pressure station level</span>
+								<input type="text" name="pressurestationlevel" id="pressurestationlevel" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->PASL;?>"  placeholder="Pressure station level" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 4</span>
+								<input type="text" name="gindicator4" id="gindicator4" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI4_1;?>" placeholder="Group Indicator 4" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Standard isobaric surface</span>
+								<input type="text" name="isobaric" id="isobaric" onkeyup="allowIntegerInputOnly(this)" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->SIS;?>" placeholder="Standard isobaric surface" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Geopotential of SIS</span>
+								<input type="text" name="geopotentialsis" id="geopotentialsis" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->GSIS;?>"  placeholder="Geopotential of isobaric surface" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 6</span>
+								<input type="text" name="gindicator6" id="gindicator6"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI6_1;?>" placeholder="Group Indicator 6" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of precipitation</span>
+								 <input type="text" name="amountofprecipitation"  id="amountofprecipitation" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->AOP;?>"  placeholder="Amount of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Duration period of precipitation</span>
+								<input type="text" name="precipitationduration" id="precipitationduration" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DPOP;?>"  placeholder="Duration period of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 7</span>
+								<input type="text" name="gindicator7" id="gindicator7"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI7_1;?>" placeholder="Group Indicator 7" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Present weather</span>
+								<input type="text" name="presentweather" id="presentweather" onkeyup=""  class="form-control" value="<?php echo $synoptic->Present_Weather;?>"  placeholder="Present weather" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Past weather</span>
+								<input type="text" name="pastweather" id="pastweather" onkeyup=""  class="form-control" value="<?php echo $synoptic->Past_Weather;?>"  placeholder="Past weather" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="gindicator8" id="gindicator8" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI8_1;?>" placeholder="Group Indicator 8" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of clouds</span>
+								<input type="text" name="amountclouds" id="amountclouds" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AOC;?>"  placeholder="Amount of clouds" >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 3 -->
+			<div class = "tab"><h2>Weather Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera  Sc. St. Cu. Cb</span>
+								<input type="text" name="cloudsgene1" id="cloudsgene1" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CLOG;?>"  placeholder="Clouds of the general Sc. St. Cu, Cb" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera Ac. As. Ns</span>
+								<input type="text" name="cloudsgene2" id="cloudsgene2" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CGOG;?>"  placeholder="Clouds of the general Ac As Ns" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Clouds of the Genera Cl Cc Cs</span>
+								 <input type="text" name="cloudsgene3" id="cloudsgene3" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CHOG;?>"  placeholder="Clouds of the general C Cc Cs" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Section Indicator</span>
+								<input type="text" name="sindicator333" id="sindicator333"   readonly class="form-control"   class="form-control" value="<?php echo $synoptic->Section_Indicator333;?>"   placeholder="Section Indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 0</span>
+								 <input type="text" name="gindicator0" id="gindicator0" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI0_1;?>"   placeholder="General Indicator" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Grass minimum temperature</span>
+								<input type="text" name="grassmintemp" id="grassmintemp"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->GMT;?>"  placeholder="Grass minimum temperature" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Character & intensity of precipitation</span>
+								 <input type="text" name="characterinten" id="characterinten" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->CIOP;?>"  placeholder="Character & Intensity of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Beginning or end of precipitation</span>
+								 <input type="text" name="begendprecipitation" id="begendprecipitation" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->BEOP;?>"  placeholder="beginning or end of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan = "2" align = "center">
+							<div class="form-group">
+								 <label><span>Did we have: </span></label><br>
+
+								<input type="checkbox" <?php if($synoptic->ThunderStorm == "true") echo "checked"; ?> name="thunderstorm" class="form-control" value="true"> Thunder storm (Ts)
+								<input type="checkbox" name="hailstorm" <?php if($synoptic->HailStorm == "true") echo "checked"; ?> class="form-control" value="true"> Hail storm (Hs)
+
+								<input type="checkbox" name="fog" <?php if($synoptic->Fog == "true") echo "checked"; ?> class="form-control" value="true"> Fog (Fg)
+								<input type="checkbox" name="earthquake" <?php if($synoptic->EarthQuake == "true") echo "checked"; ?> class="form-control"> Earth Quake
+
+								<input type="checkbox" name="anemometerreading" <?php if($synoptic->Anemometer_Reading == "true") echo "checked"; ?> class="form-control" value="true"> Anemometer Reading
+
+
+								<input type="checkbox" <?php if($synoptic->Actual_Rainfall == "true") echo "checked"; ?> name="actualrainfall" class="form-control" value="true"> Actual Rain
+
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 1</span>
+								 <input type="text" name="gindicator1_2" id="gindicator1_2"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI1_2;?>" placeholder="Group Indicator" ">
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signdata3"  id="signdata3" readonly class="form-control"    class="form-control" value="<?php echo $synoptic->SignOfData_3;?>" placeholder="Sign of the data" ">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Minimum temperature</span>
+								<input type="text" name="maxtemptx" id="maxtemptx" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Max_TempTx;?>"  placeholder="Minimum temperature" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 2</span>
+								<input type="text" name="gindicator2_2" id="gindicator2_2" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI2_2;?>" placeholder="Group Indicator 9" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of the data</span>
+								<input type="text" name="signdata4" id="signdata4" readonly class="form-control" require class="form-control" value="<?php echo $synoptic->SignOfData_4;?>"   placeholder="Sign of the data" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Maximum temperature</span>
+								<input type="text" name="maxtemptn" id="maxtemptn" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Max_TempTn;?>"  placeholder="Maximum temperature" >
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--section 4 -->
+			<div class = "tab"><h2>More Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 5</span>
+								 <input type="text" name="gindicator5" id="gindicator5" readonly class="form-control"    class="form-control" value="<?php echo $synoptic->GI5_1;?>"   placeholder="Group Indicator" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of evapouration</span>
+								<input type="text" name="amtofevap" id="amtofevap" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AOE;?>"  placeholder="Amount of evapouration" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Indicator of type of instrumentation</span>
+								<input type="text" name="indtype" id="indtype" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->ITI;?>"  placeholder="Indicator of type of instrumentation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 55</span>
+								<input type="text" name="gindicator55" id="gindicator55" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI55;?>" placeholder="Group Indicator 10" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Duration of sunshine</span>
+								<input type="text" name="durationsunshine" id="durationsunshine" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DOS;?>"  placeholder="Duration of sunshine" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 5</span>
+								 <input type="text" name="gindicator5_2" id="gindicator5_2"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI5_2;?>"   placeholder="General Indicator 11" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of pressure change</span>
+								<input type="text" name="pressurechgsign" id="pressurechgsign" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->SPC;?>"  placeholder="Sign of pressure change" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Pressure change in 24</span>
+								<input type="text" name="pressurechgin24hrs" id="pressurechgin24hrs" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->PCI24Hrs;?>"  placeholder="Pressure change in 24 hrs" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 6</span>
+								<input type="text" name="gindicator6_2" id="gindicator6_2" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI6_2;?>"   placeholder="Group Indicator 12" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of precipitation</span>
+								 <input type="text" name="amountofprecipitation2" id="amountofprecipitation2" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->AOP_2;?>" placeholder="Amount of precipitation" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Duration of period of precipitation</span>
+								<input type="text" name="precipitationduration2" id="precipitationduration2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DPOP_2;?>"  placeholder="Duration of period of precipitation" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="gindicator8_2"  id="gindicator8_2"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI8_2;?>"   placeholder="General Indicator 13" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer</span>
+								<input type="text" name="cloudlayeramount" id="cloudlayeramount" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL;?>"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud</span>
+								<input type="text" name="cloudgenus" id="cloudgenus" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC;?>"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Height of base cloud layer or mass</span>
+								<input type="text" name="basecloudheight" id="basecloudheight" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM;?>"  placeholder="Height of base cloud layer or mass" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="gindicator8_3"  id="gindicator8_3"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI8_3;?>"   placeholder="General Indicator 13" >
+							</div>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<!--section 5 -->
+			<div class = "tab"><h2>Cloud Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer</span>
+								<input type="text" name="cloudlayeramount2" id="cloudlayeramount2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_2;?>"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud</span>
+								<input type="text" name="cloudgenus2" id="cloudgenus2" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_2;?>"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of cloud base layer or mass</span>
+								<input type="text" name="basecloudheight2" id="basecloudheight2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_2;?>"  placeholder="Height of base cloud layer or mass" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 8</span>
+								<input type="text" name="gindicator8_4" id="gindicator8_4"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI8_4;?>"   placeholder="General Indicator 13" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer 3</span>
+								<input type="text" name="cloudlayeramount3" id="cloudlayeramount3" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_3;?>"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud 3</span>
+								<input type="text" name="cloudgenus3" id="cloudgenus3" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_3;?>"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Height of cloud base layer or mass 3</span>
+								<input type="text" name="basecloudheight3" id="basecloudheight3" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_3;?>"  placeholder="Height of base cloud layer or mass" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Group Indicator 8</span>
+							<input type="text" name="gindicator8_5"  id="gindicator8_5"  readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI8_5;?>"   placeholder="General Indicator 13" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Amount of individual cloud layer 4</span>
+								<input type="text" name="cloudlayeramount4" id="cloudlayeramount4" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_4;?>"  placeholder="Amount of individual cloud layer" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Genus of cloud 4</span>
+								<input type="text" name="cloudgenus4" id="cloudgenus4" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_4;?>"  placeholder="Genus of cloud" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Height of cloud base layer or mass 4</span>
+							<input type="text" name="basecloudheight4" id="basecloudheight4" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_4;?>"  placeholder="Height of base cloud layer or mass" >
+						</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Group Indicator 9</span>
+								<input type="text" name="gindicator9" id="gindicator9" readonly class="form-control"   class="form-control" value="<?php echo $synoptic->GI9;?>" placeholder="Group Indicator 14" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Suplementary information</span>
+								<input type="text" name="supplementary_info"  id="supplementary_info"  onkeyup="allowCharactersInputOnly(this)" value="<?php echo $synoptic->Supp_Info;?>" class="form-control"  placeholder="Suplementary information" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Section Indicator 555</span>
+								<input type="text" name="sindicator555" id="sindicator555" readonly class="form-control" value="<?php echo $synoptic->Section_Indicator555;?>" class="form-control"   placeholder="Section indicator" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Group Indicator 1</span>
+								<input type="text" name="gindicator1_3" id="gindicator1_3" readonly class="form-control" class="form-control" value="<?php echo $synoptic->GI1_3;?>"   placeholder="Group Indicator 18" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Sign of data 5</span>
+								<input type="text" name="signdata5" id="signdata5"  readonly class="form-control" value="<?php echo $synoptic->SignOfData_5;?>" class="form-control"  placeholder="Sign of data 3" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Wet bulb temperature</span>
+								 <input type="text" name="wetbulbtemperature" id="wetbulbtemperature" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Wetbulb_Temp;?>"  placeholder="Wetbulb temperature" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Relative humidity</span>
+								<input type="text" name="rhumidity" id="rhumidity" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->R_Humidity;?>"  placeholder="Relative humidity" >
+							</div>
+						</td>
+
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Vapour pressure</span>
+								<input type="text" name="vpressure" id="vpressure"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->V_Pressure;?>"  placeholder="Vapour Pressure" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Approved</span>
+								<select name="approval" id="approval" class="form-control">
+									<option value="<?php echo $synoptic->Approved;?>"><?php echo $synoptic->Approved;?></option>
+									<option value="">--Select Options--</option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+          <tr>
+            <td colspan="2">
+                <span style="text-align:centre;">Comment section</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+               <div class="input-group">
+                <span class="input-group-addon">Remarks</span>
+                <input type="text" name="remarks" value="<?php echo $synoptic->remarks;?>"  id="remarks" class="form-control"  placeholder=" remarks" >
+              </div>
+            </td>
+            <td>
+               <div class="input-group">
+                <span class="input-group-addon">Time</span>
+                <input type="time" name="time_"    value="<?php echo $synoptic->time_;?>"  class="form-control"  placeholder="" >
+              </div>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+               <div class="input-group">
+                <span class="input-group-addon">Observer on duty</span>
+                <input type="text" name="ObserverOnDuty"  id="ObserverOnDuty" value="<?php echo $synoptic->ObserverOnDuty;?>"  class="form-control"  placeholder="observer on duty" >
+              </div>
+            </td>
+            <td>
+
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+               <div class="input-group">
+                <span class="input-group-addon">To</span>
+                <input type="text" name="to" value="<?php echo $synoptic->to_;?>"   id="to"  class="form-control"  placeholder="" >
+              </div>
+            </td>
+            <td>
+              <div class="input-group">
+               <span class="input-group-addon">From</span>
+               <input type="text" name="from"  value="<?php echo $synoptic->from_;?>" id="from"  class="form-control"  placeholder="" >
+             </div>
+            </td>
+
+          </tr>
+				</table>
+			</div>
+
+		 <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="updatearchivesynopticformreportdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+	<span class="step"></span>
+  </div>
 
-
-                </div>
-            </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Station</span>
-                        <input type="text" name="station" id="station" required class="form-control" value="<?php echo $synoptic->StationName;?>"  readonly class="form-control" >
-
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"> Station Number</span>
-                        <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $synoptic->StationNumber;?>" readonly="readonly" >
-                    </div>
-                </div>
-
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Unit of wind speed</span>
-                    <input type="text" name="unitofwindspeed" id="unitofwindspeed" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->UWS;?>" required placeholder="Enter unit of wind speed" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Block Number</span>
-                    <input type="text" name="blockNumber" id="blockNumber"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->BN;?>" required placeholder="Enter block number" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Ind. or ommission of precipitation</span>
-                    <input type="text" name="ioprecipitation" id="ioprecipitation"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->IOOP;?>" required placeholder="Ind. or ommission of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Type of station/present & past weather</span>
-                    <input type="text" name="typeofstat" id="typeofstat" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->TSPPW;?>" required placeholder="Type of station/present & past weather" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Height of lowest cloud</span>
-                    <input type="text" name="lowestcloudheight" id="lowestcloudheight" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->HLC;?>" placeholder="Height of west cloud" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Horizontal Visibility</span>
-                    <input type="text" name="horizontalvisibility" id="horizontalvisibility" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->HV;?>" placeholder="Horizontal Visibility" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Total cloud cover</span>
-                    <input type="text" name="cloudcovertotal" id="cloudcovertotal" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->TCC;?>" placeholder="Total cloud cover" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Wind Direction</span>
-                    <input type="text" name="wdirection" id="wdirection" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->WD;?>" placeholder="Wind Direction" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Wind Speed</span>
-                    <input type="text" name="wspeed" id="wspeed" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->WS;?>" placeholder="Wind Speed" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 1</span>
-                    <input type="text" name="gindicator1" id="gindicator1"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI1_1;?>" placeholder="Group Indicator" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of the data</span>
-                    <input type="text" name="signdata1" id="signdata1" readonly class="form-control"  required class="form-control" value="<?php echo $synoptic->SignOfData_1;?>" placeholder="Sign of the data" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Air temperature</span>
-                    <input type="text" name="airtemp" id="airtemp" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->Air_temperature;?>" placeholder="Air Temperature " >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 2</span>
-                    <input type="text" name="gindicator2" id="gindicator2" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI2_1;?>" placeholder="Group Indicator 2" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of the data</span>
-                    <input type="text" name="signdata2" id="signdata2" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->SignOfData_2;?>" placeholder="Sign of the data" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Dew point temperature</span>
-                    <input type="text" name="dewpointtemperature" id="dewpointtemperature" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->Dewpoint_temperature;?>" placeholder="Dew point temperature" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 3</span>
-                    <input type="text" name="gindicator3" id="gindicator3" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI3_1;?>" placeholder="Group Indicator 3" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Pressure station level</span>
-                    <input type="text" name="pressurestationlevel" id="pressurestationlevel" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->PASL;?>" required placeholder="Pressure station level" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 4</span>
-                    <input type="text" name="gindicator4" id="gindicator4" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI4_1;?>" placeholder="Group Indicator 4" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Standard isobaric surface</span>
-                    <input type="text" name="isobaric" id="isobaric" onkeyup="allowIntegerInputOnly(this)" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->SIS;?>" placeholder="Standard isobaric surface" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Geopotential of SIS</span>
-                    <input type="text" name="geopotentialsis" id="geopotentialsis" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->GSIS;?>" required placeholder="Geopotential of isobaric surface" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 6</span>
-                    <input type="text" name="gindicator6" id="gindicator6"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI6_1;?>" placeholder="Group Indicator 6" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of precipitation</span>
-                    <input type="text" name="amountofprecipitation"  id="amountofprecipitation" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->AOP;?>" required placeholder="Amount of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Duration period of precipitation</span>
-                    <input type="text" name="precipitationduration" id="precipitationduration" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DPOP;?>" required placeholder="Duration period of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 7</span>
-                    <input type="text" name="gindicator7" id="gindicator7"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI7_1;?>" placeholder="Group Indicator 7" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Present weather</span>
-                    <input type="text" name="presentweather" id="presentweather" onkeyup="allowCharactersInputOnly(this)" required class="form-control" value="<?php echo $synoptic->Present_Weather;?>" required placeholder="Present weather" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Past weather</span>
-                    <input type="text" name="pastweather" id="pastweather" onkeyup="allowCharactersInputOnly(this)" required class="form-control" value="<?php echo $synoptic->Past_Weather;?>" required placeholder="Past weather" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 8</span>
-                    <input type="text" name="gindicator8" id="gindicator8" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI8_1;?>" placeholder="Group Indicator 8" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of clouds</span>
-                    <input type="text" name="amountclouds" id="amountclouds" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AOC;?>" required placeholder="Amount of clouds" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Clouds of the Genera Sc St. Cu. Cb</span>
-                    <input type="text" name="cloudsgene1" id="cloudsgene1" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CLOG;?>" required placeholder="Clouds of the general Sc. St. Cu, Cb" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Clouds of the Genera Ac. As. Ns</span>
-                    <input type="text" name="cloudsgene2" id="cloudsgene2" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CGOG;?>" required placeholder="Clouds of the general Ac As Ns" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Clouds of the Genera Cl Cc Cs</span>
-                    <input type="text" name="cloudsgene3" id="cloudsgene3" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->CHOG;?>" required placeholder="Clouds of the general C Cc Cs" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Section Indicator 333</span>
-                    <input type="text" name="sindicator333" id="sindicator333"   readonly class="form-control" required class="form-control" value="<?php echo $synoptic->Section_Indicator333;?>" required placeholder="Section Indicator" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 0</span>
-                    <input type="text" name="gindicator0" id="gindicator0" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI0_1;?>" required placeholder="General Indicator" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Grass minimum temperature</span>
-                    <input type="text" name="grassmintemp" id="grassmintemp"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->GMT;?>" required placeholder="Grass minimum temperature" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Character & intensity of precipitation</span>
-                    <input type="text" name="characterinten" id="characterinten" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->CIOP;?>" required placeholder="Character & Intensity of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Beginning or end of precipitation</span>
-                    <input type="text" name="begendprecipitation" id="begendprecipitation" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $synoptic->BEOP;?>" required placeholder="beginning or end of precipitation" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label><span>Did we have: </span></label><br>
-
-                <input type="checkbox" <?php if($synoptic->ThunderStorm == "true") echo "checked"; ?> name="thunderstorm" class="form-control" value="true"> Thunder storm (Ts)
-                <input type="checkbox" name="hailstorm" <?php if($synoptic->HailStorm == "true") echo "checked"; ?> class="form-control" value="true"> Hail storm (Hs)
-
-                <input type="checkbox" name="fog" <?php if($synoptic->Fog == "true") echo "checked"; ?> class="form-control" value="true"> Fog (Fg)
-                <input type="checkbox" name="earthquake" <?php if($synoptic->EarthQuake == "true") echo "checked"; ?> class="form-control"> Earth Quake
-
-                <input type="checkbox" name="anemometerreading" <?php if($synoptic->Anemometer_Reading == "true") echo "checked"; ?> class="form-control" value="true"> Anemometer Reading
-
-
-                <input type="checkbox" <?php if($synoptic->Actual_Rainfall == "true") echo "checked"; ?> name="actualrainfall" class="form-control" value="true"> Actual Rain
-
-            </div>
-
-            </div>
-
-            <div class="col-lg-6">
-
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 1</span>
-                    <input type="text" name="gindicator1_2" id="gindicator1_2"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI1_2;?>" placeholder="Group Indicator" ">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of the data</span>
-                    <input type="text" name="signdata3"  id="signdata3" readonly class="form-control"  required class="form-control" value="<?php echo $synoptic->SignOfData_3;?>" placeholder="Sign of the data" ">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Maximum temperature</span>
-                    <input type="text" name="maxtemptx" id="maxtemptx" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Max_TempTx;?>" required placeholder="Maximum temperature" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 2</span>
-                    <input type="text" name="gindicator2_2" id="gindicator2_2" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI2_2;?>" placeholder="Group Indicator 9" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of the data</span>
-                    <input type="text" name="signdata4" id="signdata4" readonly class="form-control" require class="form-control" value="<?php echo $synoptic->SignOfData_4;?>" required placeholder="Sign of the data" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Maximum temperature</span>
-                    <input type="text" name="maxtemptn" id="maxtemptn" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Max_TempTn;?>" required placeholder="Maximum temperature" >
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 5</span>
-                    <input type="text" name="gindicator5" id="gindicator5" readonly class="form-control"  required class="form-control" value="<?php echo $synoptic->GI5_1;?>" required placeholder="Group Indicator" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of evapouration</span>
-                    <input type="text" name="amtofevap" id="amtofevap" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AOE;?>" required placeholder="Amount of evapouration" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Indicator of type of instrumentation</span>
-                    <input type="text" name="indtype" id="indtype" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->ITI;?>" required placeholder="Indicator of type of instrumentation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 55</span>
-                    <input type="text" name="gindicator55" id="gindicator55" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI55;?>" placeholder="Group Indicator 10" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Duration of sunshine</span>
-                    <input type="text" name="durationsunshine" id="durationsunshine" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DOS;?>" required placeholder="Duration of sunshine" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 5</span>
-                    <input type="text" name="gindicator5_2" id="gindicator5_2"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI5_2;?>" required placeholder="General Indicator 11" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of pressure change</span>
-                    <input type="text" name="pressurechgsign" id="pressurechgsign" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->SPC;?>" required placeholder="Sign of pressure change" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Pressure change in 24hours</span>
-                    <input type="text" name="pressurechgin24hrs" id="pressurechgin24hrs" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->PCI24Hrs;?>" required placeholder="Pressure change in 24 hrs" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 6</span>
-                    <input type="text" name="gindicator6_2" id="gindicator6_2" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI6_2;?>" required placeholder="Group Indicator 12" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of precipitation</span>
-                    <input type="text" name="amountofprecipitation2" id="amountofprecipitation2" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $synoptic->AOP_2;?>" placeholder="Amount of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Duration of period of precipitation</span>
-                    <input type="text" name="precipitationduration2" id="precipitationduration2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->DPOP_2;?>" required placeholder="Duration of period of precipitation" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 8</span>
-                    <input type="text" name="gindicator8_2"  id="gindicator8_2"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI8_2;?>" required placeholder="General Indicator 13" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of individual cloud layer</span>
-                    <input type="text" name="cloudlayeramount" id="cloudlayeramount" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL;?>" required placeholder="Amount of individual cloud layer" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Genus of cloud</span>
-                    <input type="text" name="cloudgenus" id="cloudgenus" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC;?>" required placeholder="Genus of cloud" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Height if base cloud layer or mass</span>
-                    <input type="text" name="basecloudheight" id="basecloudheight" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM;?>" required placeholder="Height of base cloud layer or mass" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 8</span>
-                    <input type="text" name="gindicator8_3"  id="gindicator8_3"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI8_3;?>" required placeholder="General Indicator 13" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of individual cloud layer</span>
-                    <input type="text" name="cloudlayeramount2" id="cloudlayeramount2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_2;?>" required placeholder="Amount of individual cloud layer" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Genus of cloud</span>
-                    <input type="text" name="cloudgenus2" id="cloudgenus2" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_2;?>" required placeholder="Genus of cloud" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Height if base cloud layer or mass</span>
-                    <input type="text" name="basecloudheight2" id="basecloudheight2" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_2;?>" required placeholder="Height of base cloud layer or mass" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 8</span>
-                    <input type="text" name="gindicator8_4" id="gindicator8_4"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI8_4;?>" required placeholder="General Indicator 13" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of individual cloud layer</span>
-                    <input type="text" name="cloudlayeramount3" id="cloudlayeramount3" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_3;?>" required placeholder="Amount of individual cloud layer" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Genus of cloud</span>
-                    <input type="text" name="cloudgenus3" id="cloudgenus3" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_3;?>" required placeholder="Genus of cloud" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Height if base cloud layer or mass</span>
-                    <input type="text" name="basecloudheight3" id="basecloudheight3" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_3;?>" required placeholder="Height of base cloud layer or mass" >
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 8</span>
-                    <input type="text" name="gindicator8_5"  id="gindicator8_5"  readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI8_5;?>" required placeholder="General Indicator 13" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Amount of individual cloud layer</span>
-                    <input type="text" name="cloudlayeramount4" id="cloudlayeramount4" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->AICL_4;?>" required placeholder="Amount of individual cloud layer" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Genus of cloud</span>
-                    <input type="text" name="cloudgenus4" id="cloudgenus4" onkeyup="allowCharactersInputOnly(this)" class="form-control" value="<?php echo $synoptic->GOC_4;?>" required placeholder="Genus of cloud" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Height if base cloud layer or mass</span>
-                    <input type="text" name="basecloudheight4" id="basecloudheight4" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->HBCLOM_4;?>" required placeholder="Height of base cloud layer or mass" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 9</span>
-                    <input type="text" name="gindicator9" id="gindicator9" readonly class="form-control" required class="form-control" value="<?php echo $synoptic->GI9;?>" placeholder="Group Indicator 14" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Supplementary information</span>
-                    <input type="text" name="supplementary_info"  id="supplementary_info"  onkeyup="allowCharactersInputOnly(this)" value="<?php echo $synoptic->Supp_Info;?>" class="form-control" required placeholder="Suplementary information" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Section Indicator 5</span>
-                    <input type="text" name="sindicator555" id="sindicator555" readonly class="form-control" value="<?php echo $synoptic->Section_Indicator555;?>" class="form-control" required placeholder="Section indicator" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Group Indicator 1</span>
-                    <input type="text" name="gindicator1_3" id="gindicator1_3" readonly class="form-control" class="form-control" value="<?php echo $synoptic->GI1_3;?>" required placeholder="Group Indicator 18" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sign of data </span>
-                    <input type="text" name="signdata5" id="signdata5"  readonly class="form-control" value="<?php echo $synoptic->SignOfData_5;?>" class="form-control" required placeholder="Sign of data 3" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Wet bulb temperature</span>
-                    <input type="text" name="wetbulbtemperature" id="wetbulbtemperature" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->Wetbulb_Temp;?>" required placeholder="Wetbulb temperature" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Relative humidity</span>
-                    <input type="text" name="rhumidity" id="rhumidity" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->R_Humidity;?>" required placeholder="Relative humidity" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Vapour pressure</span>
-                    <input type="text" name="vpressure" id="vpressure"  onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $synoptic->V_Pressure;?>" required placeholder="Vapour Pressure" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Approved</span>
-                    <select name="approval" id="approval" class="form-control">
-                        <option value="<?php echo $synoptic->Approved;?>"><?php echo $synoptic->Approved;?></option>
-                        <option value="">--Select Options--</option>
-                        <option value="TRUE">TRUE</option>
-                        <option value="FALSE">FALSE</option>
-                    </select>
-                </div>
-            </div>
-
-            </div>
-            <div class="clearfix"></div>
-            </div>
-            <div class="modal-footer clearfix">
-
-                <a href="<?php echo base_url()."index.php/ArchiveSynopticFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-                <button type="submit" name="updatearchivesynopticformreportdata_button" id="updatearchivesynopticformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update</button>
-            </div>
             </form>
             <br><br>
-            </div>
+            </center>
         <?php
         }
     }else{
         ?>
         <div class="row">
             <div class="col-xs-3"><a class="btn btn-primary no-print"
-                                     href="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/DisplaySynopticForm/"><i class="fa fa-plus"></i> Add synoptic info</a>
+	href="<?php echo base_url(); ?>index.php/ArchiveSynopticFormReportData/DisplaySynopticForm/"><i class="fa fa-plus"></i> Add synoptic info</a>
             </div>
 
         </div>
@@ -1343,9 +1538,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <div class="col-xs-12">
 
                 <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Synoptic Form</h3>
-                    </div><!-- /.box-header -->
 
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
@@ -1367,15 +1559,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Horizontal Visibity</th>
                                 <th>Wind Direction</th>
                                 <th>Wind Speed</th>
-                                <th>Approved</th>
-                                <th>By</th>
+
                                 <!--<th>Approved</th>
                                 <th>Rain </th>
                                 <th>Thunder</th>
                                 <th>Fog</th>
                                 <th>Haze</th>
                                 <th>Storm</th>-->
-                            <?php if( $userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><th class="no-print">Action</th><?php }?>
+                            <?php if(  $userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC' ){ ?>
+                              <th>Approved</th>
+                              <th>By</th>
+                              <th class="no-print">Action</th><?php }?>
                             </tr>
                             </thead>
                             <tbody>
@@ -1401,31 +1595,30 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <td ><?php echo $data->HV;?></td>
                                     <td ><?php echo $data->WD;?></td>
                                     <td ><?php echo $data->WS;?></td>
-                                    <td ><?php echo $data->Approved;?></td>
-                                    <td ><?php echo $data->SubmittedBy;?></td>
 
                                     <!--<td></td>
                                         <td><?php echo $data->thunder;?></td>
                                         <td ><?php echo $data->fog;?></td>
                                         <td ><?php echo $data->haze;?></td>
                                         <td><?php echo $data->storm;?></td>-->
-                               <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
-                                        <td class="no-print">
+                               <?php if( $userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC'  ){ ?>
+
+                                 <td ><?php echo $data->Approved;?></td>
+                                 <td ><?php echo $data->SubmittedBy;?></td>
+                                 <td class="no-print">
                                         <a href="<?php echo base_url()."index.php/ArchiveSynopticFormReportData/DisplaySynopticFormForUpdate/" .$data->id ;?>"
                                            style="cursor:pointer;">Edit</a>
-                                   <!--or
-                                        <a href="<?php echo base_url()."index.php/ArchiveSynopticFormReportData/deleteSynopticFormData/" .$data->id ;?>"
-                                           onClick="return confirm('Are you sure you want to delete this record?');">Delete</a>
-                                        </td><?php }?> -->
+
                                 </tr>
 
                             <?php
                             }
+                          }
                             ?>
                             </tbody>
                         </table>
                         <br><br>
-                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
@@ -1442,6 +1635,55 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
+
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            // alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
+    </script>
     <script>
         $(document).ready(function() {
             //Post metar form data into the DB
@@ -1462,6 +1704,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
 
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveSynopticFormReportData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveSynopticFormReportData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveSynopticFormReportData_hiddentextfield").focus();
+                    return false;
+
+                }
 
                 //Check that Date selected
                 var date=$('#date').val();
@@ -1787,7 +2038,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             });
         });
     </script>
-    /////////////////////////////////////////////////////////////////////////////////////////
+
     <script>
         //Inform the user if they want to really update this textfield with a new value.
         //On Editing
@@ -3178,5 +3429,5 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
     </script>
 
-
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

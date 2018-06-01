@@ -25,7 +25,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 <section class="content report">
 <div id="output"></div>
 <div class="row">
-    <form action="<?php echo base_url(); ?>index.php/MonthlyRainfallReport/displaymonthlyrainfallreport/" method="post" enctype="multipart/form-data">
+    <form action="<?php echo base_url(); ?>index.php/ReportsController/displaymonthlyrainfallreport/" method="post" enctype="multipart/form-data">
         <?php  if($userrole=='OC'){?>
             <div class="col-xs-3">
                 <div class="form-group">
@@ -36,7 +36,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     </div>
                 </div>
             </div>
-        <?php }elseif($userrole=='Manager'){?>
+        <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
             <div class="col-xs-3">
                 <div class="form-group">
                     <div class="input-group">
@@ -69,7 +69,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 </div>
             </div>
 
-        <?php }elseif($userrole=='Manager'){?>
+        <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
             <div class="col-xs-3">
                 <div class="form-group">
                     <div class="input-group">
@@ -150,111 +150,92 @@ if(is_array($displayMonthlyRainfallReportHeaderFields)
     <div class="clearfix"></div>
     <br>
     <?php
-       $one="--";
-        $two="--";
-        $three="--";
-        $four="--";
-        $five="--";
-        $six="--";
-        $seven="--";
-        $eight="--";
-        $nine="--";
-        $ten="--";
-        $eleven="--";
-        $twelve="--";
-        $thirteen="--";
-        $fourteen="--";
-        $fifteen="--";
-        $sixteen="--";
-        $seventeen="--";
-        $eighteen="--";
-        $nineteen="--";
-        $twenty="--";
-        $twentyone="--";
-        $twentytwo="--";
-        $twentythree="--";
-        $twentyfour="--";
-        $twentyfive="--";
-        $twentysix="--";
-        $twentyseven="--";
-        $twentyeight="--";
-        $twentynine="--";
-        $thirty="--";
-        $thirtyone="--";
+       $one;
+       $two;
+       $three;
+       $four;
+       $five;
+       $six;
+       $seven;
+       $eight;
+       $nine;
+        $ten;
+        $eleven;
+        $twelve;
+        $thirteen;
+        $fourteen;
+        $fifteen;
+        $sixteen;
+        $seventeen;
+        $eighteen;
+        $nineteen;
+        $twenty;
+        $twentyone;
+        $twentytwo;
+        $twentythree;
+        $twentyfour;
+        $twentyfive;
+        $twentysix;
+        $twentyseven;
+        $twentyeight;
+        $twentynine;
+        $thirty;
+        $thirtyone;
 
         $totalrainfallmeasured=0.0;
         $numberOfRainfallDays=0;
 
         foreach($monthlyrainfallreportdatafromObservationSlipTable as $data){
+           echo $data->DayOfTheMonth;
 
-
-            if ($data->DayOfTheMonth == '1') {
+            if ($data->DayOfTheMonth == 1) {
                 $one = $data->Rainfall;
 
-                if($one==''){
-                    $one="--";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($one=='0'){
+                if(($one=='0') ||  ($one=='NIL') || empty($one)){
                     $one="NIL";
-                    $totalrainfallmeasured+=0.0;
+
 
                 }
-                elseif($one=='NIL'){
-                    $one="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($one=='TR'){
+                elseif(($one < 0.1) || ($one=='TR')){
                     $one ='TR';
-                    $totalrainfallmeasured+=0.0;
+
 
                 }
-                elseif($one < 0.1){
-                    $one='TR';
-                    $totalrainfallmeasured+=0.0;
+                elseif(($one >= 0.1) && ($one <= 0.9)){
+                    $one=$data->Rainfall;
+                    $totalrainfallmeasured+=$one;
 
                 }
 
-                elseif($one > 0.1){
+                elseif($one >= 1.0){
                     $one=$data->Rainfall;
                     $totalrainfallmeasured+=$one;
                     $numberOfRainfallDays+=1;
 
                 }
-
-
-
             }
 
-            if ($data->DayOfTheMonth == '2') {
+            if ($data->DayOfTheMonth == 2) {
                 $two = $data->Rainfall;
-                if($two==''){
-                    $two='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($two=='0'){
+                if(($two=='0') ||  ($two=='NIL') || empty($two)){
                     $two="NIL";
-                    $totalrainfallmeasured+=0.0;
+
 
                 }
-                elseif($two=='NIL'){
-                    $two="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($two=='TR'){
+                elseif(($two < 0.1) || ($two=='TR')){
                     $two ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($two < 0.1){
-                    $two='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($two > 0.1){
+                elseif(($two >= 0.1) && ($two <= 0.9)){
+                    $two=$data->Rainfall;
+                    $totalrainfallmeasured+=$two;
+
+                }
+
+                elseif($two >= 1.0){
                     $two=$data->Rainfall;
                     $totalrainfallmeasured+=$two;
                     $numberOfRainfallDays+=1;
@@ -263,982 +244,755 @@ if(is_array($displayMonthlyRainfallReportHeaderFields)
 
             }
 
-            if ($data->DayOfTheMonth == '3') {
+            if ($data->DayOfTheMonth ==3) {
                 $three = $data->Rainfall;
-                if($three==''){
-                    $three='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($three=='0'){
+                if(($three=='0') ||  ($three=='NIL') || empty($three)){
                     $three="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($three=='NIL'){
-                    $three="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($three=='TR'){
+                elseif(($three < 0.1) || ($three=='TR')){
                     $three ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($three < 0.1){
-                    $three='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($three > 0.1){
+                elseif(($three >= 0.1) && ($three <= 0.9)){
+                    $three=$data->Rainfall;
+                    $totalrainfallmeasured+=$three;
+
+                }
+
+                elseif($three >= 1.0){
                     $three=$data->Rainfall;
                     $totalrainfallmeasured+=$three;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if($data->DayOfTheMonth == '4'){
+            if($data->DayOfTheMonth ==4){
                 $four=$data->Rainfall;
-                if($four==''){
-                    $four='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($four=='0'){
+                if(($four=='0') ||  ($four=='NIL') || empty($four)){
                     $four="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($four=='NIL'){
-                    $four="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($four=='TR'){
+                elseif(($four < 0.1) || ($four=='TR')){
                     $four ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($four < 0.1){
-                    $four='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($four > 0.1){
+                elseif(($four >= 0.1) && ($four <= 0.9)){
+                    $four=$data->Rainfall;
+                    $totalrainfallmeasured+=$four;
+
+                }
+
+                elseif($four >= 1.0){
                     $four=$data->Rainfall;
                     $totalrainfallmeasured+=$four;
                     $numberOfRainfallDays+=1;
 
-
                 }
             }
 
-            if ($data->DayOfTheMonth == '5') {
+            if ($data->DayOfTheMonth ==5) {
                 $five = $data->Rainfall;
-                if($five==''){
-                    $five='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($five=='0'){
+                if(($five=='0') ||  ($five=='NIL') || empty($five)){
                     $five="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($five=='NIL'){
-                    $five="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($five=='TR'){
+                elseif(($five < 0.1) || ($five=='TR')){
                     $five ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($five < 0.1){
-                    $five='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($five > 0.1){
+                elseif(($five >= 0.1) && ($five <= 0.9)){
+                    $five=$data->Rainfall;
+                    $totalrainfallmeasured+=$five;
+
+                }
+
+                elseif($five >= 1.0){
                     $five=$data->Rainfall;
                     $totalrainfallmeasured+=$five;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '6') {
+            if ($data->DayOfTheMonth ==6) {
                 $six = $data->Rainfall;
-                if($six==''){
-                    $six='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($six=='0'){
+                if(($six=='0') ||  ($six=='NIL') || empty($six)){
                     $six="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($six=='NIL'){
-                    $six="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($six=='TR'){
+                elseif(($six < 0.1) || ($six=='TR')){
                     $six ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($six < 0.1){
-                    $six='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($six > 0.1){
+                elseif(($six >= 0.1) && ($six <= 0.9)){
+                    $six=$data->Rainfall;
+                    $totalrainfallmeasured+=$six;
+
+                }
+
+                elseif($six >= 1.0){
                     $six=$data->Rainfall;
                     $totalrainfallmeasured+=$six;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '7') {
+            if ($data->DayOfTheMonth ==7) {
                 $seven = $data->Rainfall;
-                if($seven==''){
-                    $seven='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($seven=='0'){
+                if(($seven=='0') ||  ($seven=='NIL') || empty($seven)){
                     $seven="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($seven=='NIL'){
-                    $seven="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($seven=='TR'){
+                elseif(($seven < 0.1) || ($seven=='TR')){
                     $seven ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($seven < 0.1){
-                    $seven='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($seven > 0.1){
+                elseif(($seven >= 0.1) && ($seven <= 0.9)){
+                    $seven=$data->Rainfall;
+                    $totalrainfallmeasured+=$seven;
+
+                }
+
+                elseif($seven >= 1.0){
                     $seven=$data->Rainfall;
                     $totalrainfallmeasured+=$seven;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '8') {
+            if ($data->DayOfTheMonth ==8) {
                 $eight = $data->Rainfall;
-                if($eight==''){
-                    $eight='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($eight=='0'){
+                if(($eight=='0') ||  ($eight=='NIL') || empty($eight)){
                     $eight="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($eight=='NIL'){
-                    $eight="NIL";
-                    $totalrainfallmeasured+=0.0;
 
-                }
-                elseif($eight=='TR'){
+                elseif(($eight < 0.1) || ($eight=='TR')){
                     $eight ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($eight < 0.1){
-                    $eight='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($eight > 0.1){
+                elseif(($eight >= 0.1) && ($eight <= 0.9)){
+                    $eight=$data->Rainfall;
+                    $totalrainfallmeasured+=$eight;
+
+                }
+
+                elseif($eight >= 1.0){
                     $eight=$data->Rainfall;
                     $totalrainfallmeasured+=$eight;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '9') {
+            if ($data->DayOfTheMonth ==9) {
                 $nine = $data->Rainfall;
-                if($nine==''){
-                    $nine='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($nine=='0'){
+                if(($nine=='0') ||  ($nine=='NIL') || empty($nine)){
                     $nine="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($nine=='NIL'){
-                    $nine="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($nine=='TR'){
+                elseif(($nine < 0.1) || ($nine=='TR')){
                     $nine ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($nine < 0.1){
-                    $nine='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($nine > 0.1){
+                elseif(($nine >= 0.1) && ($nine <= 0.9)){
+                    $nine=$data->Rainfall;
+                    $totalrainfallmeasured+=$nine;
+
+                }
+
+                elseif($nine >= 1.0){
                     $nine=$data->Rainfall;
                     $totalrainfallmeasured+=$nine;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '10') {
+            if ($data->DayOfTheMonth ==10) {
                 $ten = $data->Rainfall;
-                if($ten==''){
-                    $ten='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($ten=='0'){
+                if(($ten=='0') ||  ($ten=='NIL') || empty($ten)){
                     $ten="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($ten=='NIL'){
-                    $ten="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($ten=='TR'){
+                elseif(($ten < 0.1) || ($ten=='TR')){
                     $ten ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($ten < 0.1){
-                    $ten='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($ten > 0.1){
+                elseif(($ten >= 0.1) && ($ten <= 0.9)){
+                    $ten=$data->Rainfall;
+                    $totalrainfallmeasured+=$ten;
+
+                }
+
+                elseif($ten >= 1.0){
                     $ten=$data->Rainfall;
                     $totalrainfallmeasured+=$ten;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '11') {
+            if ($data->DayOfTheMonth ==11) {
                 $eleven = $data->Rainfall;
-                if($eleven==''){
-                    $eleven='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($eleven=='0'){
+                if(($eleven=='0') ||  ($eleven=='NIL') || empty($eleven)){
                     $eleven="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($eleven=='NIL'){
-                    $eleven="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($eleven=='TR'){
+                elseif(($eleven < 0.1) || ($eleven=='TR')){
                     $eleven ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($eleven < 0.1){
-                    $eleven='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($eleven > 0.1){
+                elseif(($eleven >= 0.1) && ($eleven <= 0.9)){
+                    $eleven=$data->Rainfall;
+                    $totalrainfallmeasured+=$eleven;
+
+                }
+
+                elseif($eleven >= 1.0){
                     $eleven=$data->Rainfall;
                     $totalrainfallmeasured+=$eleven;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '12') {
+            if ($data->DayOfTheMonth ==12) {
                 $twelve = $data->Rainfall;
-                if($twelve==''){
-                    $twelve='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twelve=='0'){
+                if(($twelve=='0') ||  ($twelve=='NIL') || empty($twelve)){
                     $twelve="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twelve=='NIL'){
-                    $twelve="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twelve=='TR'){
+                elseif(($twelve < 0.1) || ($twelve=='TR')){
                     $twelve ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twelve < 0.1){
-                    $twelve='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twelve > 0.1){
+                elseif(($twelve >= 0.1) && ($twelve <= 0.9)){
+                    $twelve=$data->Rainfall;
+                    $totalrainfallmeasured+=$twelve;
+
+                }
+
+                elseif($twelve >= 1.0){
                     $twelve=$data->Rainfall;
                     $totalrainfallmeasured+=$twelve;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '13') {
+            if ($data->DayOfTheMonth ==13) {
                 $thirteen = $data->Rainfall;
-                if($thirteen==''){
-                    $thirteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirteen=='0'){
+                if(($thirteen=='0') ||  ($thirteen=='NIL') || empty($thirteen)){
                     $thirteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirteen=='NIL'){
-                    $thirteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($thirteen=='TR'){
+                elseif(($thirteen < 0.1) || ($thirteen=='TR')){
                     $thirteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($thirteen < 0.1){
-                    $thirteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($thirteen > 0.1){
+                elseif(($thirteen >= 0.1) && ($thirteen <= 0.9)){
+                    $thirteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$thirteen;
+
+                }
+
+                elseif($thirteen >= 1.0){
                     $thirteen=$data->Rainfall;
                     $totalrainfallmeasured+=$thirteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '14') {
+            if ($data->DayOfTheMonth ==14) {
                 $fourteen = $data->Rainfall;
-                if($fourteen==''){
-                    $fourteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($fourteen=='0'){
+                if(($fourteen=='0') ||  ($fourteen=='NIL') || empty($fourteen)){
                     $fourteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($fourteen=='NIL'){
-                    $fourteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($fourteen=='TR'){
+                elseif(($fourteen < 0.1) || ($fourteen=='TR')){
                     $fourteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($fourteen < 0.1){
-                    $fourteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($fourteen > 0.1){
+                elseif(($fourteen >= 0.1) && ($fourteen <= 0.9)){
+                    $fourteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$fourteen;
+
+                }
+
+                elseif($fourteen >= 1.0){
                     $fourteen=$data->Rainfall;
                     $totalrainfallmeasured+=$fourteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '15') {
+            if ($data->DayOfTheMonth ==15) {
                 $fifteen = $data->Rainfall;
-                if($fifteen==''){
-                    $fifteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($fifteen=='0'){
+                if(($fifteen=='0') ||  ($fifteen=='NIL') || empty($fifteen)){
                     $fifteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($fifteen=='NIL'){
-                    $fifteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($fifteen=='TR'){
+                elseif(($fifteen < 0.1) || ($fifteen=='TR')){
                     $fifteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($fifteen < 0.1){
-                    $fifteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($fifteen > 0.1){
+                elseif(($fifteen >= 0.1) && ($fifteen <= 0.9)){
+                    $fifteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$fifteen;
+
+                }
+
+                elseif($fifteen >= 1.0){
                     $fifteen=$data->Rainfall;
                     $totalrainfallmeasured+=$fifteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '16') {
+            if ($data->DayOfTheMonth ==16) {
                 $sixteen = $data->Rainfall;
-                if($sixteen==''){
-                    $sixteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($sixteen=='0'){
+                if(($sixteen=='0') ||  ($sixteen=='NIL') || empty($sixteen)){
                     $sixteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($sixteen=='NIL'){
-                    $sixteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($sixteen=='TR'){
+                elseif(($sixteen < 0.1) || ($sixteen=='TR')){
                     $sixteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($sixteen < 0.1){
-                    $sixteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($sixteen > 0.1){
+                elseif(($sixteen >= 0.1) && ($sixteen <= 0.9)){
+                    $sixteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$sixteen;
+
+                }
+
+                elseif($sixteen >= 1.0){
                     $sixteen=$data->Rainfall;
                     $totalrainfallmeasured+=$sixteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '17') {
+            if ($data->DayOfTheMonth ==17) {
                 $seventeen = $data->Rainfall;
-                if($seventeen==''){
-                    $seventeen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($seventeen=='0'){
+                if(($seventeen=='0') ||  ($seventeen=='NIL') || empty($seventeen)){
                     $seventeen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($seventeen=='NIL'){
-                    $seventeen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($seventeen=='TR'){
+                elseif(($seventeen < 0.1) || ($seventeen=='TR')){
                     $seventeen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($seventeen < 0.1){
-                    $seventeen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($seventeen > 0.1){
+                elseif(($seventeen >= 0.1) && ($seventeen <= 0.9)){
+                    $seventeen=$data->Rainfall;
+                    $totalrainfallmeasured+=$seventeen;
+
+                }
+
+                elseif($seventeen >= 1.0){
                     $seventeen=$data->Rainfall;
                     $totalrainfallmeasured+=$seventeen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '18') {
+            if ($data->DayOfTheMonth ==18) {
                 $eighteen = $data->Rainfall;
-                if($eighteen==''){
-                    $eighteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($eighteen=='0'){
+                if(($eighteen=='0') ||  ($eighteen=='NIL') || empty($eighteen)){
                     $eighteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($eighteen=='NIL'){
-                    $eighteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($eighteen=='TR'){
+                elseif(($eighteen < 0.1) || ($eighteen=='TR')){
                     $eighteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($eighteen < 0.1){
-                    $eighteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($eighteen > 0.1){
+                elseif(($eighteen >= 0.1) && ($eighteen <= 0.9)){
+                    $eighteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$eighteen;
+
+                }
+
+                elseif($eighteen >= 1.0){
                     $eighteen=$data->Rainfall;
                     $totalrainfallmeasured+=$eighteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '19') {
+            if ($data->DayOfTheMonth ==19) {
                 $nineteen = $data->Rainfall;
-                if($nineteen==''){
-                    $nineteen='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($nineteen=='0'){
+                if(($nineteen=='0') ||  ($nineteen=='NIL') || empty($nineteen)){
                     $nineteen="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($nineteen=='NIL'){
-                    $nineteen="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($nineteen=='TR'){
+                elseif(($nineteen < 0.1) || ($nineteen=='TR')){
                     $nineteen ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($nineteen < 0.1){
-                    $nineteen='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($nineteen > 0.1){
+                elseif(($nineteen >= 0.1) && ($nineteen <= 0.9)){
+                    $nineteen=$data->Rainfall;
+                    $totalrainfallmeasured+=$nineteen;
+
+                }
+
+                elseif($nineteen >= 1.0){
                     $nineteen=$data->Rainfall;
                     $totalrainfallmeasured+=$nineteen;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '20') {
+            if ($data->DayOfTheMonth ==20) {
                 $twenty = $data->Rainfall;
-                if($twenty==''){
-                    $twenty='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twenty=='0'){
+                if(($twenty=='0') ||  ($twenty=='NIL') || empty($twenty)){
                     $twenty="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twenty=='NIL'){
-                    $twenty="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twenty=='TR'){
+                elseif(($twenty < 0.1) || ($twenty=='TR')){
                     $twenty ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twenty < 0.1){
-                    $twenty='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twenty > 0.1){
+                elseif(($twenty >= 0.1) && ($twenty <= 0.9)){
+                    $twenty=$data->Rainfall;
+                    $totalrainfallmeasured+=$twenty;
+
+                }
+
+                elseif($twenty >= 1.0){
                     $twenty=$data->Rainfall;
                     $totalrainfallmeasured+=$twenty;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '21') {
+            if ($data->DayOfTheMonth ==21) {
                 $twentyone = $data->Rainfall;
-                if($twentyone==''){
-                    $twentyone='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyone=='0'){
-                    $twentyone ="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyone=='NIL'){
+                if(($twentyone=='0') ||  ($twentyone=='NIL') || empty($twentyone)){
                     $twentyone="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentyone=='TR'){
+                elseif(($twentyone < 0.1) || ($twentyone=='TR')){
                     $twentyone ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentyone < 0.1){
-                    $twentyone='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentyone > 0.1){
+                elseif(($twentyone >= 0.1) && ($twentyone <= 0.9)){
+                    $twentyone=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentyone;
+
+                }
+
+                elseif($twentyone >= 1.0){
                     $twentyone=$data->Rainfall;
                     $totalrainfallmeasured+=$twentyone;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '22') {
+            if ($data->DayOfTheMonth ==22) {
                 $twentytwo = $data->Rainfall;
-                if($twentytwo==''){
-                    $twentytwo='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentytwo=='0'){
+                if(($twentytwo=='0') ||  ($twentytwo=='NIL') || empty($twentytwo)){
                     $twentytwo="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentytwo=='NIL'){
-                    $twentytwo="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentytwo=='TR'){
+                elseif(($twentytwo < 0.1) || ($twentytwo=='TR')){
                     $twentytwo ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentytwo < 0.1){
-                    $twentytwo='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentytwo > 0.1){
+                elseif(($twentytwo >= 0.1) && ($twentytwo <= 0.9)){
+                    $twentytwo=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentytwo;
+
+                }
+
+                elseif($twentytwo >= 1.0){
                     $twentytwo=$data->Rainfall;
                     $totalrainfallmeasured+=$twentytwo;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '23') {
+            if ($data->DayOfTheMonth ==23) {
                 $twentythree = $data->Rainfall;
-                if($twentythree==''){
-                    $twentythree='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentythree=='0'){
+                if(($twentythree=='0') ||  ($twentythree=='NIL') || empty($twentythree)){
                     $twentythree="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentythree=='NIL'){
-                    $twentythree="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentythree=='TR'){
+                elseif(($twentythree < 0.1) || ($twentythree=='TR')){
                     $twentythree ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentythree < 0.1){
-                    $twentythree='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentythree > 0.1){
-                    $eighteen=$data->Rainfall;
+                elseif(($twentythree >= 0.1) && ($twentythree <= 0.9)){
+                    $twentythree=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentythree;
+
+                }
+
+                elseif($twentythree >= 1.0){
+                    $twentythree=$data->Rainfall;
                     $totalrainfallmeasured+=$twentythree;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '24') {
+            if ($data->DayOfTheMonth ==24) {
                 $twentyfour = $data->Rainfall;
-                if($twentyfour==''){
-                    $twentyfour='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyfour=='0'){
+                if(($twentyfour=='0') ||  ($twentyfour=='NIL') || empty($twentyfour)){
                     $twentyfour="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyfour=='NIL'){
-                    $twentyfour="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentyfour=='TR'){
+                elseif(($twentyfour < 0.1) || ($twentyfour=='TR')){
                     $twentyfour ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentyfour < 0.1){
-                    $twentyfour='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentyfour > 0.1){
+                elseif(($twentyfour >= 0.1) && ($twentyfour <= 0.9)){
+                    $twentyfour=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentyfour;
+
+                }
+
+                elseif($twentyfour >= 1.0){
                     $twentyfour=$data->Rainfall;
                     $totalrainfallmeasured+=$twentyfour;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '25') {
+            if ($data->DayOfTheMonth ==25) {
                 $twentyfive=$data->Rainfall;
-                if($twentyfive==''){
-                    $twentyfive='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyfive=='0'){
+                if(($twentyfive=='0') ||  ($twentyfive=='NIL') || empty($twentyfive)){
                     $twentyfive="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyfive=='NIL'){
-                    $twentyfive="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentyfive=='TR'){
+                elseif(($twentyfive < 0.1) || ($twentyfive=='TR')){
                     $twentyfive ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentyfive < 0.1){
-                    $twentyfive='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentyfive > 0.1){
+                elseif(($twentyfive >= 0.1) && ($twentyfive <= 0.9)){
+                    $twentyfive=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentyfive;
+
+                }
+
+                elseif($twentyfive >= 1.0){
                     $twentyfive=$data->Rainfall;
                     $totalrainfallmeasured+=$twentyfive;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '26') {
+            if ($data->DayOfTheMonth ==26) {
                 $twentysix = $data->Rainfall;
-                if($twentysix==''){
-                    $twentysix='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentysix=='0'){
+                if(($twentysix=='0') ||  ($twentysix=='NIL') || empty($twentysix)){
                     $twentysix="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentysix=='NIL'){
-                    $twentysix="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentysix=='TR'){
+                elseif(($twentysix < 0.1) || ($twentysix=='TR')){
                     $twentysix ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentysix < 0.1){
-                    $twentysix='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentysix > 0.1){
+                elseif(($twentysix >= 0.1) && ($twentysix <= 0.9)){
+                    $twentysix=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentysix;
+
+                }
+
+                elseif($twentysix >= 1.0){
                     $twentysix=$data->Rainfall;
                     $totalrainfallmeasured+=$twentysix;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '27') {
+            if ($data->DayOfTheMonth ==27) {
                 $twentyseven = $data->Rainfall;
-                if($twentyseven==''){
-                    $twentyseven='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyseven=='0'){
+                if(($twentyseven=='0') ||  ($twentyseven=='NIL') || empty($twentyseven)){
                     $twentyseven="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyseven=='NIL'){
-                    $twentyseven="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentyseven=='TR'){
+                elseif(($twentyseven < 0.1) || ($twentyseven=='TR')){
                     $twentyseven ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentyseven < 0.1){
-                    $twentyseven='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentyseven > 0.1){
+                elseif(($twentyseven >= 0.1) && ($twentyseven <= 0.9)){
+                    $twentyseven=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentyseven;
+
+                }
+
+                elseif($twentyseven >= 1.0){
                     $twentyseven=$data->Rainfall;
                     $totalrainfallmeasured+=$twentyseven;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '28') {
+            if ($data->DayOfTheMonth ==28) {
                 $twentyeight = $data->Rainfall;
-                if($twentyeight==''){
-                    $twentyeight='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyeight=='0'){
+                if(($twentyeight=='0') ||  ($twentyeight=='NIL') || empty($twentyeight)){
                     $twentyeight="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentyeight=='NIL'){
-                    $twentyeight="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentyeight=='TR'){
+                elseif(($twentyeight < 0.1) || ($twentyeight=='TR')){
                     $twentyeight ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentyeight < 0.1){
-                    $twentyeight='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentyeight > 0.1){
+                elseif(($twentyeight >= 0.1) && ($twentyeight <= 0.9)){
+                    $twentyeight=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentyeight;
+
+                }
+
+                elseif($twentyeight >= 1.0){
                     $twentyeight=$data->Rainfall;
                     $totalrainfallmeasured+=$twentyeight;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if ($data->DayOfTheMonth == '29') {
+            if ($data->DayOfTheMonth ==29) {
                 $twentynine = $data->Rainfall;
-                if($twentynine==''){
-                    $twentynine='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentynine=='0'){
+                if(($twentynine=='0') ||  ($twentynine=='NIL') || empty($twentynine)){
                     $twentynine="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($twentynine=='NIL'){
-                    $twentynine="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($twentynine=='TR'){
+                elseif(($twentynine < 0.1) || ($twentynine=='TR')){
                     $twentynine ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($twentynine < 0.1){
-                    $twentynine='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($twentynine > 0.1){
+                elseif(($twentynine >= 0.1) && ($twentynine <= 0.9)){
+                    $twentynine=$data->Rainfall;
+                    $totalrainfallmeasured+=$twentynine;
+
+                }
+
+                elseif($twentynine >= 1.0){
                     $twentynine=$data->Rainfall;
                     $totalrainfallmeasured+=$twentynine;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if($data->DayOfTheMonth=='30'){
+            if($data->DayOfTheMonth==30){
                 $thirty=$data->Rainfall;
-                if($thirty==''){
-                    $thirty='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirty=='0'){
+                if(($thirty=='0') ||  ($thirty=='NIL') || empty($thirty)){
                     $thirty="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirty=='NIL'){
-                    $thirty="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($thirty=='TR'){
+                elseif(($thirty < 0.1) || ($thirty=='TR')){
                     $thirty ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($thirty < 0.1){
-                    $thirty='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($thirty > 0.1){
+                elseif(($thirty >= 0.1) && ($thirty <= 0.9)){
+                    $thirty=$data->Rainfall;
+                    $totalrainfallmeasured+=$thirty;
+
+                }
+
+                elseif($thirty >= 1.0){
                     $thirty=$data->Rainfall;
                     $totalrainfallmeasured+=$thirty;
                     $numberOfRainfallDays+=1;
 
                 }
             }
-            if($data->DayOfTheMonth=='31'){
+            if($data->DayOfTheMonth==31){
                 $thirtyone=$data->Rainfall;
-                if($thirtyone==''){
-                    $thirtyone='--';
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirtyone=='0'){
+                if(($thirtyone=='0') ||  ($thirtyone=='NIL') || empty($thirtyone)){
                     $thirtyone="NIL";
-                    $totalrainfallmeasured+=0.0;
-
-                }
-                elseif($thirtyone=='NIL'){
-                    $thirtyone="NIL";
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
 
-                elseif($thirtyone=='TR'){
+                elseif(($thirtyone < 0.1) || ($thirtyone=='TR')){
                     $thirtyone ='TR';
-                    $totalrainfallmeasured+=0.0;
-
-                }elseif($thirtyone < 0.1){
-                    $thirtyone='TR';
-                    $totalrainfallmeasured+=0.0;
+                    // $totalrainfallmeasured+=0.0;
 
                 }
-                elseif($thirtyone > 0.1){
+                elseif(($thirtyone >= 0.1) && ($thirtyone <= 0.9)){
+                    $thirtyone=$data->Rainfall;
+                    $totalrainfallmeasured+=$thirtyone;
+
+                }
+
+                elseif($thirtyone >= 1.0){
                     $thirtyone=$data->Rainfall;
                     $totalrainfallmeasured+=$thirtyone;
                     $numberOfRainfallDays+=1;
@@ -1246,7 +1000,6 @@ if(is_array($displayMonthlyRainfallReportHeaderFields)
                 }
             }
         }
-
         ?>
 
 
@@ -1367,12 +1120,9 @@ if(is_array($displayMonthlyRainfallReportHeaderFields)
 
             </tr>
         </table>
-
-
-
-
-
-
+        <br><br>
+    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+    <span><strong>Report Generated BY:</strong></span> <span class="dotted-line"><?php echo $name;?></span>
     <br><br>
     <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
     <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
@@ -1443,7 +1193,7 @@ if(is_array($displayMonthlyRainfallReportHeaderFields)
 
             //Check that the a station is selected from the list of stations(Manager)
             var stationOC=$('#stationOC').val();
-            if(stationManager==""){  // returns true if the variable does NOT contain a valid number
+            if(stationOC==""){  // returns true if the variable does NOT contain a valid number
                 alert("Station not picked");
                 $('#stationOC').val("");  //Clear the field.
                 $("#stationOC").focus();

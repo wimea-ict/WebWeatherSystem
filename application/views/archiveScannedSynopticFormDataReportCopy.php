@@ -88,36 +88,28 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                         <div class="form-group">
                             <span class="input-group-addon">Description</span>
-                            <textarea name="description_synoptic" class="form-control" onkeyup="allowCharactersInputOnly(this)" style="height:150px;" id="description_metar"></textarea>
+                            <textarea name="description_synoptic" class="form-control" onkeyup="" style="height:40px;" id="description_metar"></textarea>
                         </div>
 
-
-
-                        <div style="width:400px; height:190px; margin-bottom:4px; max-height:120px; overflow:hidden; border:1px solid; position:relative" class="pull-left">
-                            <img id="blah1" src="#" alt="your first page of synoptc form report image" class="img-responsive" />
-                            <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="name"></label>
-                        </div>
-                        <div class="clearfix"></div>
-
-
+                        <br><br>
 
                         <div class="form-group">
-                            <div class="btn btn-success btn-file">
-                                <i class="fa fa-paperclip"></i> Choose file
-                                <input type="file" name="archievescannedcopy_synopticformreport_firstpage" id="archievescannedcopy_synopticformreport_firstpage" required class="form-control" size = "40">
-
+                            <div class="input-group">
+                                <span class="input-group-addon">  Select First Part Form File to Upload:</span>
+                                <input type="file" accept="image/gif,image/jpg,image/png,image/jpeg,.pdf,.doc,.docx,.xlsx,.ppt,.pptx,.xls" name="archievescannedcopy_synopticformreport_firstpage" id="archievescannedcopy_synopticformreport_firstpage" required class="form-control" size = "40">
+                                <!-- gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx-->
                             </div>
 
-                            <p class="help-block">Lighter images are better</p>
+                            <p class="help-block">Lighter file is better</p>
                         </div>
                         <script type="text/javascript">
-                            function readURL1(input) {
+                            function readURL(input) {
 
                                 if (input.files && input.files[0]) {
                                     var reader = new FileReader();
 
                                     reader.onload = function (e) {
-                                        $('#blah1').attr('src', e.target.result);
+                                        $('#archievescannedcopy_synopticformreport_firstpage').val(e.target.result);
                                     }
 
                                     reader.readAsDataURL(input.files[0]);
@@ -125,30 +117,21 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             }
 
                             $("#archievescannedcopy_synopticformreport_firstpage").change(function(){
-                                readURL1(this);
+                                readURL(this);
                             });
                         </script>
 
-                        <br><br><br>
-
-                        <div style="width:400px; height:190px; margin-bottom:4px; max-height:120px; overflow:hidden; border:1px solid; position:relative" class="pull-left">
-                            <img id="blah2" src="#" alt="your second page of synoptic form report image" class="img-responsive" />
-                            <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="secondpage"></label>
-                        </div>
-                        <div class="clearfix"></div>
-
-
+                        <br><br>
 
                         <div class="form-group">
-                            <div class="btn btn-success btn-file">
-                                <i class="fa fa-paperclip"></i> Choose file
-                                <input type="file" name="archievescannedcopy_synopticformreport_secondpage" id="archievescannedcopy_synopticformreport_secondpage" required class="form-control" size = "40">
-
+                            <div class="input-group">
+                                <span class="input-group-addon">  Select Second Part Form File to Upload:</span>
+                                <input type="file" accept="image/gif,image/jpg,image/png,image/jpeg,.pdf,.doc,.docx,.xlsx,.ppt,.pptx,.xls" name="archievescannedcopy_synopticformreport_secondpage" id="archievescannedcopy_synopticformreport_secondpage" required class="form-control" size = "40">
+                                <!-- gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx-->
                             </div>
 
-                            <p class="help-block">Lighter images are better</p>
+                            <p class="help-block">Lighter file is better</p>
                         </div>
-
                         <script type="text/javascript">
                             function readURL2(input) {
 
@@ -156,30 +139,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     var reader = new FileReader();
 
                                     reader.onload = function (e) {
-                                        $('#blah2').attr('src', e.target.result);
+                                        $('#archievescannedcopy_synopticformreport_secondpage').val(e.target.result);
                                     }
 
                                     reader.readAsDataURL(input.files[0]);
                                 }
                             }
 
-
-
                             $("#archievescannedcopy_synopticformreport_secondpage").change(function(){
                                 readURL2(this);
                             });
-
-
                         </script>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -188,12 +158,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="modal-footer clearfix"></div>
                 <div class="clearfix"></div>
         </div>
-        <div class="modal-footer clearfix">
+        <center>
 
-            <a href="<?php echo base_url(); ?>index.php/ArchiveScannedSynopticFormDataReportCopy/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+            <a href="<?php echo base_url(); ?>index.php/ArchiveScannedSynopticFormDataReportCopy/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-            <button type="submit" id="postScannedSynopticFormDataReportCopy_button" name="postScannedSynopticFormDataReportCopy_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Save Scanned Synoptic Form Details</button>
-        </div>
+            <button type="submit" id="postScannedSynopticFormDataReportCopy_button" name="postScannedSynopticFormDataReportCopy_button" class="btn btn-primary"><i class="fa fa-plus"></i> SUBMIT</button>
+        </center>
         </form>
         </div>
     <?php
@@ -225,19 +195,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </script>
                         <div class="col-lg-8">
 
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Form Name</span>
-                                    <input type="text" name="formname" required class="form-control" required value="<?php echo $idDetails->Form;?>" readonly="readonly"   readonly class="form-control" id="formname">
-                                    <input type="hidden" name="id" value="<?php echo $idDetails->id;?>">
-                                </div>
-                            </div>
-
-
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">Station Name</span>
                                         <input type="text" name="station" id="station" required class="form-control" value="<?php echo $idDetails->StationName;?>"  readonly class="form-control" >
+                                        <input type="hidden" name="id" id="id" required class="form-control" value="<?php echo $idDetails->id;?>"  readonly class="form-control" >
 
                                     </div>
                                 </div>
@@ -248,6 +210,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="input-group">
                                         <span class="input-group-addon"> Station Number</span>
                                         <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $idDetails->StationNumber;?>" readonly="readonly" >
+                                        <input type="hidden" name="stationId" required class="form-control" id="stationId" readonly class="form-control" value="<?php echo $idDetails->station;?>" readonly="readonly" >
+
                                     </div>
                                 </div>
 
@@ -256,7 +220,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Date</span>
-                                    <input type="text" name="dateOnScannedSynopticFormReport" required class="form-control" placeholder="Enter date on the scanned form " value="<?php echo $idDetails->Date;?>" id="expdate" readonly="readonly" readonly class="form-control">
+                                    <input type="text" name="dateOnScannedSynopticFormReport" required class="form-control" placeholder="Enter date on the scanned form " value="<?php echo $idDetails->form_date;?>" id="expdate" readonly="readonly" readonly class="form-control">
                                 </div>
                             </div>
 
@@ -264,37 +228,30 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                             <div class="form-group">
                                 <span class="input-group-addon">Description</span>
-                                <textarea name="description" onkeyup="allowCharactersInputOnly(this)" class="form-control" style="height:150px;" id="description">  <?php echo $idDetails->Description;?>    </textarea>
+                                <textarea name="description" onkeyup="" class="form-control" style="height:40px;" id="description">  <?php echo $idDetails->Description;?>    </textarea>
 
                             </div>
 
-
-
-                            <div style="width:500px; height:200px; margin-bottom:4px; max-height:120px; overflow:hidden; border:2px solid; position:relative" class="pull-left">
-                                <img id="blah1" src="<?php echo base_url().'archive/'. $idDetails->FileName_FirstPage ?>" alt="your image" class="img-responsive" />
-                                <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="name"></label>
-                            </div>
-                            <div class="clearfix"></div>
-
-
+                            <br><br>
 
                             <div class="form-group">
-                                <div class="btn btn-success btn-file">
-                                    <i class="fa fa-paperclip"></i> Choose file
-                                    <input type="file" name="updatearchievescannedcopy_synopticformreport_firstpage" id="updatearchievescannedcopy_synopticformreport_firstpage"   required class="form-control" size = "40">
-
+                                <div class="input-group">
+                                    <span class="input-group-addon">  Select First Part Form File to Upload:</span>
+                                    <input type="file" accept="image/gif,image/jpg,image/png,image/jpeg,.pdf,.doc,.docx,.xlsx,.ppt,.pptx,.xls"   name="updatearchievescannedcopy_synopticformreport_firstpage" id="updatearchievescannedcopy_synopticformreport_firstpage"  class="form-control" size = "40">
+                                    <!-- gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx-->
                                 </div>
 
-                                <p class="help-block">Lighter images are better</p>
+                                <p class="help-block">Lighter file is better</p>
                             </div>
                             <script type="text/javascript">
-                                function readURL1(input) {
+
+                                function readURL_update(input) {
 
                                     if (input.files && input.files[0]) {
                                         var reader = new FileReader();
 
                                         reader.onload = function (e) {
-                                            $('#blah1').attr('src', e.target.result);
+                                            $('#updatearchievescannedcopy_synopticformreport_firstpage').val(e.target.result);
                                         }
 
                                         reader.readAsDataURL(input.files[0]);
@@ -302,49 +259,75 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 }
 
                                 $("#updatearchievescannedcopy_synopticformreport_firstpage").change(function(){
-                                    readURL1(this);
+                                    readURL_update(this);
                                 });
                             </script>
 
-                            <br><br><br>
-
-                            <div style="width:500px; height:200px; margin-bottom:4px; max-height:120px; overflow:hidden; border:2px solid; position:relative" class="pull-left">
-                                <img id="blah2" src="<?php echo base_url().'archive/'. $idDetails->FileName_SecondPage ?>" alt="your image" class="img-responsive" />
-                                <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="name"></label>
-                            </div>
-                            <div class="clearfix"></div>
-
-
-
                             <div class="form-group">
-                                <div class="btn btn-success btn-file">
-                                    <i class="fa fa-paperclip"></i> Choose file
-                                    <input type="file" name="updatearchievescannedcopy_synopticformreport_secondpage" id="updatearchievescannedcopy_synopticformreport_secondpage"   required class="form-control" size = "40">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class = "pull-left">Previously Uploaded File 1</i>
+									<a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedSynopticFormDataReportCopy/ViewImageFromBrowser/<?php echo $idDetails->FileRef;?>" target = "blank"><?php echo $idDetails->FileRef;?></a>
+									</span>
 
                                 </div>
+                            </div>
 
-                                <p class="help-block">Lighter images are better</p>
+                            <br><br>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">  Select Second Part Form File to Upload:</span>
+                                    <input type="file" accept="image/gif,image/jpg,image/png,image/jpeg,.pdf,.doc,.docx,.xlsx,.ppt,.pptx,.xls"   name="updatearchievescannedcopy_synopticformreport_secondpage" id="updatearchievescannedcopy_synopticformreport_secondpage"  class="form-control" size = "40">
+                                    <!-- gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx-->
+                                </div>
+
+                                <p class="help-block">Lighter file is better</p>
                             </div>
                             <script type="text/javascript">
-                                function readURL2(input) {
+
+                                function readURL2_update(input) {
 
                                     if (input.files && input.files[0]) {
                                         var reader = new FileReader();
 
                                         reader.onload = function (e) {
-                                            $('#blah2').attr('src', e.target.result);
+                                            $('#updatearchievescannedcopy_synopticformreport_secondpage').val(e.target.result);
                                         }
 
                                         reader.readAsDataURL(input.files[0]);
                                     }
                                 }
 
-
-
                                 $("#updatearchievescannedcopy_synopticformreport_secondpage").change(function(){
-                                    readURL2(this);
+                                    readURL2_update(this);
                                 });
                             </script>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Previously Uploaded Part File 2</span>
+                                    <input type="text" name="PreviouslyUploadedFileName_synopticformreport_secondpage" id="PreviouslyUploadedFileName_synopticformreport_secondpage" required class="form-control"  value="<?php echo $idDetails->FileName_SecondPage;?>"  readonly="readonly" readonly class="form-control">
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Approved</span>
+                                    <select name="approval" id="approval"  required class="form-control">
+                                        <option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
+                                        <option value="">--Select Approval Options--</option>
+                                        <option value="TRUE">TRUE</option>
+                                        <option value="FALSE">FALSE</option>
+                                    </select>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -352,12 +335,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     <div class="modal-footer clearfix"></div>
                     <div class="clearfix"></div>
             </div>
-            <div class="modal-footer clearfix">
+            <center>
 
-                <a  href="<?php echo base_url(); ?>index.php/ArchiveScannedSynopticFormDataReportCopy/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                <a  href="<?php echo base_url(); ?>index.php/ArchiveScannedSynopticFormDataReportCopy/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-                <button type="submit" name="updateScannedSynopticFormDataReportCopy_button" id="updateScannedSynopticFormDataReportCopy_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Scanned Synoptic Form Details</button>
-            </div>
+                <button type="submit" name="updateScannedSynopticFormDataReportCopy_button" id="updateScannedSynopticFormDataReportCopy_button" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE </button>
+            </center>
             </form>
             </div>
         <?php
@@ -386,11 +369,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Form</th>
-
                                 <th>Station Name</th>
                                 <th>Station Number</th>
-
                                 <th>Date</th>
                                 <th>Description</th>
                                 <th>Approved</th>
@@ -413,30 +393,28 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     ?>
                                     <tr>
                                         <td ><?php echo $count;?></td>
-                                        <td ><?php echo $data->Form;?></td>
-
                                         <td ><?php echo $data->StationName;?></td>
                                         <td ><?php echo $data->StationNumber;?></td>
-                                        <td ><?php echo $data->Date;?></td>
-
+                                        <td ><?php echo $data->form_date;?></td>
                                         <td><?php echo $data->Description;?></td>
-                                        <td ><?php echo $data->Approved;?></td>
+                                        <td ><?php echo $data->Approved?"TRUE":"FALSE";?></td>
                                         <td><?php echo $data->SubmittedBy;?></td>
-                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?><td class="no-print">
+                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?>
+                                     <td class="no-print">
 
                                             <a href="<?php echo base_url() . "index.php/ArchiveScannedSynopticFormDataReportCopy/DisplayFormToArchiveScannedSynopticFormReportForUpdate/" .$data->id ;?>" style="cursor:pointer;">Edit</a>
-                                          <!--  or <a href="<?php echo base_url() . "index.php/ArchiveScannedSynopticFormDataReportCopy/deleteInformationForArchiveScannedSynopticFormReport/" .$data->id ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $data->Form;?>');">Delete</a></td><?php }?> -->
+                                    </td>
                                     </tr>
 
                                 <?php
                                 }
                             }
+                          }
                             ?>
                             </tbody>
                         </table>
                         <br><br>
-                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
@@ -472,6 +450,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
 
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield").focus();
+                    return false;
+
+                }
 
                 //Check that Form name  is picked
                 var formname=$('#formname_synoptic').val();
@@ -648,23 +635,47 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 //Check that the a file has been uploaded
                 var updatefilenameselected1=$('#updatearchievescannedcopy_synopticformreport_firstpage').val();
-                if(updatefilenameselected1==""){  // returns true if the variable does NOT contain a valid number
+                var previouslyuploadedfileName1=$('#PreviouslyUploadedFileName_synopticformreport_firstpage').val();
+                if((updatefilenameselected1=="") && (previouslyuploadedfileName1=="")){  // returns true if the variable does NOT contain a valid number
                     alert("Please Select A file to Upload");
                     $('#updatearchievescannedcopy_synopticformreport_firstpage').val("");  //Clear the field.
                     $("#updatearchievescannedcopy_synopticformreport_firstpage").focus();
                     return false;
 
                 }
+                //Check that the a file has been uploaded and also the previously Uploaded file
+                var updatefilenameselected1_1=$('#updatearchievescannedcopy_synopticformreport_firstpage').val();
+                var previouslyuploadedfileName1_1=$('#PreviouslyUploadedFileName_synopticformreport_firstpage').val();
+                if((updatefilenameselected1_1!="") && (previouslyuploadedfileName1_1!="")){  // returns true if the variable does NOT contain a valid number
+                    alert(" A file has been  Uploaded and also previously uploaded file");
+                    $('#updatearchievescannedcopy_synopticformreport_firstpage').val("");  //Clear the field.
+                    $("#updatearchievescannedcopy_synopticformreport_firstpage").focus();
+                    return false;
+                }
 
                 //Check that the a file has been uploaded
                 var updatefilenameselected2=$('#updatearchievescannedcopy_synopticformreport_secondpage').val();
-                if(updatefilenameselected2==""){  // returns true if the variable does NOT contain a valid number
+                var previouslyuploadedfileName2=$('#PreviouslyUploadedFileName_synopticformreport_secondpage').val();
+                if((updatefilenameselected2=="") && (previouslyuploadedfileName2=="")){  // returns true if the variable does NOT contain a valid number
                     alert("Please Select A file to Upload");
                     $('#updatearchievescannedcopy_synopticformreport_secondpage').val("");  //Clear the field.
                     $("#updatearchievescannedcopy_synopticformreport_secondpage").focus();
                     return false;
 
                 }
+                //Check that the a file has been uploaded and also the previously Uploaded file
+                var updatefilenameselected2_1=$('#updatearchievescannedcopy_synopticformreport_secondpage').val();
+                var previouslyuploadedfileName2_1=$('#PreviouslyUploadedFileName_synopticformreport_secondpage').val();
+                if((updatefilenameselected2_1!="") && (previouslyuploadedfileName2_1!="")){  // returns true if the variable does NOT contain a valid number
+                    alert(" A file has been  Uploaded and also previously uploaded file");
+                    $('#updatearchievescannedcopy_synopticformreport_secondpage').val("");  //Clear the field.
+                    $("#updatearchievescannedcopy_synopticformreport_secondpage").focus();
+                    return false;
+                }
+
+
+
+
 
 
 

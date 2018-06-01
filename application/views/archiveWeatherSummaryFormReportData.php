@@ -3,21 +3,23 @@
 $userrole=$session_data['UserRole'];
 $userstation=$session_data['UserStation'];
 $userstationNo=$session_data['StationNumber'];
+//$userstationNo=$session_data['StationNumber'];
 $name=$session_data['FirstName'].' '.$session_data['SurName'];
+//'StationNumber' => $row->StationNumber,
 ?>
     <aside class="right-side">
     <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Archive Weather Summary Form Report Data
-                <small> Page</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active"> Archive Weather Summary Form Report Data</li>
+    <section class="content-header">
+        <h1>
+            Archive Weather Summary Form Report Data
+            <small> Page</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active"> Archive Weather Summary Form Report Data</li>
 
-            </ol>
-        </section>
+        </ol>
+    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -27,9 +29,285 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     if(is_array($displaynewarchiveweathersummaryFormreportdata) && count($displaynewarchiveweathersummaryFormreportdata)) {
         ?>
         <div class="row">
-        <form action="<?php echo base_url(); ?>index.php/ArchiveWeatherSummaryFormReportData/insertArchiveWeatherSummaryFormReportData/" method="post" enctype="multipart/form-data">
-        <div class="modal-body">
-        <div id="output"></div>
+        <form action="<?php echo base_url(); ?>index.php/ArchiveWeatherSummaryFormReportData/insertArchiveWeatherSummaryFormReportData/" id="regForm" method="post" enctype="multipart/form-data">
+
+
+        <script language="javascript">
+            function allowIntegerInputOnly(inputvalue) {
+                //var invalidChars = /[^0-9]/gi
+                var integerOnly =/[^0-9\.]/gi;  // integers and decimals //
+                if(integerOnly.test(inputvalue.value)) {
+                    inputvalue.value = inputvalue.value.replace(integerOnly,"");
+                }
+            }
+
+            function allowCharactersInputOnly(inputvalue) {
+                //var invalidChars = /[^0-9]/gi
+                var charsOnly =/[^A-Za-z]/gi;  // integers and decimals // /[^0-9\.]/gi;
+                if(charsOnly.test(inputvalue.value)) {
+                    inputvalue.value = inputvalue.value.replace(charsOnly,"");
+                }
+            }
+        </script>
+
+	   <div class = "tab"><h2>Weather Summary Data:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <?php        if($userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" ) {?>
+                      <td>
+                          <div class="input-group">
+
+                              <span class="input-group-addon">Station</span>
+                              <select name="station_archiveweathersummaryformreportdata" id="stationManager"   class="form-control" placeholder="Select Station">
+                                  <option value="<?php echo $rainfalldata->StationName;?>"><?php echo $rainfalldata->StationName;?></option>
+                                  <?php
+                                  if (is_array($stationsdata) && count($stationsdata)) {
+                                      foreach($stationsdata as $station){?>
+                                          <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                                      <?php }
+                                  } ?>
+                              </select>
+                          </div>
+                      </td>
+                        <td>
+                          <div class="input-group">
+
+                              <span class="input-group-addon">Station Number</span>
+                              <input type="text" name="stationNo"  id="stationNoManager" required class="form-control" value=""  readonly class="form-control"  >
+                          </div>
+                      </td>
+                    <?php } else {?>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Station</span>
+								<input type="text" name="stationNo_archiveweathersummaryformreportdata" id="station_archiveweathersummaryformreportdata"  class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								<input type="text" name="stationNo_archiveweathersummaryformreportdata"  class="form-control compulsory" id="stationNo_archiveweathersummaryformreportdata" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+							</div>
+						</td>
+          <?php } ?>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Select Date</span>
+								<input type="text" name="date_archiveweathersummaryformreportdata"   class="form-control compulsory" placeholder="Enter select date" id="date">
+
+
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sunshine(Hrs)</span>
+								<input type="text" name="sunshine_wsf" id="sunshine_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter the Sunshine (Hrs)" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Max Temp</span>
+								<input type="text" name="maxTemp_wsf" id="maxTemp_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter max temp" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Min Temp</span>
+								<input type="text" name="minTemp_wsf" id="minTemp_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter min temp" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DB 0600Z</span>
+								<input type="text" name="db0600Z_wsf" id="db0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter DB for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">WB 0600Z</span>
+							<input type="text" name="wb0600Z_wsf" id="wb0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control" placeholder="Enter WB for 0600Z" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DP 0600Z</span>
+								<input type="text" name="dp0600Z_wsf" id="dp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control" placeholder="Enter DP for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">VP 0600Z</span>
+								<input type="text" name="vp0600Z_wsf"  id="vp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter VP for 0600Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">RH 0600Z</span>
+								<input type="text" name="rh0600Z_wsf" id="rh0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"    class="form-control" placeholder="Enter RH for 0600Z" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">CLP 0600Z</span>
+								<input type="text" name="clp0600Z_wsf"  id="clp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter CLP for 0600Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">GPM 0600Z</span>
+								<input type="text" name="gpm0600Z_wsf" id="gpm0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter GPM for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">WIND DIR 0600Z</span>
+								<input type="text" name="winddir0600Z_wsf"  id="winddir0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Wind Direction for 0600z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">FF 0600Z</span>
+								<input type="text" name="ff0600Z_wsf"  id="ff0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter FF for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DB 1200Z</span>
+								<input type="text" name="db1200Z_wsf"  id="db1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter DB for 1200Z" >
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+
+	   <div class = "tab"><h2>More Data:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WB 1200Z</span>
+								<input type="text" name="wb1200Z_wsf" id="wb1200Z_wsf"  onkeyup="allowIntegerInputOnly(this)"   class="form-control" placeholder="Enter WB for 1200Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DP 1200Z</span>
+								<input type="text" name="dp1200Z_wsf" id="dp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter DP for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">VP 1200Z</span>
+								<input type="text" name="vp1200Z_wsf" id="vp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter VP for 1200Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">RH 1200Z</span>
+								<input type="text" name="rh1200Z_wsf" id="rh1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control" placeholder="Enter RH for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">CLP 1200Z</span>
+								<input type="text" name="clp1200Z_wsf" id="clp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter CLP for 1200Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">GPM 1200Z</span>
+								<input type="text" name="gpm1200Z_wsf" id="gpm1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter GPM for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND DIR 1200Z</span>
+								<input type="text" name="winddir1200Z_wsf"  id="winddir1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Wind Direction for 1200z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">FF 1200Z</span>
+								<input type="text" name="ff1200Z_wsf" id="ff1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter FF for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Wind Run</span>
+								<input type="text" name="windrun_wsf" id="windrun_wsf" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder=" Enter Wind Run" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">R/F</span>
+								<input type="text" name="rf_wsf" id="rf_wsf"   class="form-control"  placeholder=" Enter R/F" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="form-group">
+								<label><span>Did we have: </span></label><br>
+
+								<label><input type="checkbox" name="thunderstorm_wsf" class="form-control" value="true"> Thunder storm (Ts)</label>
+								<label><input type="checkbox" name="fog_wsf" class="form-control" value="true"> Fog (Fg)</label>
+								<label><input type="checkbox" name="haze_wsf" class="form-control" value="true"> Haze (Hz)</label>
+								<label><input type="checkbox" name="hailstorm_wsf" class="form-control" value="true"> Hail storm (Hs)</label>
+								<label><input type="checkbox" name="earthquake_wsf" class="form-control" value="true"> Earth Quake</label>
+
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+
+	    <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="postarchiveweathersummaryformreportdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+  </div>
+        </form>
+        </div>
+
+    <?php
+    }elseif((is_array($updatearchiveweathersummaryformreportdata) && count($updatearchiveweathersummaryformreportdata))) {
+        foreach($updatearchiveweathersummaryformreportdata as $data){
+
+            $formdataid = $data->id;
+            ?>
+            <div class="row">
+            <form action="<?php echo base_url(); ?>index.php/ArchiveWeatherSummaryFormReportData/updateArchiveWeatherSummaryFormReportData" id="regForm" method="post" enctype="multipart/form-data">
+
             <script language="javascript">
                 function allowIntegerInputOnly(inputvalue) {
                     //var invalidChars = /[^0-9]/gi
@@ -47,491 +325,264 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }
                 }
             </script>
-        <div class="col-lg-6">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Select Date</span>
-                    <input type="text" name="date_archiveweathersummaryformreportdata"  required class="form-control" placeholder="Enter select date" id="date">
-                    <input type="hidden" name="checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield" id="checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield">
-
-                </div>
-            </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Station</span>
-                        <input type="text" name="station_archiveweathersummaryformreportdata" id="station_archiveweathersummaryformreportdata" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
-
-                    </div>
-                </div>
-
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"> Station Number</span>
-                        <input type="text" name="stationNo_archiveweathersummaryformreportdata" required class="form-control" id="stationNo_archiveweathersummaryformreportdata" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
-                    </div>
-                </div>
-
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Max Temp</span>
-                    <input type="text" name="maxTemp_wsf" id="maxTemp_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter max temp" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Min Temp</span>
-                    <input type="text" name="minTemp_wsf" id="minTemp_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter min temp" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Sunshine(Hrs)</span>
-                    <input type="text" name="sunshine_wsf" id="sunshine_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" required placeholder="Enter the Sunshine (Hrs)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">DB 0600Z</span>
-                    <input type="text" name="db0600Z_wsf" id="db0600Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter DB for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WB 0600Z</span>
-                    <input type="text" name="wb0600Z_wsf" id="wb0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" placeholder="Enter WB for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">DP 0600Z</span>
-                    <input type="text" name="dp0600Z_wsf" id="dp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" placeholder="Enter DP for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">VP 0600Z</span>
-                    <input type="text" name="vp0600Z_wsf"  id="vp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter VP for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">RH 0600Z</span>
-                    <input type="text" name="rh0600Z_wsf" id="rh0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required  class="form-control" placeholder="Enter RH for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">CLP 0600Z</span>
-                    <input type="text" name="clp0600Z_wsf"  id="clp0600Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter CLP for 0600Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">GPM 0600Z</span>
-                    <input type="text" name="gpm0600Z_wsf" id="gpm0600Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter GPM for 0600Z" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WIND DIR 0600Z</span>
-                    <input type="text" name="winddir0600Z_wsf"  id="winddir0600Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter Wind Direction for 0600z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">FF 0600Z</span>
-                    <input type="text" name="ff0600Z_wsf"  id="ff0600Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control"  placeholder="Enter FF for 0600Z" >
-                </div>
-            </div>
-
-
-        </div>
-        <div class="col-lg-6">
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">DB 1200Z</span>
-                    <input type="text" name="db1200Z_wsf"  id="db1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter DB for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WB 1200Z</span>
-                    <input type="text" name="wb1200Z_wsf" id="wb1200Z_wsf"  onkeyup="allowIntegerInputOnly(this)"  required class="form-control" placeholder="Enter WB for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">DP 1200Z</span>
-                    <input type="text" name="dp1200Z_wsf" id="dp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter DP for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">VP 1200Z</span>
-                    <input type="text" name="vp1200Z_wsf" id="vp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter VP for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">RH 1200Z</span>
-                    <input type="text" name="rh1200Z_wsf" id="rh1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" placeholder="Enter RH for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">CLP 1200Z</span>
-                    <input type="text" name="clp1200Z_wsf" id="clp1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter CLP for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">GPM 1200Z</span>
-                    <input type="text" name="gpm1200Z_wsf" id="gpm1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter GPM for 1200Z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WIND DIR 1200Z</span>
-                    <input type="text" name="winddir1200Z_wsf"  id="winddir1200Z_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder="Enter Wind Direction for 1200z" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">FF 1200Z</span>
-                    <input type="text" name="ff1200Z_wsf" id="ff1200Z_wsf" onkeyup="allowIntegerInputOnly(this)"  required class="form-control"  placeholder="Enter FF for 1200Z" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Wind Run</span>
-                    <input type="text" name="windrun_wsf" id="windrun_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder=" Enter Wind Run" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">R/F</span>
-                    <input type="text" name="rf_wsf" id="rf_wsf" onkeyup="allowIntegerInputOnly(this)" required class="form-control"  placeholder=" Enter R/F" >
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <label><span>Did we have: </span></label><br>
-
-                <label><input type="checkbox" name="thunderstorm_wsf" class="form-control" value="true"> Thunder storm (Ts)</label>
-                <label><input type="checkbox" name="fog_wsf" class="form-control" value="true"> Fog (Fg)</label>
-                <label><input type="checkbox" name="haze_wsf" class="form-control" value="true"> Haze (Hz)</label>
-                <label><input type="checkbox" name="hailstorm_wsf" class="form-control" value="true"> Hail storm (Hs)</label>
-                <label><input type="checkbox" name="earthquake_wsf" class="form-control" value="true"> Earth Quake</label>
-
-            </div>
-        </div>
-        <div class="clearfix"></div>
-        </div>
-        <div class="modal-footer clearfix">
-
-            <a href="<?php echo base_url()."index.php/ArchiveWeatherSummaryFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-            <button type="submit" id="postarchiveweathersummaryformreportdata_button" name="postarchiveweathersummaryformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Add  New Archive Weather Summary Form</button>
-        </div>
-        </form>
-        </div>
-    <?php
-    }elseif((is_array($updatearchiveweathersummaryformreportdata) && count($updatearchiveweathersummaryformreportdata))) {
-        foreach($updatearchiveweathersummaryformreportdata as $data){
-
-            $formdataid = $data->id;
-            ?>
-            <div class="row">
-            <form action="<?php echo base_url(); ?>index.php/ArchiveWeatherSummaryFormReportData/updateArchiveWeatherSummaryFormReportData" method="post" enctype="multipart/form-data">
-            <div class="modal-body">
-            <div id="output"></div>
-                <script language="javascript">
-                    function allowIntegerInputOnly(inputvalue) {
-                        //var invalidChars = /[^0-9]/gi
-                        var integerOnly =/[^0-9\.]/gi;  // integers and decimals //
-                        if(integerOnly.test(inputvalue.value)) {
-                            inputvalue.value = inputvalue.value.replace(integerOnly,"");
-                        }
-                    }
-
-                    function allowCharactersInputOnly(inputvalue) {
-                        //var invalidChars = /[^0-9]/gi
-                        var charsOnly =/[^A-Za-z]/gi;  // integers and decimals // /[^0-9\.]/gi;
-                        if(charsOnly.test(inputvalue.value)) {
-                            inputvalue.value = inputvalue.value.replace(charsOnly,"");
-                        }
-                    }
-                </script>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Select Date</span>
-                        <input type="text" name="date" class="form-control" value="<?php echo $data->Date;?>" placeholder="Enter select date" id="expdate">
-                        <input type="hidden" name="id" value="<?php echo $data->id;?>">
-                    </div>
-                </div>
-
-
-
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">Station Name</span>
-                            <input type="text" name="station" id="station" required class="form-control" value="<?php echo $data->StationName;?>"  readonly class="form-control" >
-
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"> Station Number</span>
-                            <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $data->StationNumber;?>" readonly="readonly" >
-                        </div>
-                    </div>
-
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Max Temp</span>
-                        <input type="text" name="maxTemp" id="maxTemp" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->TEMP_MAX;?>" required placeholder="Enter max temp" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Min Temp</span>
-                        <input type="text" name="minTemp" id="minTemp" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->TEMP_MIN;?>" required placeholder="Enter min temp" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Sunshine(Hrs)</span>
-                        <input type="text" name="sunshine" id="sunshine" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->SUNSHINE;?>" required placeholder="Sunshine (Hrs)" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">DB 0600Z</span>
-                        <input type="text" name="db0600Z" id="db0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->DB_0600Z;?>" required placeholder="Enter DB for 0600Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WB 0600Z</span>
-                        <input type="text" name="wb0600Z" id="wb0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->WB_0600Z;?>" placeholder="Enter WB for 0600Z " >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">DP 0600Z</span>
-                        <input type="text" name="dp0600Z" id="dp0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->DP_0600Z;?>" placeholder="Enter DP for 0600Z " >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">VP 0600Z</span>
-                        <input type="text" name="vp0600Z" id="vp0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->VP_0600Z;?>" placeholder="Enter VP for 0600Z " >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">RH 0600Z</span>
-                        <input type="text" name="rh0600Z" id="rh0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->RH_0600Z;?>" placeholder="Enter RH for 0600Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">CLP 0600Z</span>
-                        <input type="text" name="clp0600Z" id="clp0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter CLP for 0600Z" value="<?php echo $data->CLP_0600Z;?>" >
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">GPM 0600Z</span>
-                        <input type="text" name="gpm0600Z" id="gpm0600Z" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" value="<?php echo $data->GPM_0600Z;?>" required placeholder="Enter GPM for 0600Z" >
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WIND DIR 0600Z</span>
-                        <input type="text" name="winddir0600Z" id="winddir0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->WIND_DIR_0600Z;?>" required placeholder="Enter Wind Direction for 0600Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">FF 0600Z</span>
-                        <input type="text" name="ff0600Z" id="ff0600Z" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" value="<?php echo $data->FF_0600Z;?>" required placeholder="Enter FF for 0600z" >
-                    </div>
-                </div>
-
-
-
-            </div>
-            <div class="col-lg-6">
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">DB 1200Z</span>
-                        <input type="text" name="db1200Z" id="db1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->DB_1200Z;?>" required placeholder="Enter DB for 1200Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WB 1200Z</span>
-                        <input type="text" name="wb1200Z" id="wb1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->WB_1200Z;?>" placeholder="Enter WB for 1200Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">DP 1200Z</span>
-                        <input type="text" name="dp1200Z" id="dp1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->DP_1200Z;?>" placeholder="Enter DP for 1200Z " >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">VP 1200Z</span>
-                        <input type="text" name="vp1200Z" id="vp1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->VP_1200Z;?>" placeholder="Enter VP for 1200Z " >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">RH 1200Z</span>
-                        <input type="text" name="rh1200Z" id="rh1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->RH_1200Z;?>" placeholder="Enter RH for 1200Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">CLP 1200Z</span>
-                        <input type="text" name="clp1200Z" id="clp1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter CLP for 1200Z" value="<?php echo $data->CLP_1200Z;?>" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">GPM 1200Z</span>
-                        <input type="text" name="gpm1200Z" id="gpm1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->GPM_1200Z;?>" required placeholder="Enter GPM for 1200Z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Wind Direction 1200Z</span>
-                        <input type="text" name="winddir1200Z" id="winddir1200Z" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" value="<?php echo $data->WIND_DIR_1200Z;?>" required placeholder="Enter Wind Direction for 1200z" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">FF 1200Z</span>
-                        <input type="text" name="ff1200Z" id="ff1200Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->FF_1200Z;?>" required placeholder="Enter FF for 1200Z" >
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Wind Run</span>
-                        <input type="text" name="windrun" id="windrun" onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $data->WIND_RUN;?>" required placeholder="Wind Run" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">R/F</span>
-                        <input type="text" name="rf" id="rf"  required class="form-control" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $data->R_F;?>" required placeholder="R/Day" >
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="form-group">
-                    <label><span>Did we have: </span></label><br>
-
-                    <input type="checkbox" <?php if($data->ThunderStorm == "true") echo "checked"; ?> name="thunder" class="form-control" value="true"> Thunder storm (Ts)
-                    <input type="checkbox" name="fog" <?php if($data->Fog == "true") echo "checked"; ?> class="form-control" value="true"> Fog (Fg)
-                    <input type="checkbox" name="haze" <?php if($data->Haze == "true") echo "checked"; ?> class="form-control" value="true"> Haze (Hz)
-                    <input type="checkbox" name="hailstorm" <?php if($data->HailStorm == "true") echo "checked"; ?> class="form-control" value="true"> Hail storm (Hs)
-                    <input type="checkbox" name="quake" <?php if($data->EarhtQuake == "true") echo "checked"; ?> class="form-control"> Earth Quake
-
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Approved</span>
-                        <select name="approval" id="approval" class="form-control">
-                            <option value="<?php echo $data->Approved;?>"><?php echo $data->Approved;?></option>
-                            <option value="">--Select Options--</option>
-                            <option value="TRUE">TRUE</option>
-                            <option value="FALSE">FALSE</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            </div>
-            <div class="modal-footer clearfix">
-
-                <a href="<?php echo base_url()."index.php/ArchiveWeatherSummaryFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-                <button type="submit" name="updatearchiveweathersummaryformreportdata_button" id="updatearchiveweathersummaryformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Archive Weather Summary Form</button>
-            </div>
+					   <div class = "tab"><h2>Weather Summary Data:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <?php     if($userrole=="DataOfficer" || $userrole=="SeniorDataOfficer" ) { ?>
+                          <td>
+                              <div class="input-group">
+
+                                  <span class="input-group-addon">Station</span>
+                                  <select name="station" id="stationManager"   class="form-control" placeholder="Select Station">
+                                      <option value="<?php echo $data->StationName;?>"><?php echo $data->StationName;?></option>
+                                      <?php
+                                      if (is_array($stationsdata) && count($stationsdata)) {
+                                          foreach($stationsdata as $station){?>
+                                              <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                                          <?php }
+                                      } ?>
+                                  </select>
+                              </div>
+                          </td>
+
+                          <td>
+                              <div class="input-group">
+                                  <span class="input-group-addon">Station Number</span>
+                                  <input type="text" name="stationNo"  id="stationNoManager"  class="form-control compulsory" value="<?php echo $data->StationNumber;?>"  readonly class="form-control"  >
+                              </div>
+                          </td>
+                        <?php } else {?>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Station</span>
+								<input type="text" name="station" id="station"  class="form-control" value="<?php echo $data->StationName;?>"  readonly class="form-control" >
+
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								 <input type="text" name="stationNo"  class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $data->StationNumber;?>" readonly="readonly" >
+							</div>
+						</td>
+          <?php }?>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Select Date</span>
+								<input type="text" name="date" class="form-control" value="<?php echo $data->Date;?>" placeholder="Enter select date" id="expdate" readonly class="form-control">
+								<input type="hidden" name="id" value="<?php echo $data->id;?>">
+
+
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Sunshine(Hrs)</span>
+								 <input type="text" name="sunshine" id="sunshine" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->SUNSHINE;?>"  placeholder="Sunshine (Hrs)" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Max Temp</span>
+								<input type="text" name="maxTemp" id="maxTemp" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->TEMP_MAX;?>"  placeholder="Enter max temp" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Min Temp</span>
+								 <input type="text" name="minTemp" id="minTemp" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->TEMP_MIN;?>"  placeholder="Enter min temp" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DB 0600Z</span>
+								 <input type="text" name="db0600Z" id="db0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->DB_0600Z;?>"  placeholder="Enter DB for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">WB 0600Z</span>
+							<input type="text" name="wb0600Z" id="wb0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->WB_0600Z;?>" placeholder="Enter WB for 0600Z " >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DP 0600Z</span>
+								<input type="text" name="dp0600Z" id="dp0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->DP_0600Z;?>" placeholder="Enter DP for 0600Z " >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">VP 0600Z</span>
+								 <input type="text" name="vp0600Z" id="vp0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->VP_0600Z;?>" placeholder="Enter VP for 0600Z " >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">RH 0600Z</span>
+								<input type="text" name="rh0600Z" id="rh0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->RH_0600Z;?>" placeholder="Enter RH for 0600Z" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">CLP 0600Z</span>
+								<input type="text" name="clp0600Z" id="clp0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter CLP for 0600Z" value="<?php echo $data->CLP_0600Z;?>" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">GPM 0600Z</span>
+								 <input type="text" name="gpm0600Z" id="gpm0600Z" onkeyup="allowIntegerInputOnly(this)"   class="form-control" value="<?php echo $data->GPM_0600Z;?>"  placeholder="Enter GPM for 0600Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">WIND DIR 0600Z</span>
+								 <input type="text" name="winddir0600Z" id="winddir0600Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->WIND_DIR_0600Z;?>"  placeholder="Enter Wind Direction for 0600Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">FF 0600Z</span>
+								<input type="text" name="ff0600Z" id="ff0600Z" onkeyup="allowIntegerInputOnly(this)"   class="form-control" value="<?php echo $data->FF_0600Z;?>"  placeholder="Enter FF for 0600z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DB 1200Z</span>
+								<input type="text" name="db1200Z" id="db1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->DB_1200Z;?>"  placeholder="Enter DB for 1200Z" >
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+
+	   <div class = "tab"><h2>More Data:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WB 1200Z</span>
+								 <input type="text" name="wb1200Z" id="wb1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->WB_1200Z;?>" placeholder="Enter WB for 1200Z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">DP 1200Z</span>
+								<input type="text" name="dp1200Z" id="dp1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->DP_1200Z;?>" placeholder="Enter DP for 1200Z " >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">VP 1200Z</span>
+								<input type="text" name="vp1200Z" id="vp1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->VP_1200Z;?>" placeholder="Enter VP for 1200Z " >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">RH 1200Z</span>
+								<input type="text" name="rh1200Z" id="rh1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->RH_1200Z;?>" placeholder="Enter RH for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">CLP 1200Z</span>
+								<input type="text" name="clp1200Z" id="clp1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter CLP for 1200Z" value="<?php echo $data->CLP_1200Z;?>" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">GPM 1200Z</span>
+								<input type="text" name="gpm1200Z" id="gpm1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->GPM_1200Z;?>"  placeholder="Enter GPM for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND DIR 1200Z</span>
+								<input type="text" name="winddir1200Z" id="winddir1200Z" onkeyup="allowIntegerInputOnly(this)"   class="form-control" value="<?php echo $data->WIND_DIR_1200Z;?>"  placeholder="Enter Wind Direction for 1200z" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">FF 1200Z</span>
+								<input type="text" name="ff1200Z" id="ff1200Z" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->FF_1200Z;?>"  placeholder="Enter FF for 1200Z" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Wind Run</span>
+								<input type="text" name="windrun" id="windrun" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $data->WIND_RUN;?>"  placeholder="Wind Run" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">R/F</span>
+								<input type="text" name="rf" id="rf"   class="form-control"  value="<?php echo $data->R_F;?>"  placeholder="R/Day" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-group">
+								<label><span>Did we have: </span></label><br>
+
+								<input type="checkbox" <?php if($data->ThunderStorm == "true") echo "checked"; ?> name="thunder" class="form-control" value="true"> Thunder storm (Ts)
+								<input type="checkbox" name="fog" <?php if($data->Fog == "true") echo "checked"; ?> class="form-control" value="true"> Fog (Fg)
+								<input type="checkbox" name="haze" <?php if($data->Haze == "true") echo "checked"; ?> class="form-control" value="true"> Haze (Hz)
+								<input type="checkbox" name="hailstorm" <?php if($data->HailStorm == "true") echo "checked"; ?> class="form-control" value="true"> Hail storm (Hs)
+								<input type="checkbox" name="quake" <?php if($data->EarhtQuake == "true") echo "checked"; ?> class="form-control"> Earth Quake
+
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Approved</span>
+								<select name="approval" id="approval" class="form-control">
+									<option value="<?php echo $data->Approved;?>"><?php echo $data->Approved;?></option>
+									<option value="">--Select Options--</option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+
+	    <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="updatearchiveweathersummaryformreportdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+  </div>
             </form>
             </div>
         <?php
@@ -541,115 +592,159 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         <div class="row">
             <div class="col-xs-3"><a class="btn btn-primary no-print"
                                      href="<?php echo base_url(); ?>index.php/ArchiveWeatherSummaryFormReportData/DisplayNewArchiveWeatherSummaryFormReportData/">
-                    <i class="fa fa-plus"></i> Add new Archive Weather Summary Form</a>
+                    <i class="fa fa-plus"></i> Add Archive Weather Summary Form</a>
+
+
             </div>
 
         </div>
         <br>
         <div class="row">
-        <div class="col-xs-12">
+            <div class="col-xs-12">
 
-        <div class="box">
-        <div class="box-header">
-            <h3 class="box-title"> Archive  Weather Summary Form Report Data</h3>
-        </div><!-- /.box-header -->
+                <div class="box">
+                    <?php require_once(APPPATH . 'views/error.php'); ?>
+                    <div class="box-body table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Date</th>
+                                <th>Station</th>
+                                <th>Station No</th>
+                                <th>Max</th>
+                                <th>Min</th>
+                                <th>Sun shine</th>
+                                <th>DB</th>
+                                <th>WB</th>
+                                <th>DP</th>
+                                <th>VP </th>
+                                <th>RH</th>
+                                <th>CLP</th>
+                                <th>GPM</th>
+                                <th>Wind dir</th>
+                                <th>FF</th>
+                                <th>Wind Run</th>
+                                <th>R_F</th>
+                                <?php if( $userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' | $userrole=='ObserverArchive'  || $userrole=='OC'   ){ ?>
+                                  <th>By</th>
+                                  <th>Approved</th>
+                                  <th class="no-print">Action</th>
+                                <?php }?>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $count = 0;
+                            if (is_array($archivedweathersummaryformreportdata) && count($archivedweathersummaryformreportdata)) {
+                                foreach($archivedweathersummaryformreportdata as $dailydata){
+                                    $count++;
+                                    $dailyid = $dailydata->id;
+                                    ?>
+                                    <tr>
+                                        <td ><?php echo $count;?></td>
+                                        <td ><?php echo $dailydata->Date;?></td>
+                                        <td ><?php echo $dailydata->StationName;?></td>
+                                        <td ><?php echo $dailydata->StationNumber;?></td>
+                                        <td ><?php echo $dailydata->TEMP_MAX;?></td>
+                                        <td ><?php echo $dailydata->TEMP_MIN;?></td>
+                                        <td ><?php echo $dailydata->SUNSHINE;?></td>
 
-        <div class="box-body table-responsive">
-        <table id="example1" class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>No.</th>
-            <th>Date</th>
-            <th>Station</th>
-            <th>Station No</th>
-            <th>Max</th>
-            <th>Min</th>
-            <th>Sun shine</th>
-            <th>DB</th>
-            <th>WB</th>
-            <th>DP</th>
-            <th>VP </th>
-            <th>RH</th>
-            <th>CLP</th>
-            <th>GPM</th>
-            <th>Wind dir</th>
-            <th>FF</th>
-            <th>Wind Run</th>
-            <th>R_F</th>
+                                        <td ><?php echo $dailydata->DB_0600Z;?></td>
+                                        <td ><?php echo $dailydata->WB_0600Z;?></td>
+                                        <td><?php echo $dailydata->DP_0600Z;?></td>
+                                        <td><?php echo $dailydata->VP_0600Z;?></td>
+                                        <td><?php echo $dailydata->RH_0600Z;?></td>
+                                        <td><?php echo $dailydata->CLP_0600Z;?></td>
+                                        <td><?php echo $dailydata->GPM_0600Z;?></td>
+                                        <td><?php echo $dailydata->WIND_DIR_0600Z;?></td>
+                                        <td><?php echo $dailydata->FF_0600Z;?></td>
+                                        <td><?php echo $dailydata->WIND_RUN;?></td>
+                                        <td><?php echo $dailydata->R_F;?></td>
+                                        <?php if($userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC'  ){ ?>
 
+                                          <td ><?php echo $dailydata->SubmittedBy;?></td>
+                                          <td ><?php echo $dailydata->Approved;?></td>
+                                          <td class="no-print">
 
-            <th>By</th>
-            <th>Approved</th>
-        <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><th class="no-print">Action</th><?php }?>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        $count = 0;
-        if (is_array($archivedweathersummaryformreportdata) && count($archivedweathersummaryformreportdata)) {
-            foreach($archivedweathersummaryformreportdata as $dailydata){
-                $count++;
-                $dailyid = $dailydata->id;
-                ?>
-                <tr>
-                    <td ><?php echo $count;?></td>
-                    <td ><?php echo $dailydata->Date;?></td>
-                    <td ><?php echo $dailydata->StationName;?></td>
-                    <td ><?php echo $dailydata->StationNumber;?></td>
-                    <td ><?php echo $dailydata->TEMP_MAX;?></td>
-                    <td ><?php echo $dailydata->TEMP_MIN;?></td>
-                    <td ><?php echo $dailydata->SUNSHINE;?></td>
+                                            <a href="<?php echo base_url()."index.php/ArchiveWeatherSummaryFormReportData/DisplayArchiveWeatherSummaryFormReportDataForUpdate/" .$dailydata->id ;?>"
+                                               style="cursor:pointer;">Edit</a>
+                                        </tr>
 
-                    <td ><?php echo $dailydata->DB_0600Z;?></td>
-                    <td ><?php echo $dailydata->WB_0600Z;?></td>
-                    <td><?php echo $dailydata->DP_0600Z;?></td>
-                    <td><?php echo $dailydata->VP_0600Z;?></td>
-                    <td><?php echo $dailydata->RH_0600Z;?></td>
-                    <td><?php echo $dailydata->CLP_0600Z;?></td>
-                    <td><?php echo $dailydata->GPM_0600Z;?></td>
-                    <td><?php echo $dailydata->WIND_DIR_0600Z;?></td>
-                    <td><?php echo $dailydata->FF_0600Z;?></td>
-
-
-                    <td><?php echo $dailydata->WIND_RUN;?></td>
-                    <td><?php echo $dailydata->R_F;?></td>
-
-
-                    <td ><?php echo $dailydata->SubmittedBy;?></td>
-                    <td ><?php echo $dailydata->Approved;?></td>
-               <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
-                        <td class="no-print">
-                        <a href="<?php echo base_url()."index.php/ArchiveWeatherSummaryFormReportData/DisplayArchiveWeatherSummaryFormReportDataForUpdate/" .$dailydata->id ;?>"
-                           style="cursor:pointer;">Edit</a>
-                   <!--or
-                        <a href="<?php echo base_url()."index.php/ArchiveWeatherSummaryFormReportData/deleteArchiveWeatherSummaryFormData/" .$dailydata->id ;?>"
-
-                           onClick="return confirm('Are you sure you want to delete this record?');">Delete</a></td><?php }?> -->
-                </tr>
-
-            <?php
-            }
-            ?>
-            </tbody>
-            </table>
-            <br><br>
-            <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
-            </div><!-- /.box-body -->
-            </div><!-- /.box -->
+                                <?php
+                                }
+                            }
+                          }
+                            ?>
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
             </div>
-            </div>
-        <?php
-        }  }
+        </div>
+    <?php
+    }
     ?>
     </section><!-- /.content -->
     </aside><!-- /.right-side -->
     </div><!-- ./wrapper -->
     <!-- jQuery 2.0.2
-<script src="js/jquery.min.js"></script>-->
+ <script src="js/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
+
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            // alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
+    </script>
     <script>
         $(document).ready(function() {
             //Post Add New  Archive Weather Summary  form Report data into the DB
@@ -660,7 +755,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //if true there is already an entry
                 if(returntruthvalue=="true"){
 
-                    alert("Weather Record with the Same date ,station name and Station Number Already Exists");
+                    alert("Weather Summary Record with the Same date ,station name and Station Number Already Exists");
                     return false;
                 }else if(returntruthvalue=="Missing"){
 
@@ -669,19 +764,24 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
 
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield").focus();
+                    return false;
 
+                }
 
                 //Check that Date selected
                 var date=$('#date').val();
                 if(date==""){  // returns true if the variable does NOT contain a valid number
                     alert("Please Select The date");
                     $('#date').val("");  //Clear the field.
-                    $("#date").focus();
+                    $("#date"). focus();
                     return false;
-
                 }
-
-
 
 
                 //Check that the a station is selected from the list of stations(Manager)
@@ -720,9 +820,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             var date= $('#date').val();
 
             var stationName= $('#station_archiveweathersummaryformreportdata').val();
-          var stationNumber = $('#stationNo_archiveweathersummaryformreportdata').val();
+            var stationNumber = $('#stationNo_archiveweathersummaryformreportdata').val();
 
-            $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').val("");
+            $('#checkduplicateEntryOnAddArchieveWeatherSummaryFormReportData_hiddentextfield').val("");
 
             if ((date != undefined) &&  (stationName != undefined) && (stationNumber != undefined) ) {
                 $.ajax({
@@ -779,7 +879,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     alert("Please Select The date");
                     $('#expdate').val("");  //Clear the field.
                     $("#expdate"). focus();
-                        return false;
+                    return false;
                 }
 
 
@@ -801,6 +901,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
 
                 }
+
+
+
 
                 //Check that Approved IS PICKED FROM A LIST
                 var approved=$('#approval').val();
@@ -976,7 +1079,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         $(document).ready(function(){
             ///////////////////////////////////////////////////////////////////////////////////////////
             var newValue_dp0600Z;
-            var oldValue_relativeHumidity0600Z= $('#dp0600Z').val()
+            var oldValue_dp0600Z= $('#dp0600Z').val()
 
             $('#dp0600Z').live('change paste', function(){
                 //oldValue_relativeHumidity0600Z = newValue_relativeHumidity0600Z;
@@ -1511,14 +1614,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $('#rf').val(oldValue_rf);
                     return false;
 
+                });
             });
-        });
     </script>
 
-
-
-
-
-
-
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

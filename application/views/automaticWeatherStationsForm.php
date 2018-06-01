@@ -798,7 +798,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Input Voltage</th>
                                 <th>Analog Input Voltage</th>
 
-                                <?php if( $userrole=='OC'){ ?><th class="no-print">Action</th><?php }?>
+                                <?php if( $userrole=='SeniorDataOfficer'   ){ ?><th class="no-print">Action</th><?php }?>
                             </tr>
                             </thead>
                             <tbody>
@@ -832,7 +832,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                                    <?php if( $userrole=='OC'){ ?>
+                                    <?php if( $userrole=='SeniorDataOfficer'    ){ ?>
                                         <td class="no-print">
                                         <a href="<?php echo base_url()."index.php/AutomaticWeatherStations/DisplayAutomaticWeatherStationsFormForUpdate/" .$data->id ;?>"
                                            style="cursor:pointer;">Edit</a>

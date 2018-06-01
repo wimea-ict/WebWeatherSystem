@@ -9,6 +9,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 ?>
 
     <aside class="right-side">
+    <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
             Users
@@ -52,8 +53,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             }
                         }
                     </script>
-
-
                     <div class="col-lg-6">
                         <div class="form-group">
                             <div class="input-group">
@@ -91,74 +90,24 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                     <div class="col-lg-6">
 
-
-
-                        <?php
-
-                        if($userrole=='OC'){ ?>
-
-
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> User Role</span>
+                                    <?php if( $userrole=='OC' ){ ?>
                                     <select name="user_Role_AssignedBy_OC"  id="user_Role_AssignedBy_OC"  required class="form-control" placeholder="Select Role">
                                         <option value="">--Select User Roles--</option>
                                         <option value="Observer">Observer</option>
                                         <option value="ObserverArchive">ObserverArchive</option>
                                         <option value="ObserverDataEntrant">ObserverDataEntrant</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Station</span>
-                                    <input type="text" name="user_station_OC" id="user_station_OC" value="<?php echo $userstation; ?>" readonly="readonly" required class="form-control">
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="user_stationNo_OC" id="user_stationNo_OC" required class="form-control"  readonly class="form-control" value="<?php echo $userstationNo; ?>" readonly="readonly" >
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Region</span>
-                                    <select name="user_stationRegion_AssignedBy_Manager" id="user_stationRegion_AssignedBy_Manager" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)" required class="form-control">
-                                        <option value="">--Select REGION--</option>
-                                        <option value="Central">Central</option>
-                                        <option value="Northern">Northern</option>
-                                        <option value="Southern">Southern</option>
-                                        <option value="Eastern">Eastern</option>
-                                        <option value="Western">Western</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-
-
-                        <?php } elseif($userrole=='Manager' || $userrole=='ManagerData'){?>
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> User Role</span>
-                                    <select name="user_Role_AssignedBy_Manager"  id="user_Role_AssignedBy_Manager"  required class="form-control" placeholder="Select Role">
+                                        <option value="WeatherForecaster">WeatherForecaster</option>
+                                      </select>
+                                    <?php }elseif ($userrole=='Manager' || $userrole=='ManagerData') { ?>
+                                    <select name="user_Role_AssignedBy_OC"  id="user_Role_AssignedBy_OC"  required class="form-control" placeholder="Select Role">
                                         <option value="">--Select User Roles--</option>
                                         <option value="Observer">Observer</option>
                                         <option value="ObserverArchive">ObserverArchive</option>
                                         <option value="ObserverDataEntrant">ObserverDataEntrant</option>
                                         <option value="WeatherForecaster">WeatherForecaster</option>
-                                        <option value="WeatherAnalyst">WeatherAnalyst</option>
                                         <option value="OC">OC</option>
                                         <option value="ZonalOfficer">ZonalOfficer</option>
                                         <option value="SeniorZonalOfficer">SeniorZonalOfficer</option>
@@ -166,63 +115,40 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <option value="SeniorDataOfficer">SeniorDataOfficer</option>
                                         <option value="ManagerStationNetworks">ManagerStationNetworks</option>
                                     </select>
+                                  <?php }?>
                                 </div>
                             </div>
 
 
 
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon">Station</span>
+        <select name="stationManager" id="stationManager"   class="form-control" required class="form-control" placeholder="Select Station">
+            <option value="">Select Stations</option>
+            <?php
+            if (is_array($stationsdata) && count($stationsdata)) {
+                foreach($stationsdata as $station){?>
+                    <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Station</span>
-                                    <select name="user_station_Manager" id="user_station_Manager" class="form-control" required class="form-control" placeholder="Select Station">
-                                        <option value="">Select Stations</option>
-                                        <?php
-                                        if (is_array($stationsdata) && count($stationsdata)) {
-                                            foreach($stationsdata as $station){?>
-                                                <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+              <?php }  } ?>
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <div class="input-group">
+        <input type="hidden" name="page" value="monthly_rainfall_report" >
 
-                                            <?php }
-                                        } ?>
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="user_stationNo_Manager" id="user_stationNo_Manager" required class="form-control"  readonly class="form-control" value="" readonly="readonly" >
-                                  <!--  <input type="text" name="user_stationRegion_Manager" id="user_stationRegion_Manager" required class="form-control"  readonly class="form-control" value="" readonly="readonly" > -->
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">Region</span>
-                                    <select name="user_stationRegion_AssignedBy_Manager" id="user_stationRegion_AssignedBy_Manager" readonly class="form-control" onkeyup="allowCharactersInputOnly(this)" required class="form-control">
-                                        <option value="">--Select REGION--</option>
-                                        <option value="Central">Central</option>
-                                        <option value="Northern">Northern</option>
-                                        <option value="Southern">Southern</option>
-                                        <option value="Eastern">Eastern</option>
-                                        <option value="Western">Western</option>
-
-                                    </select>
-                                </div>
-                            </div>
+        <span class="input-group-addon">Station Number</span>
+        <input type="text" name="stationNoManager"  id="stationNoManager"  class="form-control" value=""   class="form-control"  >
+  </div>
+</div>
 
 
 
 
 
 
-                        <?php } ?>
 
 
                     </div>
@@ -267,7 +193,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">FirstName</span>
-                                    <input type="text" name="firstname" id="firstname" onkeyup="allowCharactersInputOnly(this)" class="form-control" required value="<?php echo $userdetails->FirstName;?>" placeholder="Enter staff's name"  class="form-control">
+                                    <input type="text" name="firstname" id="firstname" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required value="<?php echo $userdetails->FirstName;?>" placeholder="Enter staff's name" readonly class="form-control">
                                     <input type="hidden" name="id" id="id" value="<?php echo $userdetails->Userid;?>">
                                 </div>
                             </div>
@@ -275,27 +201,26 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">SurName</span>
-                                    <input type="text" name="surname" id="surname" onkeyup="allowCharactersInputOnly(this)" required class="form-control" value="<?php echo $userdetails->SurName;?>" placeholder="Enter staff's email"  class="form-control">
+                                    <input type="text" name="surname" id="surname" onkeyup="allowCharactersInputOnly(this)" required class="form-control" value="<?php echo $userdetails->SurName;?>" placeholder="Enter staff's email" readonly class="form-control">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Email</span>
-                                    <input type="email" name="email" id="email" required class="form-control" value="<?php echo $userdetails->UserEmail;?>" placeholder="Enter user's email "  class="form-control">
+                                    <input type="email" name="email" id="email" required class="form-control" value="<?php echo $userdetails->UserEmail;?>" placeholder="Enter user's email " readonly class="form-control">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Phone</span>
-                                    <input type="text" name="contact" id="contact" required class="form-control" value="<?php echo $userdetails->UserPhone;?>" placeholder="Enter Phone "  class="form-control">
+                                    <input type="text" name="contact" id="contact" required class="form-control" value="<?php echo $userdetails->UserPhone;?>" placeholder="Enter Phone " readonly class="form-control">
                                 </div>
                             </div>
 
                         </div>
                         <div class="col-lg-6">
-                            <?php if($userrole=="OC"){ ?>
 
                                 <div class="form-group">
                                     <div class="input-group">
@@ -332,96 +257,34 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
 
 
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Region</span>
-                                        <select name="stationRegion_OC" id="stationRegion_OC" onkeyup="allowCharactersInputOnly(this)" readOnly class="form-control">
-                                            <option value="<?php echo $userdetails->StationRegion;?>"><?php echo $userdetails->StationRegion;?></option>
-                                            <option value="">--Select REGION--</option>
-                                            <option value="Central">Central</option>
-                                            <option value="Northern">Northern</option>
-                                            <option value="Southern">Southern</option>
-                                            <option value="Eastern">Eastern</option>
-                                            <option value="Western">Western</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-
-                            <?php }elseif($userrole=="Manager" && $userrole=='ManagerData'){ ?>
-
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> User Role</span>
-                                        <select name="Role_AssignedBy_Manager"  id="Role_AssignedBy_Manager"  required class="form-control" placeholder="Select Role">
-                                            <option value="<?php echo $userdetails->UserRole;?>"><?php echo $userdetails->UserRole;?></option>
-                                            <option value="">--Select User Roles--</option>
-                                            <option value="OC">OC</option>
-                                            <option value="ZonalOfficer">Zonal Officer</option>
-                                            <option value="SeniorZonalOfficer">Senior Zonal Officer</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Station</span>
-                                        <select name="station_Manager"  id="station_Manager" required class="form-control" placeholder="Select Station">
-                                            <option value="<?php echo $userdetails->UserStation;?>"><?php echo $userdetails->UserStation;?></option>
-                                            <option value="">--Select Stations--</option>
-                                            <?php
-                                            if (is_array($stationsdata) && count($stationsdata)) {
-                                                foreach($stationsdata as $station){?>
-                                                    <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
-
-                                                <?php }
-                                            } ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> Station Number</span>
-                                        <input type="text" name="stationNo_Manager" id="stationNo_Manager" required class="form-control"  value="" readonly class="form-control" value="" readonly="readonly" >
-                                        <input type="hidden" name="stationId_Manager" id="stationId_Manager" required class="form-control"  value="" readonly class="form-control" value="" readonly="readonly" >
-
-                                       <!-- <input type="text" name="stationRegion_Manager" id="stationRegion_Manager" required class="form-control"  value="" readonly class="form-control" value="" readonly="readonly" > -->
-
-                                    </div>
-                                </div>
 
 
 
 
 
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Region</span>
-                                        <select name="stationRegion_AssignedBy_Manager" id="stationRegion_AssignedBy_Manager" onkeyup="allowCharactersInputOnly(this)" required class="form-control">
-                                            <option value="<?php echo $userdetails->StationRegion;?>"><?php echo $userdetails->StationRegion;?></option>
-                                            <option value="">--Select REGION--</option>
-                                            <option value="Central">Central</option>
-                                            <option value="Northern">Northern</option>
-                                            <option value="Southern">Southern</option>
-                                            <option value="Eastern">Eastern</option>
-                                            <option value="Western">Western</option>
 
-                                        </select>
-                                    </div>
-                                </div>
+<!---
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"> User Role</span>
+                    <select name="Role_AssignedBy_Manager"  id="Role_AssignedBy_Manager"  required class="form-control" placeholder="Select Role">
+                        <option value="<?php echo $userdetails->UserRole;?>"><?php echo $userdetails->UserRole;?></option>
+                        <option value="">--Select User Roles--</option>
+                        <option value="OC">OC</option>
+                        <option value="ZonalOfficer">Zonal Officer</option>
+                        <option value="SeniorZonalOfficer">Senior Zonal Officer</option>
+                        <option value="WeatherAnalyst">WeatherAnalyst</option>
+                        <option value="WeatherForecaster">WeatherForecaster</option>
+                        <option value="SeniorDataOfficer">SeniorDataOfficer</option>
+
+                    </select>
+                </div>
+            </div>
+
+-->
+
 
                             <?php }?>
-
-
-
-
 
 
                         </div>
@@ -438,7 +301,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             </form>
             </div>
         <?php
-        }
+
     }else{
         ?>
         <div class="row">
@@ -454,7 +317,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <div class="col-xs-12">
 
                 <div class="box">
-
+                    <div class="box-header">
+                        <h3 class="box-title">Stations</h3>
+                    </div><!-- /.box-header -->
                     <?php require_once(APPPATH . 'views/error.php'); ?>
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
@@ -467,8 +332,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Email</th>
                                 <th>Station</th>
                                 <th>Station Number</th>
-                                <th> Region</th>
+                                <th>Region</th>
                                 <th>Role</th>
+
                                 <th class="no-print">Action</th>
                             </tr>
                             </thead>
@@ -493,14 +359,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $userdetails->StationName;?></td>
                                         <td ><?php echo $userdetails->StationNumber;?></td>
                                         <td ><?php echo $userdetails->station==0? $userdetails->region_zone: $userdetails->StationRegion;?></td>
-                                        <td><?php echo $userdetails->UserRole;?></td>
+                                        <td><?php echo $userdetails->UserRole; ?></td>
                                         <?php if($userrole=='Manager' || $userrole=='ManagerData'|| $userrole=='OC'){ ?><td class="no-print">
 
                                             <a href="<?php echo base_url() . "index.php/Users/DisplayStationUsersFormForUpdate/" .$userdetailsid ;?>" style="cursor:pointer;">Edit</a>
-                                          <?php if(  $userrole=='ManagerData'){ ?>
-                                            <a href="<?php echo base_url() . "index.php/Users/deleteUser/" .$userdetailsid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $userdetails->FirstName.' '.$userdetails->SurName;?>');">Deactivate</a></td>
-                                           <?php }}?>
+                                            <!--   or <a href="<?php echo base_url() . "index.php/Users/deleteUser/" .$userdetailsid ;?>"
+                                                  onClick="return confirm('Are you sure you want to delete <?php echo $userdetailsid->FirstName.' '.$userdetailsid->SurName;?>');">Delete</a></td><?php }?> -->
                                     </tr>
 
                                 <?php
@@ -675,6 +539,55 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             });
         });
+    </script>
+    <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
+
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            // alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
     </script>
     <script>
         //CHECK DB IF THE METAR ALREADY EXISTS
@@ -1019,40 +932,47 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         $(document.body).on('change','#user_Role_AssignedBy_Manager',function(){
 
             var UserRoleValue_Selected = this.value;
-            if (UserRoleValue_Selected == "ZonalOfficer" || UserRoleValue_Selected == "SeniorZonalOfficer" ) {
-                $('#user_station_Manager').attr('disabled', true);
-                $('#user_station_Manager').val('');
-                $('#user_stationNo_Manager').attr('disabled', true);
-                $('#user_stationNo_Manager').val('');
 
-                $('#user_station_Manager').attr('required', false);
-                $('#user_stationNo_Manager').attr('required', false);
 
-                $('#user_stationRegion_AssignedBy_Manager').attr('disabled', false);  //Enforce the readOnly Attribute
-                $('#user_stationRegion_AssignedBy_Manager').attr('required', true); //Enforce the required select text field
+            if (UserRoleValue_Selected == "OC") {
+                //Activate the select for Stations by removing the readOnly Attribute
+                $('#user_station_Manager').attr('readonly', false);
+                // Then Enforce the required select text field
+                $('#user_station_Manager').attr('required', true);
 
-            }else if ( UserRoleValue_Selected == "ManagerData"  ||   UserRoleValue_Selected == "ManagerStationNetworks" || UserRoleValue_Selected == "DataOfficer" || UserRoleValue_Selected == "SeniorDataOfficer") {
-              $('#user_station_Manager').attr('disabled', true);
-              $('#user_station_Manager').val('');
-              $('#user_stationNo_Manager').attr('disabled', true);
-              $('#user_stationNo_Manager').val('');
-              $('#user_stationRegion_AssignedBy_Manager').attr('disabled', true);
-              $('#user_stationRegion_AssignedBy_Manager').val('');
 
-              $('#user_station_Manager').attr('required', false);
-              $('#user_stationNo_Manager').attr('required', false);
-              $('#user_stationRegion_AssignedBy_Manager').attr('required', false);
+
+
+                //Make Zonal Officer and Senior Zonal Officer,Select Region readOnly
+                $('#user_stationRegion_AssignedBy_Manager').attr('readonly', true);  //Enforce the readOnly Attribute
+                $('#user_stationRegion_AssignedBy_Manager').attr('required', false); //Enforce the required select text field
+
 
 
             }
-            else{
-                //Activate all
-                $('#user_station_Manager').attr('disabled', false);
-                $('#user_stationNo_Manager').attr('disabled', false);
-                $('#user_station_Manager').attr('required', true);
-                $('#user_stationNo_Manager').attr('required', true);
-                $('#user_stationRegion_AssignedBy_Manager').attr('disabled', false);  //Enforce the readOnly Attribute
-                $('#user_stationRegion_AssignedBy_Manager').attr('required', false); //Enforce the required select text field
+            else if(UserRoleValue_Selected == "ZonalOfficer" || UserRoleValue_Selected == "SeniorZonalOfficer"){
+
+                //Activate the select Region by removing the readOnly Attribute
+                $('#user_stationRegion_AssignedBy_Manager').attr('readonly', false);
+                // Then Enforce the required select text field
+                $('#user_stationRegion_AssignedBy_Manager').attr('required', true); //Enforce the required select text field
+
+
+
+
+                //Make OC Select Stations ReadOnly
+                $('#user_station_Manager').attr('readonly', true);  //Enforce the readOnly Attribute
+                $('#user_station_Manager').attr('required', false);  //Enforce the required select text field
+
+
+            }else if(UserRoleValue_Selected == ""){
+
+                //Make OC Select Stations ReadOnly
+                $('#user_station_Manager').attr('readonly', true);  //Enforce the readOnly Attribute
+
+
+                //Make Zonal Officer and Senior Zonal Officer,Select Region readOnly
+                $('#user_stationRegion_AssignedBy_Manager').attr('readonly', true);  //Enforce the readOnly Attribute
 
             }
 
@@ -1166,16 +1086,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     </script>
 
     <script type="text/javascript">
-        //Once the Manager selects the Station the Station Number, should be picked from the DB.
-        // For Add User when user is OC
-        $(document).on('change','#user_station_Manager',function(){
-            $('#user_stationNo_Manager').val("");  //Clear the field.
-
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
             var stationName = this.value;
+
+
             if (stationName != "") {
                 //alert(station);
-                $('#user_stationNo_Manager').val("");
-
+                $('#stationNoManager').val("");
                 $.ajax({
                     url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
                     type: "POST",
@@ -1187,22 +1107,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         {
                             var json = JSON.parse(data);
 
-                            $('#user_stationNo_Manager').empty();
-                            $('#user_stationId_Manager').empty();
+                            $('#stationNoManager').empty();
 
-                             //alert(data);
-                            $("#user_stationNo_Manager").val(json[0].StationNumber);
-                            $("#user_stationId_Manager").val(json[0].station_id);
-
+                            // alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
 
                         }
                         else{
 
-                            $('#user_stationNo_Manager').empty();
-                            $('#user_stationNo_Manager').val("");
-
-
-
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
 
                         }
                     }
@@ -1213,9 +1127,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             }
             else {
-                $('#user_stationNo_Manager').empty();
-                $('#user_stationNo_Manager').val("");
 
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
             }
 
         })

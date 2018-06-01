@@ -1,11 +1,11 @@
 <?php require_once(APPPATH . 'views/header.php'); ?>
-<?php  $session_data = $this->session->userdata('logged_in');
+<?php
+$session_data = $this->session->userdata('logged_in');
 $userrole=$session_data['UserRole'];
 $userstation=$session_data['UserStation'];
 $userstationNo=$session_data['StationNumber'];
 //$userstationNo=$session_data['StationNumber'];
 $name=$session_data['FirstName'].' '.$session_data['SurName'];
-//'StationNumber' => $row->StationNumber,
 ?>
     <aside class="right-side">
     <!-- Content Header (Page header) -->
@@ -36,7 +36,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"> Element Name</span>
-                                <input type="text" name="nameelement" class="form-control" required placeholder="Enter element name" id="name">
+                                <input type="text" name="name_element" id="name_element" required class="form-control" required placeholder="Enter element name" >
+                                <input type="hidden" name="checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield" id="checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield">
+
                             </div>
                         </div>
 
@@ -45,15 +47,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station</span>
-                                    <input type="text" name="stationOC_element"  id="stationOC_element" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                                    <input type="text" name="station_OC_element"  id="station_OC_element" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
                                 </div>
                             </div>
 
-                        <?php }elseif($userrole=="Manager"){ ?>
+                        <?php }elseif($userrole=="Manager" || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){ ?>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station</span>
-                                    <select name="stationManager_element" id="stationManager_element"   class="form-control" placeholder="Select Station">
+                                    <select name="station_insertElement_element" id="station_insertElement_element"  required class="form-control" placeholder="Select Station">
 
                                         <option value="">Select Stations</option>
                                         <?php
@@ -71,14 +73,18 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNoOC_element" required class="form-control" id="stationNoOC_element"  readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+                                    <input type="text" name="stationNo_OC_element" required class="form-control" id="stationNo_OC_element"  readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+                                   <!-- <input type="hidden" name="stationRegion_OC_element" id="stationRegion_OC_element" required class="form-control" value="<?php echo $StationRegion;?>"  readonly class="form-control" > -->
+
                                 </div>
                             </div>
-                        <?php }elseif($userrole=="Manager"){?>
+                        <?php }elseif($userrole=="Manager" || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){?>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNoManager_element" required class="form-control" id="stationNoManager_element" value="" readonly class="form-control" value="" readonly="readonly" >
+                                    <input type="text" name="stationNo_insertElement_element" required class="form-control" id="stationNo_insertElement_element" value="" readonly class="form-control" value="" readonly="readonly" >
+                                    <input type="hidden" name="stationRegion_insertElement_element" id="stationRegion_insertElement_element" required class="form-control" value=""  readonly class="form-control" >
+
                                 </div>
                             </div>
                         <?php }?>
@@ -87,7 +93,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Instrument Name</span>
-                                <select name="instrumentnameelement" id="instrumentnameelement"   class="form-control" placeholder="Select Instrument">
+                                <select name="instrumentname_element" id="instrumentname_element" required  class="form-control" placeholder="Select Instrument that Measures the Element">
                                 </select>
                             </div>
                         </div>
@@ -97,52 +103,52 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Abbrev</span>
-                                <input type="text" name="abbrevelement" required class="form-control" placeholder="Enter abbrev" id="abbrevelement">
+                                <input type="text" name="abbrev_element" id="abbrev_element"  class="form-control" placeholder="Enter abbrev for the element" >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Type</span>
-                                <input type="text" name="typeelement" required class="form-control" placeholder="Enter type " id="typeelement">
+                                <input type="text" name="type_element" id="type_element"  class="form-control" placeholder="Enter type of Element " >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Units</span>
-                                <input type="text" name="unitselement" required class="form-control" placeholder="Enter units " id="unitselement">
+                                <input type="text" name="units_element" id="units_element"  class="form-control" placeholder="Enter units for the Element " >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Scale</span>
-                                <input type="text" name="scaleelement" required class="form-control" placeholder="Enter scale " id="scaleelement">
+                                <input type="text" name="scale_element" id="scale_element"  class="form-control" placeholder="Enter scale " >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Limits</span>
-                                <input type="text" name="limitselement" required class="form-control" placeholder="Enter limits " id="limitselement">
+                                <input type="text" name="limits_element" id="limits_element" required class="form-control" placeholder="Enter limits " >
                             </div>
                         </div>
 
                         <div class="form-group">
                             <span class="input-group-addon">Description</span>
-                            <textarea name="descriptionelement" class="form-control" style="height:150px;" id="descriptionelement"></textarea>
+                            <textarea name="description_element" id="description_element" class="form-control" style="height:40px;" ></textarea>
 
                         </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="modal-footer clearfix">
+                <center>
 
-                    <a href="<?php echo base_url(); ?>index.php/StationElements/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                    <a href="<?php echo base_url(); ?>index.php/StationElements/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK </a>
 
-                    <button type="submit" id="post_stationelement" name="post" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Add Element</button>
-                </div>
+                    <button type="submit" id="post_stationinstrumentelement_button" name="post_stationinstrumentelement_button" class="btn btn-primary"><i class="fa fa-plus"></i> SUBMIT </button>
+                </center>
             </form>
         </div>
     <?php
@@ -160,8 +166,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Element Name</span>
-                                    <input type="text" name="elementname" class="form-control" required value="<?php echo $elementdata->ElementName;?>" placeholder="Enter element name">
-                                    <input type="hidden" name="id" value="<?php echo $elementid;?>">
+                                    <input type="text" name="elementName" id="elementName"required class="form-control" required value="<?php echo $elementdata->ElementName;?>" placeholder="Enter element name" readonly class="form-control">
+                                    <input type="hidden" name="id" id="id" value="<?php echo $elementid;?>">
                                 </div>
                             </div>
 
@@ -170,25 +176,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">Station</span>
-                                        <input type="text" name="stationOC"  id="stationOC" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                                        <input type="text" name="station_OC"  id="station_OC" required class="form-control" value="<?php echo $elementdata->StationName;?>"  readonly class="form-control" >
                                     </div>
                                 </div>
 
-                            <?php }elseif($userrole=="Manager"){ ?>
+                            <?php }elseif($userrole=="Manager" || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){ ?>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">Station</span>
-                                        <select name="stationManager" id="stationManager"   class="form-control" placeholder="Select Station">
-                                            <option value="<?php echo $elementdata->StationName;?>"><?php echo $elementdata->StationName;?></option>
-                                            <option value="">Select Stations</option>
-                                            <?php
-                                            if (is_array($stationsdata) && count($stationsdata)) {
-                                                foreach($stationsdata as $station){?>
-                                                    <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+                                        <input type="text" name="station_updateElement" id="station_updateElement" required class="form-control" value="<?php echo $elementdata->StationName;?>"  readonly class="form-control" onkeyup="allowCharactersInputOnly(this)" >
 
-                                                <?php }
-                                            } ?>
-                                        </select>
                                     </div>
                                 </div>
                             <?php }?>
@@ -196,79 +193,72 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"> Station Number</span>
-                                        <input type="text" name="stationNoOC" required class="form-control" id="stationNoOC"  readonly class="form-control" value="<?php echo $elementdata->StationNumber;?>" readonly="readonly" >
+                                        <input type="text" name="stationNo_OC" required class="form-control" id="stationNo_OC"  readonly class="form-control" value="<?php echo $elementdata->StationNumber;?>" readonly="readonly" >
+                                       <!-- <input type="hidden" name="stationRegion_OC" id="stationRegion_OC" required class="form-control" value="<?php echo $StationRegion;?>"  readonly class="form-control" > -->
+
                                     </div>
                                 </div>
-                            <?php }elseif($userrole=="Manager"){?>
+                            <?php }elseif($userrole=="Manager" || $userrole=='ZonalOfficer' || $userrole=='SeniorZonalOfficer'){?>
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"> Station Number</span>
-                                        <input type="text" name="stationNoManager" required class="form-control" id="stationNoManager" value="" readonly class="form-control" value="" readonly="readonly" >
+                                        <input type="text" name="stationNo_updateElement" required class="form-control" id="stationNo_updateElement" value="<?php echo $elementdata->StationNumber;?>" readonly class="form-control" value="" readonly="readonly" >
+                                     <!--   <input type="hidden" name="stationRegion_updateElement" id="stationRegion_updateElement" required class="form-control" value="<?php echo $elementdata->StationRegion;?>"  readonly class="form-control" >  -->
+
                                     </div>
                                 </div>
                             <?php }?>
 
-                            <?php if($userrole=="OC"){?>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Instrument Name</span>
-                                        <select name="instrumentname_OC" id="instrumentname_OC"   class="form-control" placeholder="Select Station">
-                                            <option value="<?php echo $elementdata->InstrumentName;?>"><?php echo $elementdata->InstrumentName;?></option>
 
-                                        </select>
-                                    </div>
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Instrument Name</span>
+                                    <input type="text" name="instrumentname__element_Update" id="instrumentname__element_Update" value="<?php echo $elementdata->InstrumentName;?>" readonly="readonly" required  class="form-control" placeholder="Select Instrument that Measures the Element">
+
                                 </div>
+                            </div>
 
-                            <?php }elseif($userrole=="Manager"){?>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Instrument Name</span>
-                                        <select name="instrumentname_Manager" id="instrumentname_Manager"   class="form-control" placeholder="Select Station">
-                                            <option value="<?php echo $elementdata->InstrumentName;?>"><?php echo $elementdata->InstrumentName;?></option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                            <?php }?>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Abbrev</span>
-                                    <input type="text" name="abbrev" required class="form-control" value="<?php echo $elementdata->Abbrev;?>" placeholder="Enter abbrev">
+                                    <input type="text" name="abbrev" id="abbrev"  class="form-control" value="<?php echo $elementdata->Abbrev;?>" placeholder="Enter abbrev">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Type</span>
-                                    <input type="text" name="type" required class="form-control" value="<?php echo $elementdata->Type;?>" placeholder="Enter type ">
+                                    <input type="text" name="type" id="type"  class="form-control" value="<?php echo $elementdata->Type;?>" placeholder="Enter type ">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Units</span>
-                                    <input type="text" name="units" required class="form-control" value="<?php echo $elementdata->Units;?>" placeholder="Enter units ">
+                                    <input type="text" name="units" id="units"  class="form-control" value="<?php echo $elementdata->Units;?>" placeholder="Enter units ">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Scale</span>
-                                    <input type="text" name="scale" required class="form-control" value="<?php echo $elementdata->Scale;?>" placeholder="Enter scale ">
+                                    <input type="text" name="scale" id="scale"  class="form-control" value="<?php echo $elementdata->Scale;?>" placeholder="Enter scale ">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Limits</span>
-                                    <input type="text" name="limits" required class="form-control" value="<?php echo $elementdata->Limits;?>" placeholder="Enter limits ">
+                                    <input type="text" name="limits" id="limits" required class="form-control" value="<?php echo $elementdata->Limits;?>" placeholder="Enter limits ">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <span class="input-group-addon">Description</span>
-                                <textarea name="description" class="form-control" style="height:150px;"><?php echo $elementdata->Description;?></textarea>
+                                <textarea name="description" id="description" class="form-control" style="height:40px;"><?php echo $elementdata->Description;?></textarea>
 
                             </div>
 
@@ -277,12 +267,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     </div>
                     <div class="clearfix"></div>
             </div>
-            <div class="modal-footer clearfix">
+            <center>
 
-                <a  href="<?php echo base_url(); ?>index.php/StationElements/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                <a  href="<?php echo base_url(); ?>index.php/StationElements/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK </a>
 
-                <button type="submit" name="update" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Element</button>
-            </div>
+                <button type="submit" name="update_stationinstrumentelement_button" id="update_stationinstrumentelement_button" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE </button>
+            </center>
             </form>
             </div>
         <?php
@@ -321,7 +311,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Scale</th>
                                 <th>Limits</th>
                                 <th>Description</th>
-                                <th>Date Registered</th>
+
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -347,12 +338,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td><?php echo $elementdata->Scale;?></td>
                                         <td><?php echo $elementdata->Limits;?></td>
                                         <td><?php echo $elementdata->Description;?></td>
-                                        <td><?php echo $elementdata->CreationDate;?></td>
+
                                         <?php if($userrole=='Manager'|| $userrole=='OC'){ ?><td class="no-print">
 
                                             <a href="<?php echo base_url() . "index.php/StationElements/DisplayStationElementFormForUpdate/" .$elementid ;?>" style="cursor:pointer;">Edit</a>
-                                            or <a href="<?php echo base_url() . "index.php/StationElements/deleteStation/" .$elementid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $instrumentid->InstrumentName;?>');">Delete</a></td><?php }?>
+                                            <!--  or <a href="<?php echo base_url() . "index.php/StationElements/deleteStation/" .$elementid ;?>"
+                                                  onClick="return confirm('Are you sure you want to delete <?php echo $instrumentid->InstrumentName;?>');">Delete</a></td><?php }?> -->
                                     </tr>
 
                                 <?php
@@ -362,7 +353,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </tbody>
                         </table>
                         <br><br>
-                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT </button>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
@@ -382,11 +373,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
-            //Post metar form data into the DB
-            //Validate each field before inserting into the DB
+            //Post Add New  Archive metar form data into the DB
+            //Validate each select field before inserting into the DB
             $('#post_stationinstrumentelement_button').click(function(event) {
                 //Check for duplicate Entry Data when adding new archive metar form.
-                var returntruthvalue=checkDuplicateEntryData_OnAddStationElementInstrumentData();
+                var returntruthvalue=checkDuplicateEntryData_OnAddStationElementData();
                 //if true there is already an entry
                 if(returntruthvalue=="true"){
 
@@ -398,77 +389,107 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
                 }
 
-
-
-
-                //Check that the a station is selecteManagerm the list of stations(AdmiManager
-                var stationManager=$('#stationManager_element').val();
-                if(stationManager==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Please Select A Station from the lisManager                    " +
-                        $('#stationManager_element').val("");  //Clear the Manager.
-                    $("#stationManager_element").focus();
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield").focus();
                     return false;
 
                 }
-                //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNoManager=$('#stationNoManager_element').val();
-                if(stationNoManager==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station Number not picked");
-                    $('#stationNoManager_element').val("");  //Clear the field.
-                    $("#stationNoManager_element").focus();
+
+
+                //Check that Date selected
+                var station=$('#station_insertElement_element').val();
+                if(station==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Station not Selected");
+                    $('#station_insertElement_element').val("");  //Clear the field.
+                    $("#station_insertElement_element").focus();
                     return false;
 
                 }
+
 
                 //Check that the a station is selected from the list of stations(Manager)
-                var stationOC=$('#stationNoOC_element').val();
-                if(stationOC==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station not picked");
-                    $('#stationNoOC_element').val("");  //Clear the field.
-                    $("#stationNoOC_element").focus();
+                var stationNo=$('#stationNo_insertElement_element').val();
+                if(stationNo==""){  // returns true if the variable does NOT contain a valid number
+                    alert("StationNo not picked");
+                    $('#stationNo_insertElement_element').val("");  //Clear the field.
+                    $("#stationNo_insertElement_element").focus();
+                    return false;
+
+                }
+                var stationRegion=$('#stationRegion_insertElement_element').val();
+                if (stationRegion==""){  // returns true if the variable does NOT contManager valid number
+                    alert("Station Region not picked");
+                    $('#stationRegion_insertElement_element').val("");  //Clear the field.
+                    $("#stationRegion_insertElement_element").focus();
+                    return false;
+
+                }
+
+                //Check that Date selected
+                var stationOC_element=$('#station_OC_element').val();
+                if(stationOC_element==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Station not Selected");
+                    $('#station_OC_element').val("");  //Clear the field.
+                    $("#station_OC_element").focus();
+                    return false;
+
+                }
+
+
+                //Check that the a station is selected from the list of stations(Manager)
+                var stationNo_OC_element=$('#stationNo_OC_element').val();
+                if(stationNo_OC_element==""){  // returns true if the variable does NOT contain a valid number
+                    alert("StationNo not picked");
+                    $('#stationNo_OC_element').val("");  //Clear the field.
+                    $("#stationNo_OC_element").focus();
+                    return false;
+
+                }
+                var stationRegion_OC_element=$('#stationRegion_OC_element').val();
+                if (stationRegion_OC_element==""){  // returns true if the variable does NOT contManager valid number
+                    alert("Station Region not picked");
+                    $('#stationRegion_OC_element').val("");  //Clear the field.
+                    $("#stationRegion_OC_element").focus();
                     return false;
 
                 }
                 //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNoOC=$('#stationNoOC_element').val();
-                if(stationNoOC==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station Number not picked");
-                    $('#stationNoOC_element').val("");  //Clear the field.
-                    $("#stationNoOC_element").focus();
-                    return false;
-
-                }
-///////////////////////////////////////////////////////////////////////////////////////////////
-                //Check that Date selected
-                var instrumentnameelement=$('#instrumentnameelement').val();
-                if(instrumentnameelement==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Please Select The Instrument used to measure the element");
-                    $('#instrumentnameelement').val("");  //Clear the field.
-                    $("#instrumentnameelement").focus();
+                var instrumentname_element=$('#instrumentname_element').val();
+                if(instrumentname_element==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Station");
+                    $('#instrumentname_element').val("");  //Clear the field.
+                    $("#instrumentname_element").focus();
                     return false;
 
                 }
 
-///////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
             }); //button
-            //  return false;
+
 
         });  //document
     </script>
     <script>
         //CHECK DB IF THE METAR ALREADY EXISTS
-        function checkDuplicateEntryData_OnAddStationElementInstrumentData(){
-
-            //Check against the date,stationName,StationNumber,Time and Metar Option.
-            var elementname = $('#nameelement').val();
+        function checkDuplicateEntryData_OnAddStationElementData(){
 
 
-            var stationNameManager = $('#stationManagerelement').val();
-            var stationNumberManager = $('#stationNoManagerelement').val();
+            var elementname = $('#name_element').val();
 
-            var stationNameOC = $('#stationOCelement').val();
-            var stationNumberOC = $('#stationNoOCelement').val();
+
+            var stationNameManager = $('#station_insertElement_element').val();
+            var stationNumberManager = $('#stationNo_insertElement_element').val();
+
+            var stationNameOC = $('#station_OC_element').val();
+            var stationNumberOC = $('#stationNo_OC_element').val();
 
 
             if((stationNameManager!=undefined) && (stationNumberManager!=undefined)){
@@ -480,17 +501,20 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 var stationNumber=stationNumberOC;
 
             }
+
+
+
             //Instrument used to measure the Element
-            var instrumentnameelement=$('#instrumentnameelement').val();
+            var instrumentname_element=$('#instrumentname_element').val();
 
 
             $('#checkduplicateEntryOnAddNewStationInstrumentElementData_hiddentextfield').val("");
 
-            if ((elementname != undefined) && (instrumentnameelement != undefined) && (stationName != undefined) && (stationNumber != undefined)   ) {
+            if ((elementname != undefined) && (instrumentname_element != undefined) && (stationName != undefined) && (stationNumber != undefined)  ) {
                 $.ajax({
                     url: "<?php echo base_url(); ?>"+"index.php/StationElements/checkInDBIfStationElementMeasuredFromAnInstrumentInformationRecordExistsAlready",
                     type: "POST",
-                    data:{'elementname':elementname,'instrumentnameelement':instrumentnameelement,'stationName': stationName,'stationNumber':stationNumber},
+                    data:{'elementname':elementname,'instrumentname_element': instrumentname_element,'stationName':stationName,'stationNumber':stationNumber},
                     cache: false,
                     async: false,
 
@@ -519,7 +543,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             }//end of if
 
-            else if((elementname == undefined) || (instrumentnameelement == undefined) || (stationName == undefined) || (stationNumber == undefined)  ){
+            else if((elementname == undefined) || (instrumentname_element == undefined) || (stationName == undefined) || (stationNumber == undefined)  ){
 
                 var truthvalue="Missing";
             }
@@ -539,64 +563,100 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             //Update  Archive metar form data into the DB
             //Validate each field before inserting into the DB
             $('#update_stationinstrumentelement_button').click(function(event) {
+
+
+
+                //Check that id of the row is picked
+                var rowid=$('#id').val();
+                if(rowid==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Row id not picked");
+                    $('#id').val("");  //Clear the field.
+                    $("#id").focus();
+                    return false;
+
+                }
+
+
                 //Check that Date selected
-                var elementName=$('#elementname').val();
+                var elementName=$('#elementName').val();
                 if(elementName==""){  // returns true if the variable does NOT contain a valid number
                     alert("Element Name not picked");
-                    $('#elementname').val("");  //Clear the field.
-                    $("#elementname").focus();
+                    $('#elementName').val("");  //Clear the field.
+                    $("#elementName").focus();
                     return false;
 
                 }
 
+
+
+                //Check that the a station is selected from the list Managerations(Admin)
+                var station=$('#station_updateElement').val();
+                if(station==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Station not Selected");
+                    $('#station_updateElement').val("");  //Clear the field.
+                    $("#station_updateElement").focus();
+                    return false;
+
+                }
+
+
+                //Check that the a station is selected from the list of stations(Manager)
+                var stationNo=$('#stationNo_updateElement').val();
+                if(stationNo==""){  // returns true if the variable does NOT contain a valid number
+                    alert("StationNo not picked");
+                    $('#stationNo_updateElement').val("");  //Clear the field.
+                    $("#stationNo_updateElement").focus();
+                    return false;
+
+                }
+                var stationRegion=$('#stationRegion_updateElement').val();
+                if (stationRegion==""){  // returns true if the variable does NOT contManager valid number
+                    alert("Station Region not picked");
+                    $('#stationRegion_updateElement').val("");  //Clear the field.
+                    $("#stationRegion_updateElement").focus();
+                    return false;
+
+                }
 
                 //Check that Date selected
-                var instrumentelementname=$('#instrumentname').val();
-                if(instrumentelementname==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Instrument Name not picked");
-                    $('#instrumentname').val("");  //Clear the field.
-                    $("#instrumentname").focus();
+                var station_OC=$('#station_OC').val();
+                if(station_OC==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Station not Selected");
+                    $('#station_OC').val("");  //Clear the field.
+                    $("#station_OC").focus();
                     return false;
 
                 }
-                //Check that the a station is selected from the list Managerations(Admin)
-                var stationManager=('#stationManager').val();
-                if(stationManager==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Please Select A Station from the list");
-                    $('#stationManager').val("");  //Clear the field.
-                    $("#stationManager").focus();
-                    return false;
 
-                }
-                //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNoManager=$('#stationNoManager').val();
-                if(stationNoManager==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station Number not picked");
-                    $('#stationNoManager').val("");  //Clear the field.
-                    $("#stationNoManager").focus();
-                    return false;
 
-                }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
                 //Check that the a station is selected from the list of stations(Manager)
-                var stationOC=$('#stationOC').val();
-                if(stationOC==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station not picked");
-                    $('#stationOC').val("");  //Clear the field.
-                    $("#stationOC").focus();
+                var stationNo_OC=$('#stationNo_OC').val();
+                if(stationNo_OC==""){  // returns true if the variable does NOT contain a valid number
+                    alert("StationNo not picked");
+                    $('#stationNo_OC').val("");  //Clear the field.
+                    $("#stationNo_OC").focus();
                     return false;
 
                 }
-                //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNoOC=$('#stationNoOC').val();
-                if(stationNoOC==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Station Number not picked");
-                    $('#stationNoOC').val("");  //Clear the field.
-                    $("#stationNoOC").focus();
+                var stationRegion_OC=$('#stationRegion_OC').val();
+                if (stationRegion_OC==""){  // returns true if the variable does NOT contManager valid number
+                    alert("Station Region not picked");
+                    $('#stationRegion_OC').val("");  //Clear the field.
+                    $("#stationRegion_OC").focus();
                     return false;
 
                 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
+                //Check that Instrument is selected
+                var instrumentname_element_Update=$('#instrumentname_element_Update').val();
+                // var instrumentname_element_Manager=$('#instrumentname_element_OC').val();
+                if(instrumentname_element_Update==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Instrument Name not picked");
+                    $('#instrumentname_element_Update').val("");  //Clear the field.
+                    $("#instrumentname_element_Update").focus();
+                    return false;
+
+                }
 
 
 
@@ -765,22 +825,60 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $('#description').val(oldValue_description);
                     return false;
                 }
-                Manager});
+            });
         });
     </script>
 
-
-
-
     <script type="text/javascript">
-        //Once the Manager loads the page the value of Selected Station is displayed.So Get the StationNumber from the DB.
+        //Once the Manager selects the Station the Station Number should be picked from the DB.
+        //Add Element.
+        $(document.body).on('change','#station_insertElement_element',function(){
+            $('#stationNo_insertElement_element').val("");  //Clear the field.
+            var stationName = this.value;
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNo_insertElement_element').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNo_insertElement_element').empty();
+
+                            // alert(data);
+                            $("#stationNo_insertElement_element").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNo_insertElement_element').empty();
+                            $('#stationNo_insertElement_element').val("");
+                        }
+                    }
+                });
+            }
+            else {
+
+                $('#stationNo_insertElement_element').empty();
+                $('#stationNo_insertElement_element').val("");
+            }
+        })
+    </script>
+    <script type="text/javascript">
+        //Once the Manager/Zonal Officer/Senior Zonal Officer loads the page the value of Selected Station is displayed.So Get the StationNumber from the DB.
         //On Update Element
-        var stationName = $("#stationManager").val();
-        $('#stationNoManager').val("");  //Clear the field.
+        var stationName = $("#station_updateElement").val();
+        $('#stationNo_updateElement').val("");  //Clear the field.
 
         if (stationName != "") {
             //alert(station);
-            $('#stationNoAdmin').val("");
+            $('#stationNo_updateElement').val("");
             $.ajax({
                 url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
                 type: "POST",
@@ -792,16 +890,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     {
                         var json = JSON.parse(data);
 
-                        $('#stationNoManager').empty();
+                        $('#stationNo_updateElement').empty();
 
                         // alert(data);
-                        $("#stationNoManager").val(json[0].StationNumber);
+                        $("#stationNo_updateElement").val(json[0].StationNumber);
 
                     }
                     else{
 
-                        $('#stationNoManager').empty();
-                        $('#stationNoManager').val("");
+                        $('#stationNo_updateElement').empty();
+                        $('#stationNo_updateElement').val("");
 
                     }
                 }
@@ -810,97 +908,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         }
         else {
 
-            $('#stationNoManager').empty();
-            $('#stationNoManager').val("");
+            $('#stationNo_updateElement').empty();
+            $('#stationNo_updateElement').val("");
         }
     </script>
-    <script type="text/javascript">
-        //Once the Manager selects the Station the Station Number should be picked from the DB.
-        //Add Element.
-        $(document.body).on('change','#stationManager_element',function(){
-            $('#stationNoManager_element').val("");  //Clear the field.
-            var stationName = this.value;
-            if (stationName != "") {
-                //alert(station);
-                $('#stationNoAdminelement').val("");
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
-                    type: "POST",
-                    data: {'stationName': stationName},
-                    cache: false,
-                    //dataType: "JSON",
-                    success: function(data){
-                        if (data)
-                        {
-                            var json = JSON.parse(data);
 
-                            $('#stationNoManager_element').empty();
-
-                            // alert(data);
-                            $("#stationNoManager_element").val(json[0].StationNumber);
-
-                        }
-                        else{
-
-                            $('#stationNoManager_element').empty();
-                            $('#stationNoManager_element').val("");
-                        }
-                    }
-                });
-            }
-            else {
-
-                $('#stationNoManager_element').empty();
-                $('#stationNoManager_element').val("");
-            }
-        })
-    </script>
-    <script type="text/javascript">
-        //Once the Manager selects the Station the Station Number should be picked from the DB .
-        //On Update and when the
-        $(document.body).on('change','#stationManager',function(){
-            $('#stationNoManager').val("");  //Clear the field.
-            var stationName = this.value;
-            if (stationName != "") {
-                //alert(station);
-                $('#stationNoAdmin').val("");
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
-                    type: "POST",
-                    data: {'stationName': stationName},
-                    cache: false,
-                    //dataType: "JSON",
-                    success: function(data){
-                        if (data)
-                        {
-                            var json = JSON.parse(data);
-                            $('#stationNoManager').empty();
-                            // alert(data);
-                            $("#stationNoManager").val(json[0].StationNumber);
-                        }
-                        else{
-
-                            $('#stationNoManager').empty();
-                            $('#stationNoManager').val("");
-                        }
-                    }
-
-                });
-
-            }
-            else {
-
-                $('#stationNoManager').empty();
-                $('#stationNoManager').val("");
-            }
-        })
-    </script>
 
     <script type="text/javascript">
         //Once the Manager selects the Station, the Instruments attached to the Stations shd be picked from the InstrumentsTable DB.
         //Add Element.
-        $(document.body).on('change','#stationManager_element',function(){
-            $('#instrumentnameelement').html('');//Clear the field.
+        $(document.body).on('change','#station_insertElement_element',function(){
+            $('#instrumentname_element').html('');//Clear the field.
             var stationName = this.value;
             if(stationName!=""){
                 // alert(stationName);
@@ -916,9 +934,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             //var json = JSON.parse(data);
 
                             //clear the current content of the select
-                            $('#instrumentnameelement').html('');
+                            $('#instrumentname_element').html('');
                             //$select.html('');
-                            $("#instrumentnameelement").append($('<option>').text("--Select Options--").attr('value', 0));
+                            $("#instrumentname_element").append($('<option>').text("--Select Instrument Used to Measure Element--").attr('value', ''));
                             //alert(data);
 
                             //var json = JSON.parse(data);
@@ -929,13 +947,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             var i ;
 
                             for (i = 0; i < data.length; i++) {
-                                $("#instrumentnameelement").append($('<option>').text(json[i].InstrumentName)
+                                $("#instrumentname_element").append($('<option>').text(json[i].InstrumentName)
                                     .attr('value', json[i].InstrumentName));
                             }
                         }
                         else{
 
-                            $('#instrumentnameelement').html('');
+                            $('#instrumentname_element').html('');
 
                         }
 
@@ -948,65 +966,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
     </script>
 
-    <script type="text/javascript">
-        //Once the Manager selects the Station the Instruments attached to the Stations shd   be picked from the InstrumentsTable DB.
-        //Update Element.
-        $(document.body).on('change','#stationManager',function(){
-            var previousInstrumentName= $('#instrumentnameAdmin').val();
-            $('#instrumentnameAdmin').html('');//Clear the field.
-            var stationName = this.value;
-            if(stationName!=""){
-                // alert(stationName);
-
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/StationInstruments/getInstruments",
-                    type: "POST",
-                    data: {'stationName': stationName},
-                    cache: false,
-                    success: function(data){
-                        if (data)
-                        {
-                            //var json = JSON.parse(data);
-
-                            //clear the current content of the select
-                            $('#instrumentnameAdmin').html('');
-                            //$select.html('');
-                            $("#instrumentnameAdmin").append($('<option>').text(previousInstrumentName).attr('value', previousInstrumentName));
-                            $("#instrumentnameAdmin").append($('<option>').text("--Select Options--").attr('value', 0));
-                            //alert(data);
-
-                            //var json = JSON.parse(data);
-                            // var json = JSON.parse(data);
-                            // alert(json[0].InstrumentName);
-
-                            var json = JSON.parse(data);
-                            var i ;
-
-                            for (i = 0; i < data.length; i++) {
-                                $("#instrumentnameAdmin").append($('<option>').text(json[i].InstrumentName)
-                                    .attr('value', json[i].InstrumentName));
-                            }
-                        }
-                        else{
-
-                            $('#instrumentnameAdmin').html('');
-
-                        }
-                    }//end of if for data
-                }); //end of ajax.
-            }//end of if
-        })
-    </script>
-
 
 
     <script type="text/javascript">
-        //Once the Manager  Station is autopopulated. the Instruments attached to the Stations shd   be picked from the InstrumentsTable DB.
+        //Once the OC  Station is autopopulated. the Instruments attached to the Stations shd   be picked from the InstrumentsTable DB.
         //Add Element.
-
-
-        $('#instrumentnameelement').html(''); //Clear the field.
-        var stationName =  $('#stationOC_element').val();  //$("#stationAdmin").val();
+        $('#instrumentname_element').html(''); //Clear the field.
+        var stationName =  $('#station_OC_element').val();  //$("#stationAdmin").val();
         if(stationName!=""){
             // alert(stationName);
 
@@ -1021,11 +987,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         //var json = JSON.parse(data);
 
                         //clear the current content of the select
-                        $('#instrumentnameelement').html('');
+                        $('#instrumentname_element').html('');
                         //$select.html('');
 
                         //alert(data);
-                        $("#instrumentnameelement").append($('<option>').text("--Select Options--").attr('value', 0));
+                        $("#instrumentname_element").append($('<option>').text("--Select Instrument Used to Measure the Element--").attr('value', ''));
 
                         //var json = JSON.parse(data);
                         // var json = JSON.parse(data);
@@ -1035,7 +1001,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         var i ;
 
                         for (i = 0; i < data.length; i++) {
-                            $("#instrumentnameelement").append($('<option>').text(json[i].InstrumentName)
+                            $("#instrumentname_element").append($('<option>').text(json[i].InstrumentName)
                                 .attr('value', json[i].InstrumentName));
                         }
 
@@ -1043,7 +1009,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }
                     else{
 
-                        $('#instrumentnameelement').html('');
+                        $('#instrumentname_element').html('');
 
                     }
 
@@ -1053,58 +1019,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             }); //end of ajax.
         }//end of if
     </script>
-    <script type="text/javascript">
-        //Once the Manager  Station is autopopulated. the Instruments attached to the Stations shd   be picked from the InstrumentsTable DB.
-        //Update Element.
-        var previousInstrumentName=$('#instrumentnameManager').val();
-        $('#instrumentnameManager').html('');//Clear the field.
-        var stationName =  $('#stationManager').val();  //$("#stationAdmin").val();
-        if(stationName!=""){
-            // alert(stationName);
-
-            $.ajax({
-                url: "<?php echo base_url(); ?>"+"index.php/StationInstruments/getInstruments",
-                type: "POST",
-                data: {'stationName': stationName},
-                cache: false,
-                success: function(data){
-                    if (data)
-                    {
-                        //var json = JSON.parse(data);
-
-                        //clear the current content of the select
-                        $('#instrumentnameManager').html('');
-                        //$select.html('');
-                        $("#instrumentnameManager").append($('<option>').text(previousInstrumentName).attr('value', previousInstrumentName));
-
-                        $("#instrumentnameManager").append($('<option>').text("--Select Options--").attr('value', 0));
-                        //alert(data);
-
-                        //var json = JSON.parse(data);
-                        // var json = JSON.parse(data);
-                        // alert(json[0].InstrumentName);
-
-                        var json = JSON.parse(data);
-                        var i ;
-
-                        for (i = 0; i < data.length; i++) {
-                            $("#instrumentnameManager").append($('<option>').text(json[i].InstrumentName)
-                                .attr('value', json[i].InstrumentName));
-                        }
 
 
-                    }
-                    else{
 
-                        $('#instrumentnameManager').html('');
-
-                    }
-
-                }//end of if for data
-
-
-            }); //end of ajax.
-        }//end of if
-    </script>
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>

@@ -35,7 +35,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -68,7 +68,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -337,25 +337,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip0000Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["Same_Day1"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HorizontalVisibility_Time_0000Z"]= $data->Visibility;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["TotalAmountOfAllClouds_Time_0000Z"]= $data->TotalAmountOfAllClouds;
-                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["WindDirection_Time_0000Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["WindSpeed_Time_0000Z"]= $data->Wind_Speed;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HorizontalVisibility_Time_0000Z"]= 50 + substr($data->Visibility,0,1);
 
 
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AirTemperature_Time_0000Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["DewPointTemperature_Time_0000Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PressureAtStationLevel_Time_0000Z"]= $data->CLP;  //Pressure at the station level
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HorizontalVisibility_Time_0000Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
+                  $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["TotalAmountOfAllClouds_Time_0000Z"]= $data->TotalAmountOfAllClouds;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["WindDirection_Time_0000Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["WindSpeed_Time_0000Z"]= substr($data->Wind_Speed,0,2);
+
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AirTemperature_Time_0000Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["DewPointTemperature_Time_0000Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PressureAtStationLevel_Time_0000Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                  $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfPrecipitation_Time_0000Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PresentWeather_Time_0000Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PresentWeatherCode_Time_0000Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PastWeather_Time_0000Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfLowClouds_Time_0000Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["LowCloudsOftheGenera_Time_0000Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["MediumCloudsOftheGenera_Time_0000Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HighCloudsOftheGenera_Time_0000Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["LowCloudsOftheGenera_Time_0000Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["MediumCloudsOftheGenera_Time_0000Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HighCloudsOftheGenera_Time_0000Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -369,26 +390,38 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfEvaporation_Time_0000Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["PressureChgIn24Hrs_Time_0000Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualLowCloudLayer_Time_0000Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfLowCloud_Time_0000Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0000Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualLowCloudLayer_Time_0000Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfLowCloud_Time_0000Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0000Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0000Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfMediumCloud_Time_0000Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0000Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0000Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfMediumCloud_Time_0000Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0000Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualHighCloudLayer_Time_0000Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfHighCloud_Time_0000Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0000Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualHighCloudLayer_Time_0000Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfHighCloud_Time_0000Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0000Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0000Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfMediumsCloud_Time_0000Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0000Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0000Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["GenusOfMediumsCloud_Time_0000Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0000Z"]= $data->HeightOfHighClouds1;
+
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["Wind_Run_Time_0000Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["DurationOfSunshine_Time_0000Z"]= $data->DurationOfSunshine;
+
 
                 $array_synopticreportdataforADayFromObservationSlip0000Z [$i]["WetBulbTemperature_Time_0000Z"]= $data->Wet_Bulb;
             }
@@ -415,8 +448,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["PastWeather_Time_0000Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["GrassMinTemp_Time_0000Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["GrassMinTemp_Time_0000Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["CI_OfPrecipitation_Time_0000Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["BE_OfPrecipitation_Time_0000Z"]= $data->BE_OfPrecipitation;
@@ -426,7 +458,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["IndicatorOfTypeOfIntrumentation_Time_0000Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["DurationOfSunshine_Time_0000Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["SignOfPressureChange_Time_0000Z"]= $data->SignOfPressureChange;
 
@@ -434,7 +465,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["VapourPressure_Time_0000Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["Wind_Run_Time_0000Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z [$i]["T_H_Graph_Time_0000Z"]= $data->T_H_Graph;
 
@@ -450,25 +480,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip0300Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["Same_Day2"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HorizontalVisibility_Time_0300Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HorizontalVisibility_Time_0300Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HorizontalVisibility_Time_0300Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["TotalAmountOfAllClouds_Time_0300Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["WindDirection_Time_0300Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["WindSpeed_Time_0300Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["WindDirection_Time_0300Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["WindSpeed_Time_0300Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AirTemperature_Time_0300Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["DewPointTemperature_Time_0300Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PressureAtStationLevel_Time_0300Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AirTemperature_Time_0300Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["DewPointTemperature_Time_0300Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PressureAtStationLevel_Time_0300Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfPrecipitation_Time_0300Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PresentWeather_Time_0300Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PresentWeatherCode_Time_0300Z"]= $data->Present_WeatherCode;
 
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfLowClouds_Time_0300Z"]= $data->TotalAmountOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["LowCloudsOftheGenera_Time_0300Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["MediumCloudsOftheGenera_Time_0300Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HighCloudsOftheGenera_Time_0300Z"]= $data->TypeOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PastWeather_Time_0300Z"]= $data->Past_Weather;
+
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfLowClouds_Time_0300Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["LowCloudsOftheGenera_Time_0300Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["MediumCloudsOftheGenera_Time_0300Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HighCloudsOftheGenera_Time_0300Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -482,28 +533,41 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfEvaporation_Time_0300Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["PressureChgIn24Hrs_Time_0300Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualLowCloudLayer_Time_0300Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfLowCloud_Time_0300Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0300Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualLowCloudLayer_Time_0300Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfLowCloud_Time_0300Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0300Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0300Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfMediumCloud_Time_0300Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0300Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0300Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfMediumCloud_Time_0300Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0300Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualHighCloudLayer_Time_0300Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfHighCloud_Time_0300Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0300Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualHighCloudLayer_Time_0300Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfHighCloud_Time_0300Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0300Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0300Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfMediumsCloud_Time_0300Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0300Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0300Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["GenusOfMediumsCloud_Time_0300Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0300Z"]= $data->HeightOfHighClouds1;
+
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["Wind_Run_Time_0300Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["DurationOfSunshine_Time_0300Z"]= $data->DurationOfSunshine;
+
 
                 $array_synopticreportdataforADayFromObservationSlip0300Z [$i]["WetBulbTemperature_Time_0300Z"]= $data->Wet_Bulb;
+
             }
             ///////FROM MORE FORM FIELDS TABLE
             //for TIME 0300Z
@@ -523,8 +587,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["PastWeather_Time_0300Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["GrassMinTemp_Time_0300Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["GrassMinTemp_Time_0300Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["CI_OfPrecipitation_Time_0300Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["BE_OfPrecipitation_Time_0300Z"]= $data->BE_OfPrecipitation;
@@ -534,7 +597,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["IndicatorOfTypeOfIntrumentation_Time_0300Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["DurationOfSunshine_Time_0300Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["SignOfPressureChange_Time_0300Z"]= $data->SignOfPressureChange;
 
@@ -542,7 +604,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["VapourPressure_Time_0300Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["Wind_Run_Time_0300Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z [$i]["T_H_Graph_Time_0300Z"]= $data->T_H_Graph;
 
@@ -556,25 +617,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip0600Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["Same_Day3"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HorizontalVisibility_Time_0600Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HorizontalVisibility_Time_0600Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HorizontalVisibility_Time_0600Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["TotalAmountOfAllClouds_Time_0600Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["WindDirection_Time_0600Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["WindSpeed_Time_0600Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["WindDirection_Time_0600Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["WindSpeed_Time_0600Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AirTemperature_Time_0600Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["DewPointTemperature_Time_0600Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PressureAtStationLevel_Time_0600Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AirTemperature_Time_0600Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["DewPointTemperature_Time_0600Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PressureAtStationLevel_Time_0600Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfPrecipitation_Time_0600Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PresentWeather_Time_0600Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PresentWeatherCode_Time_0600Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PastWeather_Time_0600Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfLowClouds_Time_0600Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["LowCloudsOftheGenera_Time_0600Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["MediumCloudsOftheGenera_Time_0600Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HighCloudsOftheGenera_Time_0600Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["LowCloudsOftheGenera_Time_0600Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["MediumCloudsOftheGenera_Time_0600Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HighCloudsOftheGenera_Time_0600Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -588,28 +670,44 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfEvaporation_Time_0600Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["PressureChgIn24Hrs_Time_0600Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualLowCloudLayer_Time_0600Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfLowCloud_Time_0600Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0600Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualLowCloudLayer_Time_0600Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfLowCloud_Time_0600Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0600Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0600Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfMediumCloud_Time_0600Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0600Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0600Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfMediumCloud_Time_0600Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0600Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualHighCloudLayer_Time_0600Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfHighCloud_Time_0600Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0600Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualHighCloudLayer_Time_0600Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfHighCloud_Time_0600Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0600Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0600Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfMediumsCloud_Time_0600Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0600Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0600Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["GenusOfMediumsCloud_Time_0600Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0600Z"]= $data->HeightOfHighClouds1;
+
+
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["Wind_Run_Time_0600Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["DurationOfSunshine_Time_0600Z"]= $data->DurationOfSunshine;
+
+
+
 
                 $array_synopticreportdataforADayFromObservationSlip0600Z [$i]["WetBulbTemperature_Time_0600Z"]= $data->Wet_Bulb;
+
             }
             ///////FROM MORE FORM FIELDS TABLE
             //for TIME 0600Z
@@ -629,8 +727,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["PastWeather_Time_0600Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["GrassMinTemp_Time_0600Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["GrassMinTemp_Time_0600Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["CI_OfPrecipitation_Time_0600Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["BE_OfPrecipitation_Time_0600Z"]= $data->BE_OfPrecipitation;
@@ -640,7 +737,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["IndicatorOfTypeOfIntrumentation_Time_0600Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["DurationOfSunshine_Time_0600Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["SignOfPressureChange_Time_0600Z"]= $data->SignOfPressureChange;
 
@@ -648,7 +744,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["VapourPressure_Time_0600Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["Wind_Run_Time_0600Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z [$i]["T_H_Graph_Time_0600Z"]= $data->T_H_Graph;
             }
@@ -662,25 +757,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip0900Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["Same_Day4"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HorizontalVisibility_Time_0900Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HorizontalVisibility_Time_0900Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HorizontalVisibility_Time_0900Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["TotalAmountOfAllClouds_Time_0900Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["WindDirection_Time_0900Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["WindSpeed_Time_0900Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["WindDirection_Time_0900Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["WindSpeed_Time_0900Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AirTemperature_Time_0900Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["DewPointTemperature_Time_0900Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PressureAtStationLevel_Time_0900Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AirTemperature_Time_0900Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["DewPointTemperature_Time_0900Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PressureAtStationLevel_Time_0900Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfPrecipitation_Time_0900Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PresentWeather_Time_0900Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PresentWeatherCode_Time_0900Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PastWeather_Time_0900Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfLowClouds_Time_0900Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["LowCloudsOftheGenera_Time_0900Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["MediumCloudsOftheGenera_Time_0900Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HighCloudsOftheGenera_Time_0900Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["LowCloudsOftheGenera_Time_0900Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["MediumCloudsOftheGenera_Time_0900Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HighCloudsOftheGenera_Time_0900Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -694,28 +810,43 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfEvaporation_Time_0900Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["PressureChgIn24Hrs_Time_0900Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualLowCloudLayer_Time_0900Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfLowCloud_Time_0900Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0900Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualLowCloudLayer_Time_0900Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfLowCloud_Time_0900Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_0900Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0900Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfMediumCloud_Time_0900Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0900Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualMediumCloudLayer_Time_0900Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfMediumCloud_Time_0900Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_0900Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualHighCloudLayer_Time_0900Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfHighCloud_Time_0900Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0900Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualHighCloudLayer_Time_0900Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfHighCloud_Time_0900Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_0900Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0900Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfMediumsCloud_Time_0900Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0900Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_0900Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["GenusOfMediumsCloud_Time_0900Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_0900Z"]= $data->HeightOfHighClouds1;
+
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["Wind_Run_Time_0900Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["DurationOfSunshine_Time_0900Z"]= $data->DurationOfSunshine;
+
+
+
 
                 $array_synopticreportdataforADayFromObservationSlip0900Z [$i]["WetBulbTemperature_Time_0900Z"]= $data->Wet_Bulb;
+
             }
             ///////FROM MORE FORM FIELDS TABLE
             //for TIME 0900Z
@@ -735,7 +866,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["PastWeather_Time_0900Z"]= $data->Past_Weather;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["GrassMinTemp_Time_0900Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["CI_OfPrecipitation_Time_0900Z"]= $data->CI_OfPrecipitation;
@@ -746,7 +876,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["IndicatorOfTypeOfIntrumentation_Time_0900Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["DurationOfSunshine_Time_0900Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["SignOfPressureChange_Time_0900Z"]= $data->SignOfPressureChange;
 
@@ -754,7 +883,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["VapourPressure_Time_0900Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["Wind_Run_Time_0900Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z [$i]["T_H_Graph_Time_0900Z"]= $data->T_H_Graph;
 
@@ -769,25 +897,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip1200Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["Same_Day5"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HorizontalVisibility_Time_1200Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HorizontalVisibility_Time_1200Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HorizontalVisibility_Time_1200Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["TotalAmountOfAllClouds_Time_1200Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["WindDirection_Time_1200Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["WindSpeed_Time_1200Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["WindDirection_Time_1200Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["WindSpeed_Time_1200Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AirTemperature_Time_1200Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["DewPointTemperature_Time_1200Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PressureAtStationLevel_Time_1200Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AirTemperature_Time_1200Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["DewPointTemperature_Time_1200Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PressureAtStationLevel_Time_1200Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfPrecipitation_Time_1200Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PresentWeather_Time_1200Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PresentWeatherCode_Time_1200Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PastWeather_Time_1200Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfLowClouds_Time_1200Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["LowCloudsOftheGenera_Time_1200Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["MediumCloudsOftheGenera_Time_1200Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HighCloudsOftheGenera_Time_1200Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["LowCloudsOftheGenera_Time_1200Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["MediumCloudsOftheGenera_Time_1200Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HighCloudsOftheGenera_Time_1200Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -801,28 +950,42 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfEvaporation_Time_1200Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["PressureChgIn24Hrs_Time_1200Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualLowCloudLayer_Time_1200Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfLowCloud_Time_1200Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1200Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualLowCloudLayer_Time_1200Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfLowCloud_Time_1200Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1200Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1200Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfMediumCloud_Time_1200Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1200Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1200Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfMediumCloud_Time_1200Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1200Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualHighCloudLayer_Time_1200Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfHighCloud_Time_1200Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1200Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualHighCloudLayer_Time_1200Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfHighCloud_Time_1200Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1200Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1200Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfMediumsCloud_Time_1200Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1200Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1200Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["GenusOfMediumsCloud_Time_1200Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1200Z"]= $data->HeightOfHighClouds1;
+
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["Wind_Run_Time_1200Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["DurationOfSunshine_Time_1200Z"]= $data->DurationOfSunshine;
+
+
 
                 $array_synopticreportdataforADayFromObservationSlip1200Z [$i]["WetBulbTemperature_Time_1200Z"]= $data->Wet_Bulb;
+
             }
             ///////FROM MORE FORM FIELDS TABLE
             //for TIME 1200Z
@@ -842,8 +1005,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["PastWeather_Time_1200Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["GrassMinTemp_Time_1200Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["GrassMinTemp_Time_1200Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["CI_OfPrecipitation_Time_1200Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["BE_OfPrecipitation_Time_1200Z"]= $data->BE_OfPrecipitation;
@@ -853,7 +1015,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["IndicatorOfTypeOfIntrumentation_Time_1200Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["DurationOfSunshine_Time_1200Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["SignOfPressureChange_Time_1200Z"]= $data->SignOfPressureChange;
 
@@ -861,7 +1022,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["VapourPressure_Time_1200Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["Wind_Run_Time_1200Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z [$i]["T_H_Graph_Time_1200Z"]= $data->T_H_Graph;
 
@@ -876,25 +1036,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip1500Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["Same_Day6"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HorizontalVisibility_Time_1500Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HorizontalVisibility_Time_1500Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HorizontalVisibility_Time_1500Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["TotalAmountOfAllClouds_Time_1500Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["WindDirection_Time_1500Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["WindSpeed_Time_1500Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["WindDirection_Time_1500Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["WindSpeed_Time_1500Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AirTemperature_Time_1500Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["DewPointTemperature_Time_1500Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PressureAtStationLevel_Time_1500Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AirTemperature_Time_1500Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["DewPointTemperature_Time_1500Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PressureAtStationLevel_Time_1500Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfPrecipitation_Time_1500Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PresentWeather_Time_1500Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PresentWeatherCode_Time_1500Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PastWeather_Time_1500Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfLowClouds_Time_1500Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["LowCloudsOftheGenera_Time_1500Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["MediumCloudsOftheGenera_Time_1500Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HighCloudsOftheGenera_Time_1500Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["LowCloudsOftheGenera_Time_1500Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["MediumCloudsOftheGenera_Time_1500Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HighCloudsOftheGenera_Time_1500Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -908,28 +1089,43 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfEvaporation_Time_1500Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["PressureChgIn24Hrs_Time_1500Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualLowCloudLayer_Time_1500Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfLowCloud_Time_1500Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1500Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualLowCloudLayer_Time_1500Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfLowCloud_Time_1500Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1500Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1500Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfMediumCloud_Time_1500Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1500Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1500Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfMediumCloud_Time_1500Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1500Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualHighCloudLayer_Time_1500Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfHighCloud_Time_1500Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1500Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualHighCloudLayer_Time_1500Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfHighCloud_Time_1500Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1500Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1500Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfMediumsCloud_Time_1500Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1500Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1500Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["GenusOfMediumsCloud_Time_1500Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1500Z"]= $data->HeightOfHighClouds1;
+
+
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["Wind_Run_Time_1500Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["DurationOfSunshine_Time_1500Z"]= $data->DurationOfSunshine;
+
+
 
                 $array_synopticreportdataforADayFromObservationSlip1500Z [$i]["WetBulbTemperature_Time_1500Z"]= $data->Wet_Bulb;
+
             }
 
             ///////FROM MORE FORM FIELDS TABLE
@@ -950,8 +1146,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["PastWeather_Time_1500Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["GrassMinTemp_Time_1500Z"]= $data->GrassMinTemp;
+                  $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["GrassMinTemp_Time_1500Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["CI_OfPrecipitation_Time_1500Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["BE_OfPrecipitation_Time_1500Z"]= $data->BE_OfPrecipitation;
@@ -961,7 +1156,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["IndicatorOfTypeOfIntrumentation_Time_1500Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["DurationOfSunshine_Time_1500Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["SignOfPressureChange_Time_1500Z"]= $data->SignOfPressureChange;
 
@@ -969,7 +1163,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["VapourPressure_Time_1500Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["Wind_Run_Time_1500Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z [$i]["T_H_Graph_Time_1500Z"]= $data->T_H_Graph;
 
@@ -984,25 +1177,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip1800Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["Same_Day7"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HorizontalVisibility_Time_1800Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HorizontalVisibility_Time_1800Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HorizontalVisibility_Time_1800Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["TotalAmountOfAllClouds_Time_1800Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["WindDirection_Time_1800Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["WindSpeed_Time_1800Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["WindDirection_Time_1800Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["WindSpeed_Time_1800Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AirTemperature_Time_1800Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["DewPointTemperature_Time_1800Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PressureAtStationLevel_Time_1800Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AirTemperature_Time_1800Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["DewPointTemperature_Time_1800Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PressureAtStationLevel_Time_1800Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfPrecipitation_Time_1800Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PresentWeather_Time_1800Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PresentWeatherCode_Time_1800Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PastWeather_Time_1800Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfLowClouds_Time_1800Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["LowCloudsOftheGenera_Time_1800Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["MediumCloudsOftheGenera_Time_1800Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HighCloudsOftheGenera_Time_1800Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["LowCloudsOftheGenera_Time_1800Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["MediumCloudsOftheGenera_Time_1800Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HighCloudsOftheGenera_Time_1800Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -1016,28 +1230,42 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfEvaporation_Time_1800Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["PressureChgIn24Hrs_Time_1800Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualLowCloudLayer_Time_1800Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfLowCloud_Time_1800Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1800Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualLowCloudLayer_Time_1800Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfLowCloud_Time_1800Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_1800Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1800Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfMediumCloud_Time_1800Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1800Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualMediumCloudLayer_Time_1800Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfMediumCloud_Time_1800Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_1800Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualHighCloudLayer_Time_1800Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfHighCloud_Time_1800Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1800Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualHighCloudLayer_Time_1800Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfHighCloud_Time_1800Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_1800Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1800Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfMediumsCloud_Time_1800Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1800Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_1800Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["GenusOfMediumsCloud_Time_1800Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_1800Z"]= $data->HeightOfHighClouds1;
+
+
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["Wind_Run_Time_1800Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["DurationOfSunshine_Time_1800Z"]= $data->DurationOfSunshine;
+
 
                 $array_synopticreportdataforADayFromObservationSlip1800Z [$i]["WetBulbTemperature_Time_1800Z"]= $data->Wet_Bulb;
+
             }
 
             ///////FROM MORE FORM FIELDS TABLE
@@ -1058,8 +1286,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["PastWeather_Time_1800Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["GrassMinTemp_Time_1800Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["GrassMinTemp_Time_1800Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["CI_OfPrecipitation_Time_1800Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["BE_OfPrecipitation_Time_1800Z"]= $data->BE_OfPrecipitation;
@@ -1069,7 +1296,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["IndicatorOfTypeOfIntrumentation_Time_1800Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["DurationOfSunshine_Time_1800Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["SignOfPressureChange_Time_1800Z"]= $data->SignOfPressureChange;
 
@@ -1077,7 +1303,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["VapourPressure_Time_1800Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["Wind_Run_Time_1800Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z [$i]["T_H_Graph_Time_1800Z"]= $data->T_H_Graph;
 
@@ -1093,25 +1318,46 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             foreach($synopticreportdataforADayFromObservationSlip2100Z as $data){
 
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["Same_Day8"]=$data->DayOfTheMonth ;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HorizontalVisibility_Time_2100Z"]= $data->Visibility;
+                //FOR HORIZONTAL VISIBILITY
+                //IF U PICK FIG. FROM 6000 you ADD 50 to the FIRST DIGIT OF THE FIG.E.G GOT 7000 YOU ADD 50 + 7.
+                //IF U PICK LESS THAN 6000 YOY TEK THE FIRST 2 DIGITS OF THE FIG
+                if($data->Visibility>=6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HorizontalVisibility_Time_2100Z"]= 50 + substr($data->Visibility,0,1);
+
+
+                }elseif($data->Visibility<6000){
+
+                    $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HorizontalVisibility_Time_2100Z"]= substr($data->Visibility,0,2); //0 means start from the first digit.then 2 means hw mny digits to tek frm the fig
+
+
+                }
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["TotalAmountOfAllClouds_Time_2100Z"]= $data->TotalAmountOfAllClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["WindDirection_Time_2100Z"]= $data->Wind_Direction;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["WindSpeed_Time_2100Z"]= $data->Wind_Speed;
+                //BOTH WIND DIRECTION AND WIND SPEED FROM OBSERVATION SLIP.
+                //TEK THE FIRST 2 DIGITS OF THE STRING.
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["WindDirection_Time_2100Z"]= substr($data->Wind_Direction,0,2);  //substr($data['HeightOfHighClouds2'],0,3);
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["WindSpeed_Time_2100Z"]= substr($data->Wind_Speed,0,2);
 
-
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AirTemperature_Time_2100Z"]= $data->Dry_Bulb;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["DewPointTemperature_Time_2100Z"]= (((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2);
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PressureAtStationLevel_Time_2100Z"]= $data->CLP;  //Pressure at the station level
+                //for AIR TEMP and DEW POINT and Pressure at Station Level YOU IGNORE THE DECIMAL POINT.E.G 25.5 U TEK 255
+                // str_replace('.','',$figure))
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AirTemperature_Time_2100Z"]= str_replace('.', '',$data->Dry_Bulb);
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["DewPointTemperature_Time_2100Z"]= str_replace('.', '',(((3 * $data->Wet_Bulb )- ($data->Dry_Bulb))/2));
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PressureAtStationLevel_Time_2100Z"]= str_replace('.', '',$data->CLP);  //Pressure at the station level
 
 
 
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfPrecipitation_Time_2100Z"]= $data->Rainfall;
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PresentWeather_Time_2100Z"]= $data->Present_Weather;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PresentWeatherCode_Time_2100Z"]= $data->Present_WeatherCode;
+
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PastWeather_Time_2100Z"]= $data->Past_Weather;
 
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfLowClouds_Time_2100Z"]= $data->TotalAmountOfLowClouds; //TotalAmountOfLowClouds
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["LowCloudsOftheGenera_Time_2100Z"]= $data->TypeOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["MediumCloudsOftheGenera_Time_2100Z"]= $data->TypeOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HighCloudsOftheGenera_Time_2100Z"]= $data->TypeOfHighClouds;
+
+                //ALL THESE YOU TEK THE SECOND INPUT.
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["LowCloudsOftheGenera_Time_2100Z"]= $data->TypeOfLowClouds2;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["MediumCloudsOftheGenera_Time_2100Z"]= $data->TypeOfMediumClouds2;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HighCloudsOftheGenera_Time_2100Z"]= $data->TypeOfHighClouds2;
 
 
 
@@ -1125,28 +1371,45 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfEvaporation_Time_2100Z"]= $data->Piche_Read;
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["PressureChgIn24Hrs_Time_2100Z"]= $data->CLP;
 
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualLowCloudLayer_Time_2100Z"]= $data->OktasOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfLowCloud_Time_2100Z"]= $data->CLCODEOfLowClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_2100Z"]= $data->HeightOfLowClouds;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualLowCloudLayer_Time_2100Z"]= $data->OktasOfLowClouds1;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfLowCloud_Time_2100Z"]= $data->CLCODEOfLowClouds1;
+
+                //HEIGHT OF LOW CLOUD
+                //TEK THE FIRST 2 FIGURES OF THE STRING
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfLowCloudLayerOfMass_Time_2100Z"]= substr($data->HeightOfLowClouds1,0,2);
 
 
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualMediumCloudLayer_Time_2100Z"]= $data->OktasOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfMediumCloud_Time_2100Z"]= $data->CLCODEOfMediumClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_2100Z"]= $data->HeightOfMediumClouds;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualMediumCloudLayer_Time_2100Z"]= $data->OktasOfMediumClouds1;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfMediumCloud_Time_2100Z"]= $data->CLCODEOfMediumClouds1;
+                //HEIGHT OF MEDIUM CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightOfBaseMediumCloudLayerOfMass_Time_2100Z"]= substr($data->HeightOfMediumClouds1,0,2) + 50;
 
 
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualHighCloudLayer_Time_2100Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfHighCloud_Time_2100Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_2100Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualHighCloudLayer_Time_2100Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfHighCloud_Time_2100Z"]= $data->CLCODEOfHighClouds1;
+                //HEIGHT OF HIGH CLOUD
+                //TEK THE FIRST TWO FIGURES OF THE STRING THEN ADD 50 to the number
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfHighCloudLayerOfMass_Time_2100Z"]= substr($data->HeightOfHighClouds1,0,2) + 50;
 
 
 
 
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_2100Z"]= $data->OktasOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfMediumsCloud_Time_2100Z"]= $data->CLCODEOfHighClouds;
-                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_2100Z"]= $data->HeightOfHighClouds;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["AmountOfIndividualMediumsCloudLayer_Time_2100Z"]= $data->OktasOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["GenusOfMediumsCloud_Time_2100Z"]= $data->CLCODEOfHighClouds1;
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["HeightBaseOfMediumsCloudLayerOfMass_Time_2100Z"]= $data->HeightOfHighClouds1;
+
+
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["Wind_Run_Time_2100Z"]= $data->Wind_Run;
+
+                $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["DurationOfSunshine_Time_2100Z"]= $data->DurationOfSunshine;
+
+
+
+
 
                 $array_synopticreportdataforADayFromObservationSlip2100Z [$i]["WetBulbTemperature_Time_2100Z"]= $data->Wet_Bulb;
+
             }
             //////////////////////////////////////////////////////////////////////
             ///////FROM MORE FORM FIELDS TABLE
@@ -1167,8 +1430,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["PastWeather_Time_2100Z"]= $data->Past_Weather;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["GrassMinTemp_Time_2100Z"]= $data->GrassMinTemp;
+                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["GrassMinTemp_Time_2100Z"]= $data->GrassMinTemp;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["CI_OfPrecipitation_Time_2100Z"]= $data->CI_OfPrecipitation;
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["BE_OfPrecipitation_Time_2100Z"]= $data->BE_OfPrecipitation;
@@ -1178,7 +1440,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //next page
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["IndicatorOfTypeOfIntrumentation_Time_2100Z"]= $data->IndicatorOfTypeOfIntrumentation;
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["DurationOfSunshine_Time_2100Z"]= $data->DurationOfSunshine;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["SignOfPressureChange_Time_2100Z"]= $data->SignOfPressureChange;
 
@@ -1186,7 +1447,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["VapourPressure_Time_2100Z"]= $data->VapourPressure;
 
-                $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["Wind_Run_Time_2100Z"]= $data->Wind_Run;
 
                 $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z [$i]["T_H_Graph_Time_2100Z"]= $data->T_H_Graph;
 
@@ -1248,8 +1508,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_0000Z [$i]["GroupIndicatorSeven_One_Time_0000Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_0000Z [$i]["PresentWeather_Time_0000Z"]= $array_synopticreportdataforADayFromObservationSlip0000Z[$i]["PresentWeather_Time_0000Z"];
-            $finalarraymerge_Time_0000Z [$i]["PastWeather_Time_0000Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z[$i]["PastWeather_Time_0000Z"]; //MFF //MMF
+            $finalarraymerge_Time_0000Z [$i]["PresentWeatherCode_Time_0000Z"]= $array_synopticreportdataforADayFromObservationSlip0000Z[$i]["PresentWeatherCode_Time_0000Z"];
+            $finalarraymerge_Time_0000Z [$i]["PastWeather_Time_0000Z"]= $array_synopticreportdataforADayFromObservationSlip0000Z[$i]["PastWeather_Time_0000Z"]; //MFF //MMF
 
             $finalarraymerge_Time_0000Z [$i]["GroupIndicatorEight_One_Time_0000Z"]= 8; //Hard Coded
             $finalarraymerge_Time_0000Z [$i]["AmountOfLowClouds_Time_0000Z"]= $array_synopticreportdataforADayFromObservationSlip0000Z[$i]["AmountOfLowClouds_Time_0000Z"]; //OS
@@ -1283,7 +1543,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_0000Z [$i]["GroupIndicator55_Time_0000Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_0000Z [$i]["DurationOfSunshine_Time_0000Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0000Z[$i]["DurationOfSunshine_Time_0000Z"]; //MMF
+            $finalarraymerge_Time_0000Z [$i]["DurationOfSunshine_Time_0000Z"]= $array_synopticreportdataforADayFromObservationSlip0000Z[$i]["DurationOfSunshine_Time_0000Z"]; //MMF
 
 
             $finalarraymerge_Time_0000Z [$i]["GroupIndicatorFive_Two_Time_0000Z"]= 5; //hard coded
@@ -1388,8 +1648,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_0300Z [$i]["GroupIndicatorSeven_One_Time_0300Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_0300Z [$i]["PresentWeather_Time_0300Z"]= $array_synopticreportdataforADayFromObservationSlip0300Z[$i]["PresentWeather_Time_0300Z"];
-            $finalarraymerge_Time_0300Z [$i]["PastWeather_Time_0300Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z[$i]["PastWeather_Time_0300Z"]; //MFF //MMF
+            $finalarraymerge_Time_0300Z [$i]["PresentWeatherCode_Time_0300Z"]= $array_synopticreportdataforADayFromObservationSlip0300Z[$i]["PresentWeatherCode_Time_0300Z"];
+            $finalarraymerge_Time_0300Z [$i]["PastWeather_Time_0300Z"]= $array_synopticreportdataforADayFromObservationSlip0300Z[$i]["PastWeather_Time_0300Z"]; //MFF //MMF
 
             $finalarraymerge_Time_0300Z [$i]["GroupIndicatorEight_One_Time_0300Z"]= 8; //Hard Coded
             $finalarraymerge_Time_0300Z [$i]["AmountOfLowClouds_Time_0300Z"]= $array_synopticreportdataforADayFromObservationSlip0300Z[$i]["AmountOfLowClouds_Time_0300Z"]; //OS
@@ -1423,7 +1683,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_0300Z [$i]["GroupIndicator55_Time_0300Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_0300Z [$i]["DurationOfSunshine_Time_0300Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0300Z[$i]["DurationOfSunshine_Time_0300Z"]; //MMF
+            $finalarraymerge_Time_0300Z [$i]["DurationOfSunshine_Time_0300Z"]= $array_synopticreportdataforADayFromObservationSlip0300Z[$i]["DurationOfSunshine_Time_0300Z"]; //MMF
 
 
             $finalarraymerge_Time_0300Z [$i]["GroupIndicatorFive_Two_Time_0300Z"]= 5; //hard coded
@@ -1529,8 +1789,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_0600Z [$i]["GroupIndicatorSeven_One_Time_0600Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_0600Z [$i]["PresentWeather_Time_0600Z"]= $array_synopticreportdataforADayFromObservationSlip0600Z[$i]["PresentWeather_Time_0600Z"];
-            $finalarraymerge_Time_0600Z [$i]["PastWeather_Time_0600Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z[$i]["PastWeather_Time_0600Z"]; //MFF //MMF
+            $finalarraymerge_Time_0600Z [$i]["PresentWeatherCode_Time_0600Z"]= $array_synopticreportdataforADayFromObservationSlip0600Z[$i]["PresentWeatherCode_Time_0600Z"];
+            $finalarraymerge_Time_0600Z [$i]["PastWeather_Time_0600Z"]= $array_synopticreportdataforADayFromObservationSlip0600Z[$i]["PastWeather_Time_0600Z"]; //MFF //MMF
+
+
 
             $finalarraymerge_Time_0600Z [$i]["GroupIndicatorEight_One_Time_0600Z"]= 8; //Hard Coded
             $finalarraymerge_Time_0600Z [$i]["AmountOfLowClouds_Time_0600Z"]= $array_synopticreportdataforADayFromObservationSlip0600Z[$i]["AmountOfLowClouds_Time_0600Z"]; //OS
@@ -1564,7 +1826,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_0600Z [$i]["GroupIndicator55_Time_0600Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_0600Z [$i]["DurationOfSunshine_Time_0600Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0600Z[$i]["DurationOfSunshine_Time_0600Z"]; //MMF
+            $finalarraymerge_Time_0600Z [$i]["DurationOfSunshine_Time_0600Z"]= $array_synopticreportdataforADayFromObservationSlip0600Z[$i]["DurationOfSunshine_Time_0600Z"]; //MMF
 
 
             $finalarraymerge_Time_0600Z [$i]["GroupIndicatorFive_Two_Time_0600Z"]= 5; //hard coded
@@ -1668,8 +1930,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_0900Z [$i]["GroupIndicatorSeven_One_Time_0900Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_0900Z [$i]["PresentWeather_Time_0900Z"]= $array_synopticreportdataforADayFromObservationSlip0900Z[$i]["PresentWeather_Time_0900Z"];
-            $finalarraymerge_Time_0900Z [$i]["PastWeather_Time_0900Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z[$i]["PastWeather_Time_0900Z"]; //MFF //MMF
+            $finalarraymerge_Time_0900Z [$i]["PresentWeatherCode_Time_0900Z"]= $array_synopticreportdataforADayFromObservationSlip0900Z[$i]["PresentWeatherCode_Time_0900Z"];
+            $finalarraymerge_Time_0900Z [$i]["PastWeather_Time_0900Z"]= $array_synopticreportdataforADayFromObservationSlip0900Z[$i]["PastWeather_Time_0900Z"]; //MFF //MMF
 
             $finalarraymerge_Time_0900Z [$i]["GroupIndicatorEight_One_Time_0900Z"]= 8; //Hard Coded
             $finalarraymerge_Time_0900Z [$i]["AmountOfLowClouds_Time_0900Z"]= $array_synopticreportdataforADayFromObservationSlip0900Z[$i]["AmountOfLowClouds_Time_0900Z"]; //OS
@@ -1703,7 +1965,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_0900Z [$i]["GroupIndicator55_Time_0900Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_0900Z [$i]["DurationOfSunshine_Time_0900Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable0900Z[$i]["DurationOfSunshine_Time_0900Z"]; //MMF
+            $finalarraymerge_Time_0900Z [$i]["DurationOfSunshine_Time_0900Z"]= $array_synopticreportdataforADayFromObservationSlip0900Z[$i]["DurationOfSunshine_Time_0900Z"]; //OS
 
 
             $finalarraymerge_Time_0900Z [$i]["GroupIndicatorFive_Two_Time_0900Z"]= 5; //hard coded
@@ -1808,8 +2070,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_1200Z [$i]["GroupIndicatorSeven_One_Time_1200Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_1200Z [$i]["PresentWeather_Time_1200Z"]= $array_synopticreportdataforADayFromObservationSlip1200Z[$i]["PresentWeather_Time_1200Z"];
-            $finalarraymerge_Time_1200Z [$i]["PastWeather_Time_1200Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z[$i]["PastWeather_Time_1200Z"]; //MFF //MMF
+            $finalarraymerge_Time_1200Z [$i]["PresentWeatherCode_Time_1200Z"]= $array_synopticreportdataforADayFromObservationSlip1200Z[$i]["PresentWeatherCode_Time_1200Z"];
+            $finalarraymerge_Time_1200Z [$i]["PastWeather_Time_1200Z"]= $array_synopticreportdataforADayFromObservationSlip1200Z[$i]["PastWeather_Time_1200Z"]; //MFF //MMF
 
             $finalarraymerge_Time_1200Z [$i]["GroupIndicatorEight_One_Time_1200Z"]= 8; //Hard Coded
             $finalarraymerge_Time_1200Z [$i]["AmountOfLowClouds_Time_1200Z"]= $array_synopticreportdataforADayFromObservationSlip1200Z[$i]["AmountOfLowClouds_Time_1200Z"]; //OS
@@ -1843,7 +2105,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_1200Z [$i]["GroupIndicator55_Time_1200Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_1200Z [$i]["DurationOfSunshine_Time_1200Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1200Z[$i]["DurationOfSunshine_Time_1200Z"]; //MMF
+            $finalarraymerge_Time_1200Z [$i]["DurationOfSunshine_Time_1200Z"]= $array_synopticreportdataforADayFromObservationSlip1200Z[$i]["DurationOfSunshine_Time_1200Z"]; //OS
 
 
             $finalarraymerge_Time_1200Z [$i]["GroupIndicatorFive_Two_Time_1200Z"]= 5; //hard coded
@@ -1950,8 +2212,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_1500Z [$i]["GroupIndicatorSeven_One_Time_1500Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_1500Z [$i]["PresentWeather_Time_1500Z"]= $array_synopticreportdataforADayFromObservationSlip1500Z[$i]["PresentWeather_Time_1500Z"];
-            $finalarraymerge_Time_1500Z [$i]["PastWeather_Time_1500Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z[$i]["PastWeather_Time_1500Z"]; //MFF //MMF
+            $finalarraymerge_Time_1500Z [$i]["PresentWeatherCode_Time_1500Z"]= $array_synopticreportdataforADayFromObservationSlip1500Z[$i]["PresentWeatherCode_Time_1500Z"];
+            $finalarraymerge_Time_1500Z [$i]["PastWeather_Time_1500Z"]= $array_synopticreportdataforADayFromObservationSlip1500Z[$i]["PastWeather_Time_1500Z"]; //MFF //MMF
 
             $finalarraymerge_Time_1500Z [$i]["GroupIndicatorEight_One_Time_1500Z"]= 8; //Hard Coded
             $finalarraymerge_Time_1500Z [$i]["AmountOfLowClouds_Time_1500Z"]= $array_synopticreportdataforADayFromObservationSlip1500Z[$i]["AmountOfLowClouds_Time_1500Z"]; //OS
@@ -1985,7 +2247,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_1500Z [$i]["GroupIndicator55_Time_1500Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_1500Z [$i]["DurationOfSunshine_Time_1500Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1500Z[$i]["DurationOfSunshine_Time_1500Z"]; //MMF
+            $finalarraymerge_Time_1500Z [$i]["DurationOfSunshine_Time_1500Z"]= $array_synopticreportdataforADayFromObservationSlip1500Z[$i]["DurationOfSunshine_Time_1500Z"]; //OS
 
 
             $finalarraymerge_Time_1500Z [$i]["GroupIndicatorFive_Two_Time_1500Z"]= 5; //hard coded
@@ -2092,8 +2354,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_1800Z [$i]["GroupIndicatorSeven_One_Time_1800Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_1800Z [$i]["PresentWeather_Time_1800Z"]= $array_synopticreportdataforADayFromObservationSlip1800Z[$i]["PresentWeather_Time_1800Z"];
-            $finalarraymerge_Time_1800Z [$i]["PastWeather_Time_1800Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z[$i]["PastWeather_Time_1800Z"]; //MFF //MMF
+            $finalarraymerge_Time_1800Z [$i]["PresentWeatherCode_Time_1800Z"]= $array_synopticreportdataforADayFromObservationSlip1800Z[$i]["PresentWeatherCode_Time_1800Z"];
+            $finalarraymerge_Time_1800Z [$i]["PastWeather_Time_1800Z"]= $array_synopticreportdataforADayFromObservationSlip1800Z[$i]["PastWeather_Time_1800Z"]; //OS
 
             $finalarraymerge_Time_1800Z [$i]["GroupIndicatorEight_One_Time_1800Z"]= 8; //Hard Coded
             $finalarraymerge_Time_1800Z [$i]["AmountOfLowClouds_Time_1800Z"]= $array_synopticreportdataforADayFromObservationSlip1800Z[$i]["AmountOfLowClouds_Time_1800Z"]; //OS
@@ -2127,7 +2389,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_1800Z [$i]["GroupIndicator55_Time_1800Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_1800Z [$i]["DurationOfSunshine_Time_1800Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable1800Z[$i]["DurationOfSunshine_Time_1800Z"]; //MMF
+            $finalarraymerge_Time_1800Z [$i]["DurationOfSunshine_Time_1800Z"]= $array_synopticreportdataforADayFromObservationSlip1800Z[$i]["DurationOfSunshine_Time_1800Z"]; //OS
 
 
             $finalarraymerge_Time_1800Z [$i]["GroupIndicatorFive_Two_Time_1800Z"]= 5; //hard coded
@@ -2232,8 +2494,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
             $finalarraymerge_Time_2100Z [$i]["GroupIndicatorSeven_One_Time_2100Z"]= 7; //Hard Coded
-            $finalarraymerge_Time_2100Z [$i]["PresentWeather_Time_2100Z"]= $array_synopticreportdataforADayFromObservationSlip2100Z[$i]["PresentWeather_Time_2100Z"];
-            $finalarraymerge_Time_2100Z [$i]["PastWeather_Time_2100Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z[$i]["PastWeather_Time_2100Z"]; //MFF //MMF
+            $finalarraymerge_Time_2100Z [$i]["PresentWeatherCode_Time_2100Z"]= $array_synopticreportdataforADayFromObservationSlip2100Z[$i]["PresentWeatherCode_Time_2100Z"];
+            $finalarraymerge_Time_2100Z [$i]["PastWeather_Time_2100Z"]= $array_synopticreportdataforADayFromObservationSlip2100Z[$i]["PastWeather_Time_2100Z"]; //MFF //MMF
 
             $finalarraymerge_Time_2100Z [$i]["GroupIndicatorEight_One_Time_2100Z"]= 8; //Hard Coded
             $finalarraymerge_Time_2100Z [$i]["AmountOfLowClouds_Time_2100Z"]= $array_synopticreportdataforADayFromObservationSlip2100Z[$i]["AmountOfLowClouds_Time_2100Z"]; //OS
@@ -2267,7 +2529,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $finalarraymerge_Time_2100Z [$i]["GroupIndicator55_Time_2100Z"]= 55; //hard coded
 
-            $finalarraymerge_Time_2100Z [$i]["DurationOfSunshine_Time_2100Z"]= $array_synopticreportdataforADayFrom_MoreFormFieldsTable2100Z[$i]["DurationOfSunshine_Time_2100Z"]; //MMF
+            $finalarraymerge_Time_2100Z [$i]["DurationOfSunshine_Time_2100Z"]= $array_synopticreportdataforADayFromObservationSlip2100Z[$i]["DurationOfSunshine_Time_2100Z"]; //OS
 
 
             $finalarraymerge_Time_2100Z [$i]["GroupIndicatorFive_Two_Time_2100Z"]= 5; //hard coded
@@ -3103,6 +3365,10 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         }
         ?>
         </table>
+        <br><br>
+        </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+        <span><strong>Report Generated BY:</strong></span> <span class="dotted-line"><?php echo $name;?></span>
+
         <br><br>
         <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
         <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>

@@ -29,7 +29,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             if(is_array($displaynewarchivemonthlyrainfallForm) && count($displaynewarchivemonthlyrainfallForm)) {
                 ?>
                 <div class="row">
-                    <form action='<?= base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/insertMonthlyRainfallFormReportData/' method="post" enctype="multipart/form-data">
+                    <form action="<?php echo base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/insertMonthlyRainfallFormReportData/" method="post" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div id="output"></div>
                             <script language="javascript">
@@ -55,8 +55,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">Select Date</span>
-                                        <input type="text" name="date_archivedailymonthlyrainfalldata" required class="form-control" placeholder="Enter select date" id="date">
-                                        <input type="hidden" name="checkduplicateEntryOnAddArchieveMonthlyRainfallFormReportData_hiddentextfield" id="checkduplicateEntryOnAddArchieveMonthlyRainfallFormReportData_hiddentextfield">
+                                        <input type="text" name="date_archivedailymonthlyrainfalldata"  class="form-control compulsory" placeholder="Enter select date" id="date">
+                                        
                                     </div>
                                 </div>
 
@@ -65,7 +65,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">Station Name</span>
-                                            <input type="text" name="station_archivedailymonthlyrainfalldata" id="station_archivedailymonthlyrainfalldata" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                                            <input type="text" name="station_archivedailymonthlyrainfalldata" id="station_archivedailymonthlyrainfalldata"  class="form-control compulsory" value="<?php echo $userstation;?>"  readonly class="form-control" >
 
                                         </div>
                                     </div>
@@ -75,7 +75,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon"> Station Number</span>
-                                            <input type="text" name="stationNo_archivedailymonthlyrainfalldata" required class="form-control" id="stationNo_archivedailymonthlyrainfalldata" readonly  value="<?php echo $userstationNo;?>" readonly="readonly" >
+                                            <input type="text" name="stationNo_archivedailymonthlyrainfalldata"  class="form-control compulsory" id="stationNo_archivedailymonthlyrainfalldata" readonly  value="<?php echo $userstationNo;?>" readonly="readonly" >
                                         </div>
                                     </div>
 
@@ -85,7 +85,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">RAINFALL</span>
-                                        <input type="text" name="rainfall_archivedailymonthlyrainfalldata" id="rainfall_archivedailymonthlyrainfalldata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter MAX" >
+                                        <input type="text" name="rainfall_archivedailymonthlyrainfalldata" id="rainfall_archivedailymonthlyrainfalldata"  required class="form-control" required placeholder="Enter MAX" >
                                     </div>
                                 </div>
 
@@ -96,12 +96,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="clearfix"></div>
                         </div>
 
-                        <div class="modal-footer clearfix">
+                        <center>
 
-                            <a href="<?= base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                            <a href="<?php echo base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-                            <button type="submit" id="postarchiveMonthlyRainfallFormReportdata_button" name="postarchiveMonthlyRainfallFormReportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Save  New Archive Dekadal Form</button>
-                        </div>
+                            <button type="submit" id="postarchiveMonthlyRainfallFormReportdata_button" name="postarchiveMonthlyRainfallFormReportdata_button" class="btn btn-primary"><i class="fa fa-plus"></i> SUBMIT</button>
+                        </center>
                     </form>
                 </div>
                 <?php
@@ -111,7 +111,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $rainfalldataid = $rainfalldata->id;
                     ?>
                     <div class="row">
-                        <form action='<?= base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/UpdateMonthlyRainfallFormReportData' method="post" enctype="multipart/form-data">
+                        <form action="<?php echo base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/UpdateMonthlyRainfallFormReportData" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                                 <div id="output"></div>
                                 <script language="javascript">
@@ -164,7 +164,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">RAINFALL</span>
-                                            <input type="text" name="rainfall" id="rainfall" value="<?php echo $rainfalldata->Rainfall;?>" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter RAINFALL" >
+                                            <input type="text" name="rainfall" id="rainfall" value="<?php echo $rainfalldata->Rainfall;?>"  required class="form-control" required placeholder="Enter RAINFALL" >
                                         </div>
                                     </div>
 
@@ -187,12 +187,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="modal-footer clearfix">
+                            <center>
 
-                                <a href="<?php echo base_url()."index.php/ArchiveMonthlyRainfallFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                                <a href="<?php echo base_url(); ?>index.php/ArchiveMonthlyRainfallFormReportData/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-                                <button type="submit" name="updatearchiveMonthlyRainfallformreportdata_button" id="updatearchiveMonthlyRainfallformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Archive Rainfall Form</button>
-                            </div>
+                                <button type="submit" name="updatearchiveMonthlyRainfallformreportdata_button" id="updatearchiveMonthlyRainfallformreportdata_button" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE</button>
+                            </center>
                         </form>
                     </div>
                     <?php
@@ -202,7 +202,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="row">
                     <div class="col-xs-3"><a class="btn btn-primary no-print"
                                              href="<?php echo base_url()."index.php/ArchiveMonthlyRainfallFormReportData/DisplayNewArchiveMonthlyRaifallForm/";?>"
-                        <i class="fa fa-plus"></i> Add new Archive Monthly Rainfall</a>
+                        <i class="fa fa-plus"></i> Add Archive Monthly Rainfall</a>
 
 
 
@@ -228,7 +228,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <th>Station No</th>
 
                                         <th>RAINFALL</th>
-                                    <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
+                                    <?php if($userrole=='SeniorDataOfficer'){ ?>
                                             <th>Approved</th>
 
                                             <th>By</th>
@@ -251,25 +251,23 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                                 <td ><?php echo $data->StationName;?></td>
                                                 <td ><?php echo $data->StationNumber;?></td>
                                                 <td ><?php echo $data->Rainfall;?></td>
+                                           <?php if($userrole=='SeniorDataOfficer'  ){ ?>
+                                             <td><?php echo $data->Approved;?></td>
 
-                                                <td><?php echo $data->Approved;?></td>
-
-                                                <td><?php echo $data->SubmittedBy;?></td>
-                                           <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><td class="no-print">
-
+                                             <td><?php echo $data->SubmittedBy;?></td>
+                                             <td class="no-print">
                                                     <a href="<?php echo base_url() . "index.php/ArchiveMonthlyRainfallFormReportData/DisplayArchivedMonthlyRainfallFormForUpdate/" .$id ;?>" style="cursor:pointer;">Edit</a>
-                                                   <!-- or <a href="<?php echo base_url() . "index.php/ArchiveMonthlyRainfallFormReportData/DeleteRainfallData/" .$id ;?>"
-                                                          onClick="return confirm('Are you sure you want to delete <?php echo $data->StationName;?>');">Delete</a></td><?php }?> -->
-                                            </tr>
+                                              </tr>
 
                                             <?php
                                         }
                                     }
+                                  }
                                     ?>
                                     </tbody>
                                 </table>
                                 <br><br>
-                                <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                                <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
                             </div><!-- /.box-body -->
                         </div><!-- /.box -->
                     </div>
@@ -306,6 +304,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveMonthlyRainfallFormReportData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveMonthlyRainfallFormReportData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveMonthlyRainfallFormReportData_hiddentextfield").focus();
+                    return false;
+
+                }
 
                 //Check that Date selected
                 var date=$('#date').val();
@@ -539,3 +546,4 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

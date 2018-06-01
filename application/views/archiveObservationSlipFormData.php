@@ -29,9 +29,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     if(is_array($displaynewarchiveobervationslipform) && count($displaynewarchiveobervationslipform)) {
         ?>
         <div class="row">
-        <form action='<?php echo base_url(); ?>index.php/ArchiveObservationSlipFormData/insertArchiveObservationSlipFormData/' method="post" enctype="multipart/form-data">
-        <div class="modal-body">
-        <div id="output"></div>
+        <form action='<?php echo base_url(); ?>index.php/ArchiveObservationSlipFormData/insertArchiveObservationSlipFormData/' id ="regForm" method="post" enctype="multipart/form-data">
         <script language="javascript">
             function allowIntegerInputOnly(inputvalue) {
                 //var invalidChars = /[^0-9]/gi
@@ -49,392 +47,802 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
             }
         </script>
-        <div class="col-lg-6">
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Select Date</span>
-                <input type="text" name="date_archiveobservationslipformdata" required class="form-control" placeholder="Enter select date" id="date">
-                <input type="hidden" name="checkduplicateEntryOnAddArchiveObservationSlipFormData_hiddentextfield" id="checkduplicateEntryOnAddArchiveObservationSlipFormData_hiddentextfield">
+		<!-- Section 1 -->
+			  <div class="tab"><h4>Station & CLouds Info:</h4>
+			   <table id="example1" class="table table-bordered table-striped">
+			   		<tr>
+               <?php if($userrole=='SeniorDataOfficer' || $userrole=='DataOfficer'){ ?>
+						<td colspan = "4">
 
-            </div>
-        </div>
+								<div class="input-group">
+									<span class="input-group-addon">Station Name</span>
+								<select name="station_archiveobservationslipformdata" id="stationManager"   class="form-control" placeholder="Select Station">
+                      <option value="">Select Stations</option>
+                      <?php
+                      if (is_array($stationsdata) && count($stationsdata)) {
+                          foreach($stationsdata as $station){?>
+                              <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
+                          <?php }
+                      } ?>
+                  </select>
+								</div>
 
+						</td>
+						<td colspan = "4">
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Station Name</span>
-                    <input type="text" name="station_archiveobservationslipformdata" id="station_archiveobservationslipformdata" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								 <input type="text" name="stationNo_archiveobservationslipformdata"  class="form-control" id="stationNoManager" readonly class="form-control" value="" readonly="readonly" >
+							</div>
 
-                </div>
-            </div>
+						</td>
+          <?php } else{ ?>
+            <td colspan = "4">
 
+								<div class="input-group">
+									<span class="input-group-addon">Station Name</span>
+									<input type="text" name="station_archiveobservationslipformdata" id="station_archiveobservationslipformdata"  class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
 
+								</div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"> Station Number</span>
-                    <input type="text" name="stationNo_archiveobservationslipformdata" required class="form-control" id="stationNo_archiveobservationslipformdata" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
-                </div>
-            </div>
+						</td>
+						<td colspan = "4">
 
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								 <input type="text" name="stationNo_archiveobservationslipformdata"  class="form-control" id="stationNo_archiveobservationslipformdata" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+							</div>
 
+						</td>
+          <?php } ?>
+						<td colspan = "4">
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">TIME</span>
-                <select name="time_archiveobservationslipformdata" id="time_archiveobservationslipformdata" required class="form-control">
-                    <option value="">--Select TIME Options--</option>
-                    <option value="0000Z">0000Z</option>
-                    <option value="0100Z">0100Z</option>
-                    <option value="0200Z">0200Z</option>
-                    <option value="0300Z">0300Z</option>
-                    <option value="0400Z">0400Z</option>
-                    <option value="0500Z">0500Z</option>
-                    <option value="0600Z">0600Z</option>
-                    <option value="0700Z">0700Z</option>
-                    <option value="0800Z">0800Z</option>
-                    <option value="0900Z">0900Z</option>
-                    <option value="1000Z">1000Z</option>
-                    <option value="1100Z">1100Z</option>
-                    <option value="1200Z">1200Z</option>
-                    <option value="1300Z">1300Z</option>
-                    <option value="1400Z">1400Z</option>
-                    <option value="1500Z">1500Z</option>
-                    <option value="1600Z">1600Z</option>
-                    <option value="1700Z">1700Z</option>
-                    <option value="1800Z">1800Z</option>
-                    <option value="1900Z">1900Z</option>
-                    <option value="2000Z">2000Z</option>
-                    <option value="2100Z">2100Z</option>
-                    <option value="2200Z">2200Z</option>
-                    <option value="2300Z">2300Z</option>
-                </select>
-            </div>
-        </div>
+								<div class="input-group">
+									<span class="input-group-addon">Select Date</span>
+									<input type="text" name="date_archiveobservationslipformdata"  class="form-control compulsory" placeholder="Enter select date" id="date">
+								</div>
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Total amount of all clouds</span>
-                <input type="text" name="totalamountofallclouds_archiveobservationslipformdata"  id="totalamountofallclouds_archiveobservationslipformdata"  onkeyup="allowIntegerInputOnly(this)"required class="form-control" required placeholder=" Enter total amount of all clouds" >
-            </div>
-        </div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan = "4">
+							 <div class="input-group">
+								<span class="input-group-addon">TIME</span>
+								<select name="time_archiveobservationslipformdata" id="time_archiveobservationslipformdata"  class="form-control compulsory">
+									<option value=""></option>
+									<option value="0000Z">0000Z</option>
+									<option value="0100Z">0100Z</option>
+									<option value="0200Z">0200Z</option>
+									<option value="0300Z">0300Z</option>
+									<option value="0400Z">0400Z</option>
+									<option value="0500Z">0500Z</option>
+									<option value="0600Z">0600Z</option>
+									<option value="0700Z">0700Z</option>
+									<option value="0800Z">0800Z</option>
+									<option value="0900Z">0900Z</option>
+									<option value="1000Z">1000Z</option>
+									<option value="1100Z">1100Z</option>
+									<option value="1200Z">1200Z</option>
+									<option value="1300Z">1300Z</option>
+									<option value="1400Z">1400Z</option>
+									<option value="1500Z">1500Z</option>
+									<option value="1600Z">1600Z</option>
+									<option value="1700Z">1700Z</option>
+									<option value="1800Z">1800Z</option>
+									<option value="1900Z">1900Z</option>
+									<option value="2000Z">2000Z</option>
+									<option value="2100Z">2100Z</option>
+									<option value="2200Z">2200Z</option>
+									<option value="2300Z">2300Z</option>
+								</select>
+							</div>
+						</td>
+						<td colspan="4">
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Total amount of low clouds</span>
-                <input type="text" name="totalamountoflowclouds_archiveobservationslipformdata" id="totalamountoflowclouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter total amount of low clouds" >
-            </div>
-        </div>
+								<div class="input-group">
+									<span class="input-group-addon">Total amount of all clouds</span>
+									 <select name="totalamountofallclouds_archiveobservationslipformdata"  id="totalamountofallclouds_archiveobservationslipformdata"  onkeyup="allowIntegerInputOnly(this)" class="form-control"  placeholder=" Enter total amount of all clouds" >
+										<option value="">--Select Total Amount Of All Clouds </option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+									</select>
+								</div>
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">TYPE LOW CLOUD</span>
-                <input type="text" name="TypeOfLowClouds_archiveobservationslipformdata"  id="TypeOfLowClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TwTw" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">OKTAS LOW CLOUD</span>
-                <input type="text" name="OktasOfLowClouds_archiveobservationslipformdata" id="OktasOfLowClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS LOW CLOUD" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">HEIGHT OF LOW CLOUD</span>
-                <input type="text" name="HeightOfLowClouds_archiveobservationslipformdata"  id="HeightOfLowClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder=" Enter HEIGHT LOW CLOUD " >
-
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">CL CODE</span>
-                <input type="text" name="CLCODEOfLowClouds_archiveobservationslipformdata"  id="CLCODEOfLowClouds_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE LOW CLOUD " >
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">TYPE MEDIUM CLOUD</span>
-                <input type="text" name="TypeOfMediumClouds_archiveobservationslipformdata"  id="TypeOfMediumClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE MEDIUM CLOUD" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">OKTAS MEDIUM CLOUD</span>
-                <input type="text" name="OktasOfMediumClouds_archiveobservationslipformdata" id="OktasOfMediumClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS MEDIUM CLOUD" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">HEIGHT MEDIUM CLOUD</span>
-                <input type="text" name="HeightOfMediumClouds_archiveobservationslipformdata"  id="HeightOfMediumClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder=" Enter HEIGHT MEDIUM CLOUD " >
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">CL CODE MEDIUM CLOUD</span>
-                <input type="text" name="CLCODEOfMediumClouds_archiveobservationslipformdata"  id="CLCODEOfMediumClouds_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE MEDIUM CLOUD " >
-
-            </div>
-        </div>
+						</td>
+						<td colspan="4">
 
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">TYPE HIGH CLOUD</span>
-                <input type="text" name="TypeOfHighClouds_archiveobservationslipformdata"  id="TypeOfHighClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE HIGH CLOUD" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">OKTAS MEDIUM CLOUD</span>
-                <input type="text" name="OktasOfHighClouds_archiveobservationslipformdata" id="OktasOfHighClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS HIGH CLOUD" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">HEIGHT HIGH CLOUD</span>
-                <input type="text" name="HeightOfHighClouds_archiveobservationslipformdata"  id="HeightOfHighClouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder=" Enter HEIGHT HIGH CLOUD " >
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">CL CODE MEDIUM CLOUD</span>
-                <input type="text" name="CLCODEOfHighClouds_archiveobservationslipformdata"  id="CLCODEOfHighClouds_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE HIGH CLOUD " >
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Cloud Searchlight Alidade Reading</span>
-                <input type="text" name="cloudsearchlight_archiveobservationslipformdata" id="cloudsearchlight_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Cloud Searchlight Alidade Reading" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Rainfall(mm)</span>
-                <input type="text" name="rainfall_archiveobservationslipformdata" id="rainfall_archiveobservationslipformdata"   class="form-control" placeholder="Enter Rainfall(mm)" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Dry Bulb</span>
-                <input type="text" name="drybulb_archiveobservationslipformdata" id="drybulb_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter Dry Bulb" >
-            </div>
-        </div>
+								<div class="input-group">
+									<span class="input-group-addon">Total amount of low clouds</span>
+									 <select name="totalamountoflowclouds_archiveobservationslipformdata" id="totalamountoflowclouds_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control "  placeholder="Enter total amount of low clouds" >
+										<option value="">--Select Total Amount of Low Clouds </option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
 
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">Wet Bulb</span>
-                <input type="text" name="wetbulb_archiveobservationslipformdata" id="wetbulb_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter Wet Bulb" >
-            </div>
-        </div>
+									</select>
+								</div>
+
+						</td>
+					</tr>
 
 
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">MAX Read</span>
-                <input type="text" name="maxRead_archiveobservationslipformdata"  id="maxRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MAX READ" >
-            </div>
-        </div>
+					<tr>
+						<td colspan = "4">
+							<b>Low</b>
+						</td>
+						<td colspan = "4">
+							<b>Medium</b>
+						</td>
+						<td colspan = "4">
+							<b>High</b>
+						</td>
+					</tr>
+					<tr>
+						<td><b>type</b></td> <td><b>oktas</b></td> <td><b>height</b></td> <td><b>clcode</b></td> <td><b>type</b></td> <td><b>oktas</b></td>
+						<td><b>height</b></td> <td><b>clcode</b></td> <td><b>type</b></td> <td><b>oktas</b></td> <td><b>height</b></td> <td><b>clcode</b></td>
+
+					</tr>
+
+					<!-- Type 1 clouds -->
+
+					<tr>
+						<td>
+						<select  name="TypeOfLowClouds1_archiveobservationslipformdata"  id="TypeOfLowClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of LOW Cloud" >
+						<option value=""></option>
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+
+						</select>
+						</td>
+
+						<td>
+							 <select name="OktasOfLowClouds1_archiveobservationslipformdata" id="OktasOfLowClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS  for LOW CLOUD" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+
+
+						</select>
+						</td>
+
+						<td>
+							<input type="text" name="HeightOfLowClouds1_archiveobservationslipformdata"  id="HeightLowClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = 'width:70px;'>
+						</td>
+
+						<td>
+							 <select  name="CLCODEOfLowClouds1_archiveobservationslipformdata"  id="CLCODEOfLowClouds1_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE of  LOW CLOUD " >
+							<option value=""></option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+
+						</select>
+						</td>
+
+						<td>
+							<select name="TypeOfMediumClouds1_archiveobservationslipformdata"  id="TypeOfMediumClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE OF MEDIUM CLOUD" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+
+						<td>
+							 <select name="OktasOfMediumClouds1_archiveobservationslipformdata" id="OktasOfMediumClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS  OF MEDIUM CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+
+						<td>
+							 <input type="text" name="HeightOfMediumClouds1_archiveobservationslipformdata"  id="HeightOfMediumClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+
+						<td>
+							<select name="CLCODEOfMediumClouds1_archiveobservationslipformdata"  id="CLCODEOfMediumClouds1_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE MEDIUM CLOUD " >
+							<option value=""> </option>
+							<option value="Ac">Ac</option>
+							<option value="As">As</option>
+							<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							 <select name="TypeOfHighClouds1_archiveobservationslipformdata"  id="TypeOfHighClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE OF HIGH CLOUD" >
+								<option value=""> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							<select name="OktasOfHighClouds1_archiveobservationslipformdata" id="OktasOfHighClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS OF HIGH CLOUD" >
+								<option value=""> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfHighClouds1_archiveobservationslipformdata"  id="HeightOfHighClouds1_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+						<td>
+							 <select name="CLCODEOfHighClouds1_archiveobservationslipformdata"  id="CLCODEOfHighClouds1_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE OF MEDIUM CLOUD " >
+								<option value=""></option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+
+							</select>
+						</td>
+					</tr>
+
+					<!--  Type 2 clouds -->
+
+					<tr>
+						<td>
+							 <select  name="TypeOfLowClouds2_archiveobservationslipformdata"  id="TypeOfLowClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of LOW CLOUD" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+
+							</select>
+						</td>
+
+						<td>
+							 <select name="OktasOfLowClouds2_archiveobservationslipformdata" id="OktasOfLowClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS OF LOW CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+
+						<td>
+							 <input type="text" name="HeightOfLowClouds2_archiveobservationslipformdata"  id="HeightOfLowClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+						<td>
+							 <select  name="CLCODEOfLowClouds2_archiveobservationslipformdata"  id="CLCODEOfLowClouds2_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE of LOW CLOUD " >
+							<option value=""> </option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+						</select>
+						</td>
+						<td>
+							  <select name="TypeOfMediumClouds2_archiveobservationslipformdata"  id="TypeOfMediumClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE OF MEDIUM CLOUD" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							<select name="OktasOfMediumClouds2_archiveobservationslipformdata" id="OktasOfMediumClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS OF MEDIUM CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							 <input type="text" name="HeightOfMediumClouds2_archiveobservationslipformdata"  id="HeightOfMediumClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width: 70px">
+						</td>
+						<td>
+							 <select name="CLCODEOfMediumClouds2_archiveobservationslipformdata"  id="CLCODEOfMediumClouds2_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF MEDIUM CLOUD " >
+							<option value=""> </option>
+							<option value="Ac">Ac</option>
+							<option value="As">As</option>
+							<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							  <select name="TypeOfHighClouds2_archiveobservationslipformdata"  id="TypeOfHighClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE OF HIGH CLOUD" >
+								<option value=""> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							 <select name="OktasOfHighClouds2_archiveobservationslipformdata" id="OktasOfHighClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS OF HIGH CLOUD" >
+								<option value=""> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfHighClouds2_archiveobservationslipformdata"  id="HeightOfHighClouds2_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+						<td>
+							 <select name="CLCODEOfHighClouds2_archiveobservationslipformdata"  id="CLCODEOfHighClouds2_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE MEDIUM CLOUD " >
+								<option value=""></option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+							</select>
+						</td>
+					</tr>
+
+					<!-- Type 3 clouds -->
+					<tr>
+						<td>
+							 <select  name="TypeOfLowClouds3_archiveobservationslipformdata"  id="TypeOfLowClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of low Cloud" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+
+						</select>
+						</td>
+
+						<td>
+							 <select name="OktasOfLowClouds3_archiveobservationslipformdata" id="OktasOfLowClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS of LOW CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+
+						<td>
+							 <input type="text" name="HeightOfLowClouds3_archiveobservationslipformdata"  id="HeightLowClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width: 70px;">
+						</td>
+
+						<td>
+							 <select  name="CLCODEOfLowClouds3_archiveobservationslipformdata"  id="CLCODEOfLowClouds3_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE of LOW CLOUD " >
+							<option value=""> </option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+
+						</select>
+						</td>
+						<td>
+							<select name="TypeOfMediumClouds3_archiveobservationslipformdata"  id="TypeOfMediumClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE OF MEDIUM CLOUD" >
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							<select name="OktasOfMediumClouds3_archiveobservationslipformdata" id="OktasOfMediumClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS OF MEDIUM CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfMediumClouds3_archiveobservationslipformdata"  id="HeightOfMediumClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+						<td>
+							 <select name="CLCODEOfMediumClouds3_archiveobservationslipformdata"  id="CLCODEOfMediumClouds3_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF MEDIUM CLOUD " >
+							   <option value=""> </option>
+								<option value="Ac">Ac</option>
+								<option value="As">As</option>
+								<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							 <select name="TypeOfHighClouds3_archiveobservationslipformdata"  id="TypeOfHighClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter TYPE HIGH CLOUD" >
+								<option value=""></option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							  <select name="OktasOfHighClouds3_archiveobservationslipformdata" id="OktasOfHighClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter OKTAS HIGH CLOUD" >
+							<option value=""> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+						<td>
+							 <input type="text" name="HeightOfHighClouds3_archiveobservationslipformdata"  id="HeightOfHighClouds3_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="0" style = "width:70px;">
+						</td>
+						<td>
+							 <select name="CLCODEOfHighClouds3_archiveobservationslipformdata"  id="CLCODEOfHighClouds3_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE MEDIUM CLOUD " >
+								<option value=""></option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="input-group">
+								<span class="input-group-addon">Cloud Searchlight Alidade Reading</span>
+								<input type="text" name="cloudsearchlight_archiveobservationslipformdata" id="cloudsearchlight_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Cloud Searchlight Alidade Reading" >
+							</div>
+						</td>
+						<td colspan="6">
+							<div class="input-group">
+							<span class="input-group-addon">Rainfall(mm)</span>
+							<input type="text" name="rainfall_archiveobservationslipformdata" id="rainfall_archiveobservationslipformdata"   class="form-control" placeholder="Enter Rainfall(mm)" >
+						</div>
+						</td>
+					</tr>
+				</table>
+
+				</div>
+
+
+			  <!-- Section 2 -->
+			  <div class="tab">
+
+				 <table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td >
+							<div class="input-group">
+							<span class="input-group-addon">Dry Bulb</span>
+							<input type="text" name="drybulb_archiveobservationslipformdata" id="drybulb_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Dry Bulb" >
+						</div>
+						</td>
+						<td align = "center"><b>Rainfall & Temperature:</b></td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Wet Bulb</span>
+							<input type="text" name="wetbulb_archiveobservationslipformdata" id="wetbulb_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Wet Bulb" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td><b>MAX</b></td> <td><b>MIN</b></td> <td><b>PICHE</b></td>
+
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">MAX Read</span>
+							 <input type="text" name="maxRead_archiveobservationslipformdata"  id="maxRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MAX READ" >
+							</div> <br>
+
+							 <div class="input-group">
+								<span class="input-group-addon">MAX Reset</span>
+								<input type="text" name="maxReset_archiveobservationslipformdata" id="maxReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MAX RESET" >
+							</div>
+						</td>
+
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">MIN Read</span>
+								 <input type="text" name="minRead_archiveobservationslipformdata"  id="minRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MIN READ" >
+							</div><br>
+
+							<div class="input-group">
+								<span class="input-group-addon">MIN Reset</span>
+								 <input type="text" name="minReset_archiveobservationslipformdata" id="minReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MIN RESET" >
+							</div>
+						</td>
+
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">PICHE Read</span>
+								<input type="text" name="picheRead_archiveobservationslipformdata"  id="picheRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter PICHE READ" >
+							</div> <br>
+
+							 <div class="input-group">
+								<span class="input-group-addon">PICHE Reset</span>
+								<input type="text" name="picheReset_archiveobservationslipformdata" id="picheReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter PICHE RESET" >
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan = "3"><center><b>Time marks</b></center></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">THERMO</span>
+							 <input type="text" name="timemarksThermo_archiveobservationslipformdata"  id="timemarksThermo_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS THERMO" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">HYGRO</span>
+							<input type="text" name="timemarksHygro_archiveobservationslipformdata" id="timemarksHygro_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS HYGRO" >
+						</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">RAIN REC</span>
+							<input type="text" name="timemarksRainRec_archiveobservationslipformdata" id="timemarksRainRec_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS RAIN REC" >
+						</div>
+						</td>
+					</tr>
+
+				</table>
+			  </div>
 
 
 
-        </div>
-        <div class="col-lg-6">
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">MAX Reset</span>
-                    <input type="text" name="maxReset_archiveobservationslipformdata" id="maxReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MAX RESET" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">MIN Read</span>
-                    <input type="text" name="minRead_archiveobservationslipformdata"  id="minRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MIN READ" >
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">MIN Reset</span>
-                    <input type="text" name="minReset_archiveobservationslipformdata" id="minReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter MIN RESET" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">PICHE Read</span>
-                    <input type="text" name="picheRead_archiveobservationslipformdata"  id="picheRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter PICHE READ" >
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">PICHE Reset</span>
-                    <input type="text" name="picheReset_archiveobservationslipformdata" id="picheReset_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter PICHE RESET" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME MARKS THERMO</span>
-                    <input type="text" name="timemarksThermo_archiveobservationslipformdata"  id="timemarksThermo_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS THERMO" >
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME MARKS HYGRO</span>
-                    <input type="text" name="timemarksHygro_archiveobservationslipformdata" id="timemarksHygro_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS HYGRO" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME MARKS RAIN REC</span>
-                    <input type="text" name="timemarksRainRec_archiveobservationslipformdata" id="timemarksRainRec_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS RAIN REC" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
+			  <!-- Section 3 -->
+			  <div class="tab">
+          <b>Weather Info:</b>
+					<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <td>
+             <div class="input-group">
                     <span class="input-group-addon">PRESENT WEATHER</span>
                     <input type="text" name="presentweather_archiveobservationslipformdata" id="presentweather_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter PRESENT WEATHER" >
+
                 </div>
-            </div>
+            </td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">M.S.L.Pr(mb) or 850mb. Ht.(gpm)</span>
+								<input type="text" name="MSLPR_archiveobservationslipformdata" id="MSLPR_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter M.S.L.Pr(mb) or 850mb. Ht.(gpm)" >
+							</div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">VISIBILITY</span>
-                    <input type="text" name="visibility_archiveobservationslipformdata" id="visibility_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter VISIBILITY" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WIND DIRECTION</span>
-                    <input type="text" name="winddirection_archiveobservationslipformdata" id="winddirection_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" placeholder="Enter WIND DIRECTION" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">WIND SPEED(KTS)</span>
-                    <input type="text" name="windspeed_archiveobservationslipformdata" id="windspeed_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)" required class="form-control" placeholder="Enter WIND SPEED(KTS)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">GUSTING(KTS)</span>
-                    <input type="text" name="gusting_archiveobservationslipformdata" id="gusting_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter GUSTING (KTS)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Attd.Thermo.(C)</span>
-                    <input type="text" name="attdThermo_archiveobservationslipformdata" id="attdThermo_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter ATTD.THERMO." >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Pr.As Read(C)</span>
-                    <input type="text" name="prAsRead_archiveobservationslipformdata" id="prAsRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Pr.As Read" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Correction</span>
-                    <input type="text" name="correction_archiveobservationslipformdata" id="correction_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Correction" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">C.L.P(mb)</span>
-                    <input type="text" name="CLP_archiveobservationslipformdata" id="CLP_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter C.L.P(mb)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">M.S.L.Pr(mb) or 850mb. Ht.(gpm)</span>
-                    <input type="text" name="MSLPR_archiveobservationslipformdata" id="MSLPR_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter M.S.L.Pr(mb) or 850mb. Ht.(gpm)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME MARKS BAROGRAPH</span>
-                    <input type="text" name="timeMarksBarograph_archiveobservationslipformdata" id="timeMarksBarograph_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS BAROGRAPH" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME MARKS ANEMOGRAPH</span>
-                    <input type="text" name="timeMarksAnemograph_archiveobservationslipformdata" id="timeMarksAnemograph_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS ANEMOGRAPH" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Other T/MARKS </span>
-                    <input type="text" name="otherTMarks_archiveobservationslipformdata" id="otherTMarks_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter Other T/MARKS" >
-                </div>
-            </div>
+						</td>
+					</tr>
 
 
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Remarks or any other Observations </span>
-                    <input type="text" name="remarks_archiveobservationslipformdata" id="remarks_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter Remarks or any other Observations" >
-                </div>
-            </div>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">VISIBILITY</span>
+							<input type="text" name="visibility_archiveobservationslipformdata" id="visibility_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter VISIBILITY" >
+						</div>
+						</td>
+						<td>
+						 <div class="input-group">
+							<span class="input-group-addon">GUSTING(KTS)</span>
+							 <input type="text" name="gusting_archiveobservationslipformdata" id="gusting_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter GUSTING (KTS)" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align = "center"><b>wind</b></td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND DIRECTION</span>
+								 <input type="text" name="winddirection_archiveobservationslipformdata" id="winddirection_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter WIND DIRECTION" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND SPEED(KTS)</span>
+								<input type="text" name="windspeed_archiveobservationslipformdata" id="windspeed_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter WIND SPEED(KTS)" >
+							</div>
+						</td>
+					</tr>
 
 
-        </div>
+					</table>
+			  </div>
+
+
+			  <!-- Section 4 -->
+			  <div class = "tab"><h2>More Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Attd.Thermo.(C)</span>
+								 <input type="text" name="attdThermo_archiveobservationslipformdata" id="attdThermo_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter ATTD.THERMO." >
+							</div> <br>
+
+							<div class="input-group">
+								<span class="input-group-addon">Pr.As Read(C)</span>
+								<input type="text" name="prAsRead_archiveobservationslipformdata" id="prAsRead_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Pr.As Read" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Correction</span>
+								<input type="text" name="correction_archiveobservationslipformdata" id="correction_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter Correction" >
+							</div> <br>
+
+							<div class="input-group">
+								<span class="input-group-addon">C.L.P(mb)</span>
+								<input type="text" name="CLP_archiveobservationslipformdata" id="CLP_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter C.L.P(mb)" >
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="2" align = "center">Time marks</td>
+					</tr>
+
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME MARKS BAROGRAPH</span>
+								 <input type="text" name="timeMarksBarograph_archiveobservationslipformdata" id="timeMarksBarograph_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS BAROGRAPH" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME MARKS ANEMOGRAPH</span>
+								 <input type="text" name="timeMarksAnemograph_archiveobservationslipformdata" id="timeMarksAnemograph_archiveobservationslipformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder="Enter TIME MARKS ANEMOGRAPH" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Other T/MARKS </span>
+								<input type="text" name="otherTMarks_archiveobservationslipformdata" id="otherTMarks_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter Other T/MARKS" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Remarks or any other Observations </span>
+								 <input type="text" name="remarks_archiveobservationslipformdata" id="remarks_archiveobservationslipformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder="Enter Remarks or any other Observations" >
+							</div>
+						</td>
+					</tr>
+				</table>
+			  </div>
+
         <div class="clearfix"></div>
         </div>
-        <div class="modal-footer clearfix">
-
-            <a href="<?php echo base_url(); ?>index.php/ArchiveObservationSlipFormData/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-            <button type="submit" id="postarchiveobservationslipformdata_button" name="postarchiveobservationslipformdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Add  Archive Observation Slip</button>
-        </div>
+	<div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="postarchiveobservationslipformdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+  </div>
         </form>
         </div>
     <?php
@@ -444,9 +852,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $observationslipformid = $obervationslipformidupdate->id;
             ?>
             <div class="row">
-            <form action='<?php echo base_url(); ?>index.php/ArchiveObservationSlipFormData/UpdateArchiveObservationSlipFormData' method="post" enctype="multipart/form-data">
-            <div class="modal-body">
-            <div id="output"></div>
+            <form action='<?php echo base_url(); ?>index.php/ArchiveObservationSlipFormData/UpdateArchiveObservationSlipFormData' id="regForm" method="post" enctype="multipart/form-data">
             <script language="javascript">
                 function allowIntegerInputOnly(inputvalue) {
                     //var invalidChars = /[^0-9]/gi
@@ -464,379 +870,796 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     }
                 }
             </script>
-            <div class="col-lg-6">
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Select Date</span>
-                    <input type="text" name="date" class="form-control" value="<?php echo $observationslipformidupdate->Date;?>" placeholder="Enter select date" id="expdate" readonly class="form-control">
-                    <input type="hidden" name="id" value="<?php echo $observationslipformidupdate->id;?>">
+			<!-- Section 1 -->
+			  <div class="tab"><h4>Station & CLouds Info:</h4>
+			   <table id="example1" class="table table-bordered table-striped">
+			   		<tr>
+              <?php if($userrole=='SeniorDataOfficer' || $userrole=='DataOfficer'){ ?>
+           <td colspan = "4">
+
+               <div class="input-group">
+                 <span class="input-group-addon">Station Name</span>
+               <select name="station" id="stationManager"   class="form-control" placeholder="Select Station">
+                     <option value="<?php echo $observationslipformidupdate->StationName;?>"><?php echo $observationslipformidupdate->StationName;?></option>
+                     <?php
+                     if (is_array($stationsdata) && count($stationsdata)) {
+                         foreach($stationsdata as $station){?>
+                             <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                         <?php }
+                     } ?>
+                 </select>
+               </div>
+
+           </td>
+           <td colspan = "4">
+
+             <div class="input-group">
+               <span class="input-group-addon"> Station Number</span>
+                <input type="text" name="stationNo_archiveobservationslipformdata"  class="form-control" id="stationNoManager" readonly class="form-control" value="<?php echo $observationslipformidupdate->StationNumber;?>" readonly="readonly" >
+             </div>
+
+           </td>
+         <?php } else{ ?>
+						<td colspan = "4">
+
+								<div class="input-group">
+									<span class="input-group-addon">Station Name</span>
+									<input type="text" name="station" id="station"  class="form-control" value="<?php echo $observationslipformidupdate->StationName;?>"  readonly class="form-control" >
+
+								</div>
+
+						</td>
+						<td colspan = "4">
+
+							<div class="input-group">
+								<span class="input-group-addon"> Station Number</span>
+								 <input type="text" name="stationNo_archiveobservationslipformdata"  class="form-control" id="stationNo_archiveobservationslipformdata" readonly class="form-control" value="<?php echo $observationslipformidupdate->StationNumber;?>" readonly="readonly" >
+							</div>
+
+						</td>
+          <?php } ?>
+						<td colspan = "4">
+
+								<div class="input-group">
+									<span class="input-group-addon">Select Date</span>
+									<input type="text" name="date" class="form-control" value="<?php echo $observationslipformidupdate->Date;?>" placeholder="Enter select date" id="expdate" readonly class="form-control">
+									<input type="hidden" name="id" value="<?php echo $observationslipformidupdate->id;?>">
+								</div>
+
+						</td>
+					</tr>
+					<tr>
+						<td colspan = "4">
+							 <div class="input-group">
+								<span class="input-group-addon">TIME</span>
+								 <input type="text" name="timeRecorded"  class="form-control" id="timeRecorded" readonly class="form-control" value="<?php echo $observationslipformidupdate->TIME;?>" readonly="readonly" >
+							</div>
+						</td>
+						<td colspan="4">
+
+								<div class="input-group">
+									<span class="input-group-addon">Total amount of all clouds</span>
+									 <select name="totalamountofallclouds" onkeyup="allowIntegerInputOnly(this)"   id="totalamountofallclouds"  class="form-control"  placeholder=" Enter total amount of all clouds" >
+										<option value="<?php echo $observationslipformidupdate->TotalAmountOfAllClouds;?>"><?php echo $observationslipformidupdate->TotalAmountOfAllClouds;?> </option>
+										<option value="">--Select Total Amount Of All Clouds </option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+									</select>
+								</div>
+
+						</td>
+						<td colspan="4">
+
+
+								<div class="input-group">
+									<span class="input-group-addon">Total amount of low clouds</span>
+									  <select name="totalamountoflowclouds" onkeyup="allowIntegerInputOnly(this)"  id="totalamountoflowclouds"  class="form-control"  placeholder="Enter total amount of all clouds" >
+										<option value="<?php echo $observationslipformidupdate->TotalAmountOfLowClouds;?>"><?php echo $observationslipformidupdate->TotalAmountOfLowClouds;?> </option>
+										<option value="">--Select Total Amount of Low Clouds </option>
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+
+
+									</select>
+								</div>
+
+						</td>
+					</tr>
+
+
+					<tr>
+						<td colspan = "4">
+							<b>Low</b>
+						</td>
+						<td colspan = "4">
+							<b>Medium</b>
+						</td>
+						<td colspan = "4">
+							<b>High</b>
+						</td>
+					</tr>
+					<tr>
+						<td><b>type</b></td> <td><b>oktas</b></td> <td><b>height</b></td> <td><b>clcode</b></td> <td><b>type</b></td> <td><b>oktas</b></td>
+						<td><b>height</b></td> <td><b>clcode</b></td> <td><b>type</b></td> <td><b>oktas</b></td> <td><b>height</b></td> <td><b>clcode</b></td>
+
+					</tr>
+
+					<!-- Type 1 clouds -->
+
+					<tr>
+						<td>
+						 <select  name="TypeOfLowClouds1"  id="TypeOfLowClouds1" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of LOW CLOUD" >
+                        <option value="<?php echo $observationslipformidupdate->TypeOfLowClouds1;?>"><?php echo $observationslipformidupdate->TypeOfLowClouds1;?> </option>
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+
+						</select>
+						</td>
+
+						<td>
+							<select name="OktasOfLowClouds1" id="OktasOfLowClouds1" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS of LOW CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfLowClouds1;?>"><?php echo $observationslipformidupdate->OktasOfLowClouds1;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+
+
+						</select>
+						</td>
+
+						<td>
+							<input type="text" name="HeightOfLowClouds1"  id="HeightOfLowClouds1" value="<?php echo $observationslipformidupdate->HeightOfLowClouds1;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = 'width:60px;'>
+						</td>
+
+						<td>
+							 <select  name="CLCODEOfLowClouds1"  id="CLCODEOfLowClouds1"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF LOW CLOUD " >
+                        <option value="<?php echo $observationslipformidupdate->CLCODEOfLowClouds1;?>"><?php echo $observationslipformidupdate->CLCODEOfLowClouds1;?> </option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+
+						</select>
+						</td>
+
+						<td>
+							 <select  name="TypeOfMediumClouds1"  id="TypeOfMediumClouds1" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of Medium Cloud" >
+                        <option value="<?php echo $observationslipformidupdate->TypeOfMediumClouds1;?>"><?php echo $observationslipformidupdate->TypeOfMediumClouds1;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+
+						<td>
+							 <select name="OktasOfMediumClouds1" id="OktasOfMediumClouds1" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS MEDIUM CLOUD" >
+                        <option value="<?php echo $observationslipformidupdate->OktasOfMediumClouds1;?>"><?php echo $observationslipformidupdate->OktasOfMediumClouds1;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+
+						<td>
+							 <input type="text" name="HeightOfMediumClouds1"  id="HeightOfMediumClouds1" value="<?php echo $observationslipformidupdate->HeightOfMediumClouds1;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control"style = "width:70px;" >
+						</td>
+
+						<td>
+							 <select  name="CLCODEOfMediumClouds1"  id="CLCODEOfMediumClouds1"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF MEDIUM CLOUD " >
+							<option value="<?php echo $observationslipformidupdate->CLCODEOfMediumClouds1;?>"><?php echo $observationslipformidupdate->CLCODEOfMediumClouds1;?> </option>
+							<option value="Ac">Ac</option>
+							<option value="As">As</option>
+							<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							  <select  name="TypeOfHighClouds1"  id="TypeOfHighClouds1" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of HIGH Cloud" >
+								<option value="<?php echo $observationslipformidupdate->TypeOfHighClouds1;?>"><?php echo $observationslipformidupdate->TypeOfHighClouds1;?> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							<select name="OktasOfHighClouds1" id="OktasOfHighClouds1" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS HIGH CLOUD" >
+								<option value="<?php echo $observationslipformidupdate->OktasOfHighClouds1;?>"><?php echo $observationslipformidupdate->OktasOfHighClouds1;?> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							 <input type="text" name="HeightOfHighClouds1"  id="HeightOfHighClouds1" value="<?php echo $observationslipformidupdate->HeightOfHighClouds1;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width:70px;" >
+						</td>
+						<td>
+							<select  name="CLCODEOfHighClouds1"  id="CLCODEOfHighClouds1"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE HIGH CLOUD " >
+								<option value="<?php echo $observationslipformidupdate->CLCODEOfHighClouds1;?>"><?php echo $observationslipformidupdate->CLCODEOfHighClouds1;?> </option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+
+							</select>
+						</td>
+					</tr>
+
+					<!--  Type 2 clouds -->
+
+					<tr>
+						<td>
+							 <select  name="TypeOfLowClouds2"  id="TypeOfLowClouds2" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of LOW Cloud" >
+							<option value="<?php echo $observationslipformidupdate->TypeOfLowClouds2;?>"><?php echo $observationslipformidupdate->TypeOfLowClouds2;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+
+							</select>
+						</td>
+
+						<td>
+							<select name="OktasOfLowClouds2" id="OktasOfLowClouds2" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS of LOW CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfLowClouds2;?>"><?php echo $observationslipformidupdate->OktasOfLowClouds2;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+
+						<td>
+							<input type="text" name="HeightOfLowClouds2"  id="HeightOfLowClouds2" value="<?php echo $observationslipformidupdate->HeightOfLowClouds2;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width:60px;" >
+						</td>
+						<td>
+							 <select  name="CLCODEOfLowClouds2"  id="CLCODEOfLowClouds2"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE OF LOW CLOUD " >
+                        <option value="<?php echo $observationslipformidupdate->CLCODEOfLowClouds2;?>"><?php echo $observationslipformidupdate->CLCODEOfLowClouds2;?> </option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+						</select>
+						</td>
+						<td>
+							 <select  name="TypeOfMediumClouds2"  id="TypeOfMediumClouds2" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of Medium Cloud" >
+							<option value="<?php echo $observationslipformidupdate->TypeOfMediumClouds2;?>"><?php echo $observationslipformidupdate->TypeOfMediumClouds2;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							<select name="OktasOfMediumClouds2" id="OktasOfMediumClouds2" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS MEDIUM CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfMediumClouds2;?>"><?php echo $observationslipformidupdate->OktasOfMediumClouds2;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfMediumClouds2"  id="HeightOfMediumClouds2" value="<?php echo $observationslipformidupdate->HeightOfMediumClouds2;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width: 70px">
+						</td>
+						<td>
+							 <select  name="CLCODEOfMediumClouds2"  id="CLCODEOfMediumClouds2"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF MEDIUM CLOUD " >
+							<option value="<?php echo $observationslipformidupdate->CLCODEOfMediumClouds2;?>"><?php echo $observationslipformidupdate->CLCODEOfMediumClouds2;?> </option>
+							<option value="Ac">Ac</option>
+							<option value="As">As</option>
+							<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							   <select  name="TypeOfHighClouds2"  id="TypeOfHighClouds2" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of HIGH Cloud" >
+								<option value="<?php echo $observationslipformidupdate->TypeOfHighClouds2;?>"><?php echo $observationslipformidupdate->TypeOfHighClouds2;?> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							 <select name="OktasOfHighClouds2" id="OktasOfHighClouds2" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS  OF HIGH CLOUD" >
+								<option value="<?php echo $observationslipformidupdate->OktasOfHighClouds2;?>"><?php echo $observationslipformidupdate->OktasOfHighClouds2;?> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							 <input type="text" name="HeightOfHighClouds2"  id="HeightOfHighClouds2" value="<?php echo $observationslipformidupdate->HeightOfHighClouds2;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width:70px;">
+						</td>
+						<td>
+							<select  name="CLCODEOfHighClouds2"  id="CLCODEOfHighClouds2"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF HIGH CLOUD " >
+                        <option value="<?php echo $observationslipformidupdate->CLCODEOfHighClouds2;?>"><?php echo $observationslipformidupdate->CLCODEOfHighClouds2;?> </option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+							</select>
+						</td>
+					</tr>
+
+					<!-- Type 3 clouds -->
+					<tr>
+						<td>
+							 <select  name="TypeOfLowClouds3"  id="TypeOfLowClouds3" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of LOW Cloud" >
+							<option value="<?php echo $observationslipformidupdate->TypeOfLowClouds3;?>"><?php echo $observationslipformidupdate->TypeOfLowClouds3;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+
+						</select>
+						</td>
+
+						<td>
+							<select name="OktasOfLowClouds3" id="OktasOfLowClouds3" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS of LOW CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfLowClouds3;?>"><?php echo $observationslipformidupdate->OktasOfLowClouds3;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+
+						<td>
+							<input type="text" name="HeightOfLowClouds3"  id="HeightOfLowClouds3" value="<?php echo $observationslipformidupdate->HeightOfLowClouds3;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width: 60px;">
+						</td>
+
+						<td>
+							<select  name="CLCODEOfLowClouds3"  id="CLCODEOfLowClouds3"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CLCODE OF LOW CLOUD " >
+							<option value="<?php echo $observationslipformidupdate->CLCODEOfLowClouds3;?>"><?php echo $observationslipformidupdate->CLCODEOfLowClouds3;?> </option>
+							<option value="Sc">Sc</option>
+							<option value="St">St</option>
+							<option value="Cu">Cu</option>
+							<option value="Cb">Cb</option>
+
+						</select>
+						</td>
+						<td>
+							 <select  name="TypeOfMediumClouds3"  id="TypeOfMediumClouds3" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of Medium Cloud" >
+							<option value="<?php echo $observationslipformidupdate->TypeOfMediumClouds3;?>"><?php echo $observationslipformidupdate->TypeOfMediumClouds3;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							 <select name="OktasOfMediumClouds3" id="OktasOfMediumClouds3" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS MEDIUM CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfMediumClouds3;?>"><?php echo $observationslipformidupdate->OktasOfMediumClouds3;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfMediumClouds3"  id="HeightOfMediumClouds3" value="<?php echo $observationslipformidupdate->HeightOfMediumClouds3;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width:70px;">
+						</td>
+						<td>
+							 <select  name="CLCODEOfMediumClouds3"  id="CLCODEOfMediumClouds3"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF MEDIUM CLOUD " >
+								<option value="<?php echo $observationslipformidupdate->CLCODEOfMediumClouds3;?>"><?php echo $observationslipformidupdate->CLCODEOfMediumClouds3;?> </option>
+								<option value="Ac">Ac</option>
+								<option value="As">As</option>
+								<option value="Ns">Ns</option>
+							</select>
+						</td>
+						<td>
+							 <select  name="TypeOfHighClouds3"  id="TypeOfHighClouds3" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="Enter Type of HIGH Cloud" >
+								<option value="<?php echo $observationslipformidupdate->TypeOfHighClouds3;?>"><?php echo $observationslipformidupdate->TypeOfHighClouds3;?> </option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</td>
+						<td>
+							 <select name="OktasOfHighClouds3" id="OktasOfHighClouds3" onkeyup="allowIntegerInputOnly(this)" class="form-control" placeholder="Enter OKTAS OF HIGH  CLOUD" >
+							<option value="<?php echo $observationslipformidupdate->OktasOfHighClouds3;?>"><?php echo $observationslipformidupdate->OktasOfHighClouds3;?> </option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+						</td>
+						<td>
+							<input type="text" name="HeightOfHighClouds3"  id="HeightOfHighClouds3" value="<?php echo $observationslipformidupdate->HeightOfHighClouds3;?>" onkeyup="allowIntegerInputOnly(this)"  class="form-control" style = "width:70px;">
+						</td>
+						<td>
+							 <select  name="CLCODEOfHighClouds3"  id="CLCODEOfHighClouds3"  onkeyup="allowCharactersInputOnly(this)"  class="form-control" placeholder=" Enter CL CODE OF HIGH CLOUD " >
+								<option value="<?php echo $observationslipformidupdate->CLCODEOfHighClouds3;?>"><?php echo $observationslipformidupdate->CLCODEOfHighClouds3;?> </option>
+								<option value="Cl">Cl</option>
+								<option value="Cc">Cc</option>
+								<option value="Cs">Cs</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="input-group">
+								<span class="input-group-addon">Cloud Searchlight Alidade Reading</span>
+								 <input type="text" name="cloudsearchlight" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->CloudSearchLightReading;?>" id="cloudsearchlight"  class="form-control" placeholder="Enter Cloud Searchlight Alidade Reading" >
+							</div>
+						</td>
+						<td colspan="6">
+							<div class="input-group">
+							<span class="input-group-addon">Rainfall(mm)</span>
+							<input type="text" name="rainfall"  value="<?php echo $observationslipformidupdate->Rainfall;?>" id="rainfall"  class="form-control" placeholder="Enter Rainfall(mm)" >
+						</div>
+						</td>
+					</tr>
+				</table>
+
+				</div>
+
+
+			  <!-- Section 2 -->
+			  <div class="tab">
+
+				 <table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td >
+							<div class="input-group">
+							<span class="input-group-addon">Dry Bulb</span>
+							 <input type="text" name="drybulb" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Dry_Bulb;?>" id="drybulb"  class="form-control" placeholder="Enter Dry Bulb" >
+						</div>
+						</td>
+						<td align = "center"><b>Rainfall & Temperature:</b></td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">Wet Bulb</span>
+							<input type="text" name="wetbulb" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Wet_Bulb;?>" id="wetbulb"  class="form-control" placeholder="Enter Wet Bulb" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td><b>MAX</b></td> <td><b>MIN</b></td> <td><b>PICHE</b></td>
+
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">MAX Read</span>
+							<input type="text" name="maxRead"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Max_Read;?>" id="maxRead"  class="form-control" placeholder="Enter MAX READ" >
+							</div> <br>
+
+							 <div class="input-group">
+								<span class="input-group-addon">MAX Reset</span>
+								 <input type="text" name="maxReset" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->Max_Reset;?>"id="maxReset"  class="form-control" placeholder="Enter MAX RESET" >
+							</div>
+						</td>
+
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">MIN Read</span>
+								 <input type="text" name="minRead" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Min_Read;?>" id="minRead"  class="form-control" placeholder="Enter MIN READ" >
+							</div><br>
+
+							<div class="input-group">
+								<span class="input-group-addon">MIN Reset</span>
+								 <input type="text" name="minReset" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Min_Reset;?>" id="minReset"  class="form-control" placeholder="Enter MIN RESET" >
+							</div>
+						</td>
+
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">PICHE Read</span>
+								 <input type="text" name="picheRead" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->Piche_Read;?>" id="picheRead"  class="form-control" placeholder="Enter PICHE READ" >
+							</div> <br>
+
+							 <div class="input-group">
+								<span class="input-group-addon">PICHE Reset</span>
+								 <input type="text" name="picheReset" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Piche_Reset;?>" id="picheReset"  class="form-control" placeholder="Enter PICHE RESET" >
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan = "3"><center><b>Time marks</b></center></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">THERMO</span>
+							 <input type="text" name="timemarksThermo" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TimeMarksThermo;?>" id="timemarksThermo"  class="form-control" placeholder="Enter TIME MARKS THERMO" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">HYGRO</span>
+							<input type="text" name="timemarksHygro" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksHygro;?>" id="timemarksHygro"  class="form-control" placeholder="Enter TIME MARKS HYGRO" >
+						</div>
+						</td>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">RAIN REC</span>
+							<input type="text" name="timemarksRainRec" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksRainRec;?>" id="timemarksRainRec"  class="form-control" placeholder="Enter TIME MARKS RAIN REC" >
+						</div>
+						</td>
+					</tr>
+
+				</table>
+			  </div>
+
+
+
+			  <!-- Section 3 -->
+			  <div class="tab">
+          <b>Weather Info:</b>
+					<table id="example1" class="table table-bordered table-striped">
+					<tr>
+            <td>
+             <div class="input-group">
+                    <span class="input-group-addon">PRESENT WEATHER</span>
+                    <input type="text" name="presentweather" onkeyup="allowCharactersInputOnly(this)"  id="presentweather" value="<?php echo $observationslipformidupdate->Present_Weather;?>"  class="form-control" placeholder="Enter PRESENT WEATHER" >
+
                 </div>
-            </div>
+            </td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">M.S.L.Pr(mb) or 850mb. Ht.(gpm)</span>
+								<input type="text" name="MSLPR" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->MSLPr;?>" id="MSLPR"  class="form-control" placeholder="Enter M.S.L.Pr(mb) or 850mb. Ht.(gpm)" >
+							</div>
+
+						</td>
+					</tr>
+
+
+
+					<tr>
+						<td>
+							<div class="input-group">
+							<span class="input-group-addon">VISIBILITY</span>
+							<input type="text" name="visibility" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Visibility;?>" id="visibility"  class="form-control" placeholder="Enter VISIBILITY" >
+						</div>
+						</td>
+						<td>
+						 <div class="input-group">
+							<span class="input-group-addon">GUSTING(KTS)</span>
+							 <input type="text" name="gusting" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Gusting;?>" id="gusting"  class="form-control" placeholder="Enter GUSTING (KTS)" >
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align = "center"><b>wind</b></td>
+					</tr>
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND DIRECTION</span>
+								 <input type="text" name="winddirection"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Wind_Direction;?>" id="winddirection"  class="form-control"  placeholder="Enter WIND DIRECTION" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">WIND SPEED(KTS)</span>
+								 <input type="text" name="windspeed" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->Wind_Speed;?>" id="windspeed"  class="form-control"  placeholder="Enter WIND SPEED(KTS)" >
+							</div>
+						</td>
+					</tr>
+
+
+					</table>
+			  </div>
+
+
+			  <!-- Section 4 -->
+			  <div class = "tab"><h2>More Info:</h2>
+				<table id="example1" class="table table-bordered table-striped">
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Attd.Thermo.(C)</span>
+								 <input type="text" name="attdThermo" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->AttdThermo;?>" id="attdThermo"  class="form-control" placeholder="Enter ATTD.THERMO." >
+							</div> <br>
+
+							<div class="input-group">
+								<span class="input-group-addon">Pr.As Read(C)</span>
+								<input type="text" name="prAsRead" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->PrAsRead;?>" id="prAsRead"  class="form-control" placeholder="Enter Pr.As Read" >
+							</div>
+						</td>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Correction</span>
+								<input type="text" name="correction" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Correction;?>" id="correction"  class="form-control" placeholder="Enter Correction" >
+							</div> <br>
+
+							<div class="input-group">
+								<span class="input-group-addon">C.L.P(mb)</span>
+								<input type="text" name="CLP" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->CLP;?>" id="CLP"  class="form-control" placeholder="Enter C.L.P(mb)" >
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="2" align = "center">Time marks</td>
+					</tr>
+
+					<tr>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME MARKS BAROGRAPH</span>
+								 <input type="text" name="timeMarksBarograph" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TimeMarksBarograph;?>" id="timeMarksBarograph"  class="form-control" placeholder="Enter TIME MARKS BAROGRAPH" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">TIME MARKS ANEMOGRAPH</span>
+								<input type="text" name="timeMarksAnemograph" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksAnemograph;?>" id="timeMarksAnemograph"  class="form-control" placeholder="Enter TIME MARKS ANEMOGRAPH" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="input-group">
+								<span class="input-group-addon">Other T/MARKS </span>
+								<input type="text" name="otherTMarks" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->OtherTMarks;?>" id="otherTMarks"  class="form-control" placeholder="Enter Other T/MARKS" >
+							</div>
+						</td>
+						<td>
+							 <div class="input-group">
+								<span class="input-group-addon">Remarks or any other Observations </span>
+								 <input type="text" name="remarks" onkeyup="allowCharactersInputOnly(this)"  value="<?php echo $observationslipformidupdate->Remarks;?>" id="remarks"  class="form-control" placeholder="Enter Remarks or any other Observations" >
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan = "2" align = "center">
+							<div class="input-group">
+								<span class="input-group-addon">Approved</span>
+								<select name="approval" id="approval"   class="form-control">
+									<option value="<?php echo $observationslipformidupdate->Approved;?>"><?php echo $observationslipformidupdate->Approved;?></option>
+									<option value="">--Select Approval Options--</option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+				</table>
+			  </div>
+
+
+
+
+        <div class="clearfix"></div>
+        </div>
+		 <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" name="updatearchiveobservationslipformdata_button">Next</button>
+    </div>
+  </div>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+  </div>
 
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Station</span>
-                        <input type="text" name="station" id="station" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
-
-                    </div>
-                </div>
-
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"> Station Number</span>
-                        <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
-                    </div>
-                </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TIME</span>
-                    <input type="text" name="timeRecorded" required class="form-control" id="timeRecorded" readonly class="form-control" value="<?php echo $observationslipformidupdate->TIME;?>" readonly="readonly" >
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Total amount of all clouds</span>
-                    <input type="text" name="totalamountofallclouds" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TotalAmountOfAllClouds;?>" id="totalamountofallclouds" required class="form-control" required placeholder=" Enter total amount of all clouds" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Total amount of low clouds</span>
-                    <input type="text" name="totalamountoflowclouds" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TotalAmountOfLowClouds;?>" id="totalamountoflowclouds" required class="form-control" required placeholder="Enter total amount of all clouds" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TYPE LOW CLOUD</span>
-                    <input type="text" name="TypeOfLowClouds" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TypeOfLowClouds;?>" id="TypeOfLowClouds"  class="form-control"  placeholder="Enter TwTw" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">OKTAS LOW CLOUD</span>
-                    <input type="text" name="OktasOfLowClouds" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->OktasOfLowClouds;?>" id="OktasOfLowClouds"  class="form-control" placeholder="Enter OKTAS LOW CLOUD" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">HEIGHT OF LOW CLOUDS</span>
-                    <input type="text" name="HeightOfLowClouds"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->HeightOfLowClouds;?>" id="HeightOfLowClouds"  class="form-control" placeholder=" Enter HEIGHT LOW CLOUD " >
-
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">CL CODE</span>
-                    <input type="text" name="CLCODEOfLowClouds" onkeyup="allowCharactersInputOnly(this)"  value="<?php echo $observationslipformidupdate->CLCODEOfLowClouds;?>" id="CLCODEOfLowClouds"  class="form-control" placeholder=" Enter CL CODE LOW CLOUD " >
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TYPE MEDIUM CLOUD</span>
-                    <input type="text" name="TypeOfMediumClouds"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TypeOfMediumClouds;?>" id="TypeOfMediumClouds"  class="form-control"  placeholder="Enter TYPE MEDIUM CLOUD" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">OKTAS MEDIUM CLOUD</span>
-                    <input type="text" name="OktasOfMediumClouds" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->OktasOfMediumClouds;?>" id="OktasOfMediumClouds"  class="form-control" placeholder="Enter OKTAS MEDIUM CLOUD" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">HEIGHT MEDIUM CLOUD</span>
-                    <input type="text" name="HeightOfMediumClouds"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->HeightOfMediumClouds;?>" id="HeightOfMediumClouds"  class="form-control" placeholder=" Enter HEIGHT MEDIUM CLOUD " >
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">CL CODE MEDIUM CLOUD</span>
-                    <input type="text" name="CLCODEOfMediumClouds"  onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->CLCODEOfMediumClouds;?>" id="CLCODEOfMediumClouds"  class="form-control" placeholder=" Enter CL CODE MEDIUM CLOUD " >
-
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">TYPE HIGH CLOUD</span>
-                    <input type="text" name="TypeOfHighClouds" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TypeOfHighClouds;?>" id="TypeOfHighClouds"  class="form-control"  placeholder="Enter TYPE HIGH CLOUD" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">OKTAS HIGH CLOUD</span>
-                    <input type="text" name="OktasOfHighClouds" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->OktasOfHighClouds;?>" id="OktasOfHighClouds"  class="form-control" placeholder="Enter OKTAS HIGH CLOUD" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">HEIGHT HIGH CLOUD</span>
-                    <input type="text" name="HeightOfHighClouds"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->HeightOfHighClouds;?>" id="HeightOfHighClouds"  class="form-control" placeholder=" Enter HEIGHT HIGH CLOUD " >
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">CL CODE HIGH CLOUD</span>
-                    <input type="text" name="CLCODEOfHighClouds" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->CLCODEOfHighClouds;?>"  id="CLCODEOfHighClouds"  class="form-control" placeholder=" Enter CL CODE HIGH CLOUD " >
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Cloud Searchlight Alidade Reading</span>
-                    <input type="text" name="cloudsearchlight" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->CloudSearchLightReading;?>" id="cloudsearchlight"  class="form-control" placeholder="Enter Cloud Searchlight Alidade Reading" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Rainfall(mm)</span>
-                    <input type="text" name="rainfall"  value="<?php echo $observationslipformidupdate->Rainfall;?>" id="rainfall"  class="form-control" placeholder="Enter Rainfall(mm)" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Dry Bulb</span>
-                    <input type="text" name="drybulb" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Dry_Bulb;?>" id="drybulb" required class="form-control" placeholder="Enter Dry Bulb" >
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">Wet Bulb</span>
-                    <input type="text" name="wetbulb" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Wet_Bulb;?>" id="wetbulb" required class="form-control" placeholder="Enter Wet Bulb" >
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon">MAX Read</span>
-                    <input type="text" name="maxRead"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Max_Read;?>" id="maxRead"  class="form-control" placeholder="Enter MAX READ" >
-                </div>
-            </div>
-
-
-            </div>
-            <div class="col-lg-6">
-
-
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">MAX Reset</span>
-                        <input type="text" name="maxReset" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->Max_Reset;?>"id="maxReset"  class="form-control" placeholder="Enter MAX RESET" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">MIN Read</span>
-                        <input type="text" name="minRead" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Min_Read;?>" id="minRead"  class="form-control" placeholder="Enter MIN READ" >
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">MIN Reset</span>
-                        <input type="text" name="minReset" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Min_Reset;?>" id="minReset"  class="form-control" placeholder="Enter MIN RESET" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">PICHE Read</span>
-                        <input type="text" name="picheRead" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->Piche_Read;?>" id="picheRead"  class="form-control" placeholder="Enter PICHE READ" >
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">PICHE Reset</span>
-                        <input type="text" name="picheReset" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Piche_Reset;?>" id="picheReset"  class="form-control" placeholder="Enter PICHE RESET" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">TIME MARKS THERMO</span>
-                        <input type="text" name="timemarksThermo" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TimeMarksThermo;?>" id="timemarksThermo"  class="form-control" placeholder="Enter TIME MARKS THERMO" >
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">TIME MARKS HYGRO</span>
-                        <input type="text" name="timemarksHygro" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksHygro;?>" id="timemarksHygro"  class="form-control" placeholder="Enter TIME MARKS HYGRO" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">TIME MARKS RAIN REC</span>
-                        <input type="text" name="timemarksRainRec" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksRainRec;?>" id="timemarksRainRec"  class="form-control" placeholder="Enter TIME MARKS RAIN REC" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">PRESENT WEATHER</span>
-                        <input type="text" name="presentweather" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->Present_Weather;?>" id="presentweather"  class="form-control" placeholder="Enter PRESENT WEATHER" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">VISIBILITY</span>
-                        <input type="text" name="visibility" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Visibility;?>" id="visibility" required class="form-control" placeholder="Enter VISIBILITY" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WIND DIRECTION</span>
-                        <input type="text" name="winddirection"  onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Wind_Direction;?>" id="winddirection" required class="form-control" required placeholder="Enter WIND DIRECTION" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WIND SPEED(KTS)</span>
-                        <input type="text" name="windspeed" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->Wind_Speed;?>" id="windspeed" required class="form-control" required placeholder="Enter WIND SPEED(KTS)" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">GUSTING(KTS)</span>
-                        <input type="text" name="gusting" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Gusting;?>" id="gusting"  class="form-control" placeholder="Enter GUSTING (KTS)" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Attd.Thermo.(C)</span>
-                        <input type="text" name="attdThermo" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->AttdThermo;?>" id="attdThermo"  class="form-control" placeholder="Enter ATTD.THERMO." >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Pr.As Read(C)</span>
-                        <input type="text" name="prAsRead" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->PrAsRead;?>" id="prAsRead"  class="form-control" placeholder="Enter Pr.As Read" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Correction</span>
-                        <input type="text" name="correction" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->Correction;?>" id="correction"  class="form-control" placeholder="Enter Correction" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">C.L.P(mb)</span>
-                        <input type="text" name="CLP" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->CLP;?>" id="CLP"  class="form-control" placeholder="Enter C.L.P(mb)" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">M.S.L.Pr(mb) or 850mb. Ht.(gpm)</span>
-                        <input type="text" name="MSLPR" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->MSLPr;?>" id="MSLPR"  class="form-control" placeholder="Enter M.S.L.Pr(mb) or 850mb. Ht.(gpm)" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">TIME MARKS BAROGRAPH</span>
-                        <input type="text" name="timeMarksBarograph" onkeyup="allowIntegerInputOnly(this)"  value="<?php echo $observationslipformidupdate->TimeMarksBarograph;?>" id="timeMarksBarograph"  class="form-control" placeholder="Enter TIME MARKS BAROGRAPH" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">TIME MARKS ANEMOGRAPH</span>
-                        <input type="text" name="timeMarksAnemograph" onkeyup="allowIntegerInputOnly(this)" value="<?php echo $observationslipformidupdate->TimeMarksAnemograph;?>" id="timeMarksAnemograph"  class="form-control" placeholder="Enter TIME MARKS ANEMOGRAPH" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Other T/MARKS </span>
-                        <input type="text" name="otherTMarks" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $observationslipformidupdate->OtherTMarks;?>" id="otherTMarks"  class="form-control" placeholder="Enter Other T/MARKS" >
-                    </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Remarks or any other Observations </span>
-                        <input type="text" name="remarks" onkeyup="allowCharactersInputOnly(this)"  value="<?php echo $observationslipformidupdate->Remarks;?>" id="remarks"  class="form-control" placeholder="Enter Remarks or any other Observations" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">Approved</span>
-                        <select name="approval" id="approval"  required class="form-control">
-                            <option value="<?php echo $observationslipformidupdate->Approved;?>"><?php echo $observationslipformidupdate->Approved;?></option>
-                            <option value="">--Select Approval Options--</option>
-                            <option value="TRUE">TRUE</option>
-                            <option value="FALSE">FALSE</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-            <div class="clearfix"></div>
-            </div>
-            <div class="modal-footer clearfix">
-
-                <a href="<?php echo base_url()."index.php/ArchiveObservationSlipFormData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
-
-                <button type="submit" name="updatearchiveobservationslipformdata_button" id="updatearchiveobservationslipformdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Archive Observation Slip Form Data</button>
-            </div>
             </form>
             </div>
         <?php
@@ -846,7 +1669,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         <div class="row">
             <div class="col-xs-3"><a class="btn btn-primary no-print"
                                      href="<?php echo base_url()."index.php/ArchiveObservationSlipFormData/DisplayNewArchiveObservationSlipForm/";?>"
-                    <i class="fa fa-plus"></i> Add new Archive Observation Slip</a>
+                    <i class="fa fa-plus"></i> Add Archive Observation Slip</a>
 
 
 
@@ -884,9 +1707,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Min Read</th>
                                 <th>Piche Read</th>
 
-                            <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
+                            <?php if( $userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC' ){ ?>
                                     <th>Approved</th>
-
                                     <th>By</th>
                                     <th class="no-print">Action</th>
                                 <?php }?>
@@ -920,25 +1742,26 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $archiveobservationslipdata->Max_Read;?></td>
                                         <td><?php echo $archiveobservationslipdata->Min_Read;?></td>
                                         <td><?php echo $archiveobservationslipdata->Piche_Read;?></td>
+                                   <?php if($userrole=='SeniorDataOfficer' || $userrole=='DataOfficer' || $userrole=='ObserverArchive' || $userrole=='OC' ){ ?>
+                                     <td><?php echo $archiveobservationslipdata->Approved;?></td>
 
-                                        <td><?php echo $archiveobservationslipdata->Approved;?></td>
+                                     <td><?php echo $archiveobservationslipdata->SubmittedBy;?></td>
+                                     <td class="no-print">
 
-                                        <td><?php echo $archiveobservationslipdata->SubmittedBy;?></td>
-                                   <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><td class="no-print">
+                                            <a href="<?php echo base_url()."index.php/ArchiveObservationSlipFormData/DisplayArchiveObservationSlipFormForUpdate/" .$archiveobservationslipdataid; ?>" style="cursor:pointer;">Edit</a>
 
-                                            <a href="<?php echo base_url() . "index.php/ArchiveObservationSlipFormData/DisplayArchiveObservationSlipFormForUpdate/" .$archiveobservationslipdataid ;?>" style="cursor:pointer;">Edit</a>
-                                         <!--   or <a href="<?php echo base_url() . "index.php/ArchiveObservationSlipFormData/deleteArchiveObservationSlipFormData/" .$archiveobservationslipdataid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $archiveobservationslipdata->StationName;?>');">Delete</a></td><?php }?> -->
                                     </tr>
 
                                 <?php
                                 }
                             }
+                          }
                             ?>
                             </tbody>
                         </table>
                         <br><br>
-                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                        <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
+
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
@@ -955,7 +1778,55 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url(); ?>js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
 
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            // alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
+    </script>
     <script>
         $(document).ready(function() {
             //Post metar form data into the DB
@@ -975,6 +1846,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
 
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchiveObservationSlipFormData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchiveObservationSlipFormData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchiveObservationSlipFormData_hiddentextfield").focus();
+                    return false;
+
+                }
 
                 //Check that Date selected
                 var date=$('#date').val();
@@ -1018,6 +1898,57 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////
+                var maxRead_archiveobservationslipformdata=$('#maxRead_archiveobservationslipformdata').val();
+                if(maxRead_archiveobservationslipformdata > 42){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MaxRead Temperature can't go beyond 42 degrees");
+                    $('#maxRead_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#maxRead_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
+                var maxReset_archiveobservationslipformdata=$('#maxReset_archiveobservationslipformdata').val();
+                if(maxReset_archiveobservationslipformdata > 42){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MaxReset Temperature can't go beyond 42 degrees");
+                    $('#maxReset_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#maxReset_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
+//////////////////////////////////////////////////////////////////////
+                var minRead_archiveobservationslipformdata=$('#minRead_archiveobservationslipformdata').val();
+                if(minRead_archiveobservationslipformdata > 23){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MinRead Temperature can't go beyond 42 degrees");
+                    $('#minRead_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#minRead_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
+                var minReset_archiveobservationslipformdata=$('#minReset_archiveobservationslipformdata').val();
+                if(minReset_archiveobservationslipformdata > 23){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MinReset Temperature can't go beyond 42 degrees");
+                    $('#minReset_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#minReset_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
+//////////////////////////////////////////////////////////////////////
+                var winddirection_archiveobservationslipformdata=$('#winddirection_archiveobservationslipformdata').val();
+                if((winddirection_archiveobservationslipformdata > 360) || (winddirection_archiveobservationslipformdata < 000) ){  // returns true if the variable does NOT contain a valid number
+                    alert("Please Wind Direction should be between 000 to 360");
+                    $('#winddirection_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#winddirection_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
+                var windspeed_archiveobservationslipformdata=$('#windspeed_archiveobservationslipformdata').val();
+                if(windspeed_archiveobservationslipformdata < 000){  // returns true if the variable does NOT contain a valid number
+                    alert("Please Wind Speed can't go beyond 000");
+                    $('#windspeed_archiveobservationslipformdata').val("");  //Clear the field.
+                    $("#windspeed_archiveobservationslipformdata").focus();
+                    return false;
+
+                }
 
             }); //button
             //  return false;
@@ -1141,7 +2072,57 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
 ///////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////
+                var maxRead=$('#maxRead').val();
+                if(maxRead > 42){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MaxRead Temperature can't go beyond 42 degrees");
+                    $('#maxRead').val("");  //Clear the field.
+                    $("#maxRead").focus();
+                    return false;
 
+                }
+                var maxReset=$('#maxReset').val();
+                if(maxReset > 42){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MaxReset Temperature can't go beyond 42 degrees");
+                    $('#maxReset').val("");  //Clear the field.
+                    $("#maxReset").focus();
+                    return false;
+
+                }
+//////////////////////////////////////////////////////////////////////
+                var minRead=$('#minRead').val();
+                if(minRead > 23){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MinRead Temperature can't go beyond 42 degrees");
+                    $('#minRead').val("");  //Clear the field.
+                    $("#minRead").focus();
+                    return false;
+
+                }
+                var minReset=$('#minReset').val();
+                if(minReset > 23){  // returns true if the variable does NOT contain a valid number
+                    alert("Please MinReset Temperature can't go beyond 42 degrees");
+                    $('#minReset').val("");  //Clear the field.
+                    $("#minReset").focus();
+                    return false;
+
+                }
+//////////////////////////////////////////////////////////////////////
+                var winddirection=$('#winddirection').val();
+                if((winddirection > 360) || (winddirection < 000) ){  // returns true if the variable does NOT contain a valid number
+                    alert("Please Wind Direction should be between 000 to 360");
+                    $('#winddirection').val("");  //Clear the field.
+                    $("#winddirection").focus();
+                    return false;
+
+                }
+                var windspeed=$('#windspeed').val();
+                if(minReset < 000){  // returns true if the variable does NOT contain a valid number
+                    alert("Please Wind Speed can't go beyond 000");
+                    $('#windspeed').val("");  //Clear the field.
+                    $("#windspeed").focus();
+                    return false;
+
+                }
 
 
             }); //button
@@ -1211,27 +2192,160 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         });
     </script>
 
+
     <script>
         $(document).ready(function(){
-            var newValue_TypeOfLowClouds ;
-            var oldValue_TypeOfLowClouds= $('#TypeOfLowClouds').val();
+            var newValue_HeightOfLowClouds1 ;
+            var oldValue_HeightOfLowClouds1= $('#HeightOfLowClouds1').val();
 
-            $('#TypeOfLowClouds').live('change paste', function(){
+            $('#HeightOfLowClouds1').live('change paste', function(){
                 //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_TypeOfLowClouds = $(this).val();
+                newValue_HeightOfLowClouds1 = $(this).val();
 
                 var retVal = confirm("Do you want to make updates to this field ?");
                 if( retVal == true ){
                     //document.write ("User wants to continue!");
 
-                    $('#TypeOfLowClouds').val(newValue_TypeOfLowClouds);
+                    $('#HeightOfLowClouds1').val(newValue_HeightOfLowClouds1);
                     //alert("HI");
                     return true;
                 }
                 else{
                     //document.write ("User does not want to continue!");
                     //alert("HItttttt");
-                    $('#TypeOfLowClouds').val(oldValue_TypeOfLowClouds);
+                    $('#HeightOfLowClouds1').val(oldValue_HeightOfLowClouds1);
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var newValue_HeightOfLowClouds2 ;
+            var oldValue_HeightOfLowClouds2= $('#HeightOfLowClouds2').val();
+
+            $('#HeightOfLowClouds2').live('change paste', function(){
+                //oldValue_dddfffmfm = newValue_dddfffmfm;
+                newValue_HeightOfLowClouds2 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#HeightOfLowClouds2').val(newValue_HeightOfLowClouds2);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#HeightOfLowClouds2').val(oldValue_HeightOfLowClouds2);
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var newValue_HeightOfLowClouds3 ;
+            var oldValue_HeightOfLowClouds3= $('#HeightOfLowClouds3').val();
+
+            $('#HeightOfLowClouds3').live('change paste', function(){
+                //oldValue_dddfffmfm = newValue_dddfffmfm;
+                newValue_HeightOfLowClouds3 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#HeightOfLowClouds3').val(newValue_HeightOfLowClouds3);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#HeightOfLowClouds3').val(oldValue_HeightOfLowClouds3);
+                    return false;
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function(){
+            var newValue_HeightOfMeduimClouds1 ;
+            var oldValue_HeightOfMeduimClouds1= $('#HeightOfMeduimClouds1').val();
+
+            $('#HeightOfMeduimClouds1').live('change paste', function(){
+                //oldValue_dddfffmfm = newValue_dddfffmfm;
+                newValue_HeightOfMeduimClouds1 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#HeightOfMeduimClouds1').val(newValue_HeightOfMeduimClouds1);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#HeightOfMeduimClouds1').val(oldValue_HeightOfMeduimClouds1);
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var newValue_HeightOfMeduimClouds2 ;
+            var oldValue_HeightOfMeduimClouds2= $('#HeightOfMeduimClouds2').val();
+
+            $('#HeightOfMeduimClouds2').live('change paste', function(){
+                //oldValue_dddfffmfm = newValue_dddfffmfm;
+                newValue_HeightOfMeduimClouds2 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#HeightOfMeduimClouds2').val(newValue_HeightOfMeduimClouds2);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#HeightOfMeduimClouds2').val(oldValue_HeightOfMeduimClouds2);
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var newValue_HeightOfMeduimClouds3 ;
+            var oldValue_HeightOfMeduimClouds3= $('#HeightOfMeduimClouds3').val();
+
+            $('#HeightOfMeduimClouds3').live('change paste', function(){
+                //oldValue_dddfffmfm = newValue_dddfffmfm;
+                newValue_HeightOfMeduimClouds3 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#HeightOfMeduimClouds3').val(newValue_HeightOfMeduimClouds3);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#HeightOfMeduimClouds3').val(oldValue_HeightOfMeduimClouds3);
                     return false;
                 }
             });
@@ -1240,52 +2354,25 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
     <script>
         $(document).ready(function(){
-            var newValue_OktasOfLowClouds ;
-            var oldValue_OktasOfLowClouds= $('#OktasOfLowClouds').val();
+            var newValue_HeightOfHighClouds1 ;
+            var oldValue_HeightOfHighClouds1= $('#HeightOfHighClouds1').val();
 
-            $('#OktasOfLowClouds').live('change paste', function(){
+            $('#HeightOfHighClouds1').live('change paste', function(){
                 //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_OktasOfLowClouds = $(this).val();
+                newValue_HeightOfHighClouds1 = $(this).val();
 
                 var retVal = confirm("Do you want to make updates to this field ?");
                 if( retVal == true ){
                     //document.write ("User wants to continue!");
 
-                    $('#OktasOfLowClouds').val(newValue_OktasOfLowClouds);
+                    $('#HeightOfHighClouds1').val(newValue_HeightOfHighClouds1);
                     //alert("HI");
                     return true;
                 }
                 else{
                     //document.write ("User does not want to continue!");
                     //alert("HItttttt");
-                    $('#OktasOfLowClouds').val(oldValue_OktasOfLowClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_HeightOfLowClouds ;
-            var oldValue_HeightOfLowClouds= $('#HeightOfLowClouds').val();
-
-            $('#HeightOfLowClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_HeightOfLowClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#HeightOfLowClouds').val(newValue_HeightOfLowClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#HeightOfLowClouds').val(oldValue_HeightOfLowClouds);
+                    $('#HeightOfHighClouds1').val(oldValue_HeightOfHighClouds1);
                     return false;
                 }
             });
@@ -1293,106 +2380,25 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     </script>
     <script>
         $(document).ready(function(){
-            var newValue_CLCODEOfLowClouds ;
-            var oldValue_CLCODEOfLowClouds= $('#CLCODEOfLowClouds').val();
+            var newValue_HeightOfHighClouds2 ;
+            var oldValue_HeightOfHighClouds2= $('#HeightOfHighClouds2').val();
 
-            $('#CLCODEOfLowClouds').live('change paste', function(){
+            $('#HeightOfHighClouds2').live('change paste', function(){
                 //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_CLCODEOfLowClouds = $(this).val();
+                newValue_HeightOfHighClouds2 = $(this).val();
 
                 var retVal = confirm("Do you want to make updates to this field ?");
                 if( retVal == true ){
                     //document.write ("User wants to continue!");
 
-                    $('#CLCODEOfLowClouds').val(newValue_CLCODEOfLowClouds);
+                    $('#HeightOfHighClouds2').val(newValue_HeightOfHighClouds2);
                     //alert("HI");
                     return true;
                 }
                 else{
                     //document.write ("User does not want to continue!");
                     //alert("HItttttt");
-                    $('#CLCODEOfLowClouds').val(oldValue_CLCODEOfLowClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_TypeOfMeduimClouds ;
-            var oldValue_TypeOfMeduimClouds= $('#TypeOfMeduimClouds').val();
-
-            $('#TypeOfMeduimClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_TypeOfMeduimClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#TypeOfMeduimClouds').val(newValue_TypeOfMeduimClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#TypeOfMeduimClouds').val(oldValue_TypeOfMeduimClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_OktasOfMeduimClouds;
-            var oldValue_OktasOfMeduimClouds= $('#OktasOfMeduimClouds').val();
-
-            $('#OktasOfMeduimClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_OktasOfMeduimClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#OktasOfMeduimClouds').val(newValue_OktasOfMeduimClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#OktasOfMeduimClouds').val(oldValue_OktasOfMeduimClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_HeightOfMeduimClouds ;
-            var oldValue_HeightOfMeduimClouds= $('#HeightOfMeduimClouds').val();
-
-            $('#HeightOfMeduimClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_HeightOfMeduimClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#HeightOfMeduimClouds').val(newValue_HeightOfMeduimClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#HeightOfMeduimClouds').val(oldValue_HeightOfMeduimClouds);
+                    $('#HeightOfHighClouds2').val(oldValue_HeightOfHighClouds2);
                     return false;
                 }
             });
@@ -1400,132 +2406,25 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     </script>
     <script>
         $(document).ready(function(){
-            var newValue_CLCODEOfMeduimClouds ;
-            var oldValue_CLCODEOfMeduimClouds= $('#CLCODEOfMeduimClouds').val();
+            var newValue_HeightOfHighClouds3 ;
+            var oldValue_HeightOfHighClouds3= $('#HeightOfHighClouds3').val();
 
-            $('#CLCODEOfMeduimClouds').live('change paste', function(){
+            $('#HeightOfHighClouds3').live('change paste', function(){
                 //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_CLCODEOfMeduimClouds = $(this).val();
+                newValue_HeightOfHighClouds3 = $(this).val();
 
                 var retVal = confirm("Do you want to make updates to this field ?");
                 if( retVal == true ){
                     //document.write ("User wants to continue!");
 
-                    $('#CLCODEOfMeduimClouds').val(newValue_CLCODEOfMeduimClouds);
+                    $('#HeightOfHighClouds3').val(newValue_HeightOfHighClouds3);
                     //alert("HI");
                     return true;
                 }
                 else{
                     //document.write ("User does not want to continue!");
                     //alert("HItttttt");
-                    $('#CLCODEOfMeduimClouds').val(oldValue_CLCODEOfMeduimClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_TypeOfHighClouds ;
-            var oldValue_TypeOfHighClouds= $('#TypeOfHighClouds').val();
-
-            $('#TypeOfHighClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_TypeOfHighClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#TypeOfHighClouds').val(newValue_TypeOfHighClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#TypeOfHighClouds').val(oldValue_TypeOfHighClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_OktasOfHighClouds ;
-            var oldValue_OktasOfHighClouds= $('#OktasOfHighClouds').val();
-
-            $('#OktasOfHighClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_OktasOfHighClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#OktasOfHighClouds').val(newValue_OktasOfHighClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#OktasOfHighClouds').val(oldValue_OktasOfHighClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function(){
-            var newValue_HeightOfHighClouds ;
-            var oldValue_HeightOfHighClouds= $('#HeightOfHighClouds').val();
-
-            $('#HeightOfHighClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_HeightOfHighClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#HeightOfHighClouds').val(newValue_HeightOfHighClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#HeightOfHighClouds').val(oldValue_HeightOfHighClouds);
-                    return false;
-                }
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
-            var newValue_CLCODEOfHighClouds ;
-            var oldValue_CLCODEOfHighClouds= $('#CLCODEOfHighClouds').val();
-
-            $('#CLCODEOfHighClouds').live('change paste', function(){
-                //oldValue_dddfffmfm = newValue_dddfffmfm;
-                newValue_CLCODEOfHighClouds = $(this).val();
-
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
-
-                    $('#CLCODEOfHighClouds').val(newValue_CLCODEOfHighClouds);
-                    //alert("HI");
-                    return true;
-                }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#CLCODEOfHighClouds').val(oldValue_CLCODEOfHighClouds);
+                    $('#HeightOfHighClouds3').val(oldValue_HeightOfHighClouds3);
                     return false;
                 }
             });
@@ -1624,7 +2523,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             });
         });
     </script>
-    /////////////////////////////////////////////////////////////////////////////////////////
+
     <script>
         //Inform the user if they want to really update this textfield with a new value.
         //On Editing
@@ -2330,66 +3229,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
                 }
             });
-    );
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script type="text/javascript">        //Once the Admin selects the Station the Station Number shouManager picked from theManager        // For Insert/Add Observation Slip
-       // $(document.body).change',('#stationAdmin_archiveobservationslipformdata') function(){
-            (document.body).on('change','#stationAdmin_archiveobservationslipformdata',function(){
-            $('#stationNoAdmin_archiveobservationslipformdata').val("");  //Clear the field.
-            var stationName = this.value;
-
-
-       if (stationName != "") {
-                //alert(station);
-                $('#stationNoAdmin_archiveobservationslipformdata').val("");
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
-                    type: "POST",
-                    data: {'stationName': stationName},
-                    cache: false,
-                    //dataType: "JSON",
-                    success: function(data){
-                        if (data)
-                        {
-                            var json = JSON.parse(data);
-
-                            $('#stationNoAdmin_archiveobservationslipformdata').val("");
-
-                            // alert(data);
-                            $("#stationNoAdmin_archiveobservationslipformdata").val(json[0].StationNumber);
-                        }
-                        else{
-
-                            $('#stationNoAdmin_archiveobservationslipformdata').empty();
-                            $('#stationNoAdmin_archiveobservationslipformdata').val("");
-
-                        }
-                    });
-
-
-
-       else {
-
-               $('#stationNoAdmin_archiveobservationslipformdata').empty();
-               $('#stationNoAdmin_archiveobservationslipformdata').val("");
-           }     })
-
+            );
     </script>
 
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

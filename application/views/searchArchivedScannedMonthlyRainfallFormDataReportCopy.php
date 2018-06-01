@@ -35,7 +35,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     </div>
                                 </div>
                             </div>
-                        <?php }elseif($userrole=='Manager'){?>
+                        <?php }elseif($userrole=='ManagerData'){?>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -68,7 +68,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
                             </div>
 
-                        <?php }elseif($userrole=='Manager'){?>
+                        <?php }elseif($userrole=='ManagerData'){?>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -135,13 +135,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 <tr>
                     <td class="main">No.</td>
-                    <td class="main">Form</td>
+                   
                     <td class="main">Station Name</td>
                     <td class="main">Station Number</td>
                     <td class="main">Month</td>
                     <td class="main">Year</td>
                     <td class="main">Description</td>
-                    <td class="main">File Name</td>
+                    <td class="no-print">File Name</td>
 
                 </tr>
 
@@ -158,14 +158,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                         <td ><?php echo $count;?></td>
-                        <td ><?php echo $data->Form;?></td>
+                        
                         <td ><?php echo $data->StationName;?></td>
                         <td ><?php echo $data->StationNumber;?></td>
-                        <td ><?php echo $data->Month;?></td>
-                        <td ><?php echo $data->Year;?></td>
+                        <td ><?php echo $data->month;?></td>
+                        <td ><?php echo $data->year;?></td>
                         <td><?php echo $data->Description;?></td>
-                        <td>
-                            <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedMonthlyRainfallFormDataReportCopy/DownloadArchivedMonthlyRainfallFormReport/<?php echo $data->FileName; ?>">Download Image</a>
+                        <td class="no-print">
+                            <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedMonthlyRainfallFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileRef;?>" target = "blank"> <?php echo $data->FileRef;?> </a>
+                            
 
                         </td>
 
@@ -175,21 +176,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
                 ?>
             </table>
+            <br><br>
 
-          <br><br><br><br>
-
-
-          <div style="width:500px; height:200px; margin-bottom:4px; max-height:120px; overflow:hidden; border:2px solid; position:relative" class="pull-left">
-              <img id="blah" src="<?php echo base_url().'archive/'. $data->FileName ?>" alt="your image" class="img-responsive" />
-              <label style="position:absolute; bottom:0; left:0; width:100%; height:15px; background:rgbargba(0,0,0,.4); color:#fff;" id="name"></label>
-          </div>
-          <div class="clearfix"></div>
+            <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
+            </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+            <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
 
 
           <br><br><br><br>
-          <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
-          <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
-          <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-print"></i> Export to csv</button>
+          <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT </button>
+          <button id="export" class="btn btn-primary no-print"><i class="fa fa-download"></i> Export to excel</button>
+          <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-download"></i> Export to csv</button>
           <a href="<?php echo base_url()."index.php/SearchArchivedScannedMonthlyRainfallFormDataReportCopy/"; ?>" class="btn btn-warning pull-right"><i class="fa fa-times"></i> Close report</a>
           <div class="clearfix"></div>
           <br><br>
@@ -269,7 +266,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
                 //Check that the a station Number is selected from the list of stations(Manager)
                 var stationNoOC=$('#stationNoOC').val();
-                if(stationNoManager==""){  // returns true if the variable does NOT contain a valid number
+                if(stationNoOC==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station Number not picked");
                     $('#stationNoOC').val("");  //Clear the field.
                     $("#stationNoOC").focus();

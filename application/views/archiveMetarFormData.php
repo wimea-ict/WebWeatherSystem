@@ -55,17 +55,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">Select Date</span>
-                    <input type="text" name="date_archivemetarformdata" required class="form-control" placeholder="Enter select date" id="date">
+                    <input type="text" name="date_archivemetarformdata"  class="form-control compulsory" required placeholder="Enter select date" id="date">
                     <input type="hidden" name="checkduplicateEntryOnAddArchieveMetarFormData_hiddentextfield" id="checkduplicateEntryOnAddArchieveMetarFormData_hiddentextfield">
                 </div>
             </div>
 
 
-
+<?php if(  $userrole== "ObserverDataEntrant"  ||  $userrole== "OC" ){ ?>
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Station Name</span>
-                        <input type="text" name="station_archivemetarformdata" id="station_archivemetarformdata" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                        <input type="text" name="station_archivemetarformdata" id="station_archivemetarformdata"  class="form-control compulsory" value="<?php echo $userstation;?>"  readonly class="form-control" >
 
                     </div>
                 </div>
@@ -74,14 +74,39 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"> Station Number</span>
-                        <input type="text" name="stationNo_archivemetarformdata" required class="form-control" id="stationNo_archivemetarformdata" readonly  value="<?php echo $userstationNo;?>" readonly="readonly" >
+                        <input type="text" name="stationNo_archivemetarformdata"  class="form-control compulsory" id="stationNo_archivemetarformdata" readonly class="form-control"  value="<?php echo $userstationNo;?>" readonly="readonly" >
                     </div>
                 </div>
+    <?php } elseif($userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" ) {?>
+      <div class="form-group">
+          <div class="input-group">
+
+              <span class="input-group-addon">Station</span>
+              <select name="station_archivemetarformdata" id="stationManager"   class="form-control" placeholder="Select Station">
+                  <option value="">Select Stations</option>
+                  <?php
+                  if (is_array($stationsdata) && count($stationsdata)) {
+                      foreach($stationsdata as $station){?>
+                          <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                      <?php }
+                  } ?>
+              </select>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <div class="input-group">
+              <span class="input-group-addon">Station Number</span>
+              <input type="text" name="stationNo_archivemetarformdata"  id="stationNoManager"  class="form-control compulsory" value=""  readonly class="form-control"  >
+          </div>
+      </div>
+    <?php }?>
 
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">TIME</span>
-                    <select name="time_archivemetarformdata" id="time_archivemetarformdata"  required class="form-control">
+                    <select name="time_archivemetarformdata" id="time_archivemetarformdata"   class="form-control compulsory">
                         <option value="">--Select TIME Options--</option>
                         <option value="0000Z">0000Z</option>
                         <option value="0100Z">0100Z</option>
@@ -116,26 +141,42 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">Metar/Speci</span>
-                    <select name="metarspeci_archivemetarformdata" id="metarspeci_archivemetarformdata" required class="form-control">
-                        <option value="">--Select Options--</option>
+                    <span class="input-group-addon">METAR/SPECI</span>
+                    <select name="metarspeci_archivemetarformdata" id="metarspeci_archivemetarformdata"  class="form-control compulsory">
+                        <option value="">--Select Options METAR/SPECI--</option>
                         <option value="METAR">METAR</option>
                         <option value="SPECI">SPECI</option>
                     </select>
                 </div>
             </div>
 
+            <?php
+            $stationIndicator;
+            //echo $stationName;
+            if (is_array($stationIndicatorData) && count($stationIndicatorData)) {
+                foreach($stationIndicatorData as $station){
+                    // echo strtolower($station->LocationStationName);
+                    if(strcasecmp($userstation, $station->LocationStationName) == 0){  //strcasecmp returns 0 if the strings are the same
+                        $stationIndicator=$station->Indicator;
+                        // echo $station->Indicator;
+                        //  echo $stationIndicator;
+                        break;
+                    }
+                }
+            }
+            ?>
+
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">CCCC</span>
-                    <input type="text" name="cccc_archivemetarformdata" id="cccc_archivemetarformdata" onkeyup="allowCharactersInputOnly(this)" required class="form-control" required placeholder="CCCC" >
+                    <input type="text" name="cccc_archivemetarformdata" id="cccc_archivemetarformdata" value="<?php echo $stationIndicator; ?>" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  class="form-control compulsory"  placeholder="CCCC" >
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">YYGGgg</span>
-                    <input type="text" name="yyGGgg_archivemetarformdata" id="yyGGgg_archivemetarformdata"  required class="form-control" required placeholder="YYGGgg" >
+                    <span class="input-group-addon">YYGGgg<sup>z</sup></span>
+                    <input type="text" name="yyGGgg_archivemetarformdata" id="yyGGgg_archivemetarformdata" value=""   class="form-control"   class="form-control compulsory"  placeholder="Enter the YYGGgg" >
 
                 </div>
             </div>
@@ -144,15 +185,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">Dddff/fm/fm</span>
-                    <input type="text" name="dddfffmfm_archivemetarformdata" id="dddfffmfm_archivemetarformdata"  required class="form-control" required placeholder="Dddff/fm/fm" >
+                    <span class="input-group-addon">Dddff/f<sub>m</sub>/f<sub>m</sub></span>
+                    <input type="text" name="dddfffmfm_archivemetarformdata" id="dddfffmfm_archivemetarformdata"   class="form-control compulsory"  placeholder="Enter the Dddff/fm/fm" >
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">VVVV or COVAK</span>
-                    <input type="text" name="wwcovak_archivemetarformdata" id="wwcovak_archivemetarformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control" placeholder=" Enter VVVV or COVAK" >
+                    <span class="input-group-addon">VVVV or CAVOK</span>
+                    <input type="text" name="wwcavok_archivemetarformdata" id="wwcavok_archivemetarformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control compulsory" placeholder=" Enter VVVV or CAVOK" >
                 </div>
             </div>
 
@@ -162,9 +203,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">W1W1</span>
+                    <span class="input-group-addon">W<sup>1</sup>W<sup>1</sup></span>
                      <input type="text" name="w1w1_archivemetarformdata" id="w1w1_archivemetarformdata"   class="form-control" placeholder=" Enter W1W1 ">
-                   <!-- <select name="w1w1_archivemetarformdata" id="w1w1_archivemetarformdata"   required class="form-control">
+                   <!-- <select name="w1w1_archivemetarformdata" id="w1w1_archivemetarformdata"    class="form-control compulsory">
                         <option value="">--Select Options--</option>
                         <option value="RA">RA</option>
                         <option value="Fg">Fg</option>
@@ -178,7 +219,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">N1CCh1h1NnCChhhNhCChhh</span>
-                    <input type="text" name="ncc_archivemetarformdata" id="ncc_archivemetarformdata"   class="form-control" placeholder=" Enter N1CCh1h1NnCChhhNhCChhh " >
+                    <input type="text" name="ncc_archivemetarformdata" id="ncc_archivemetarformdata"   class="form-control" placeholder=" Enter the N1CCh1h1NnCChhhNhCChhh " >
                 </div>
             </div>
 
@@ -187,22 +228,22 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">TT/TdTd</span>
-                    <input type="text" name="tttdtd_archivemetarformdata" id="tttdtd_archivemetarformdata"     required class="form-control"  required placeholder="Enter TT/TdTd" >
+                    <span class="input-group-addon">TT/T<sub>d</sub>T<sub>d</sub></span>
+                    <input type="text" name="tttdtd_archivemetarformdata" id="tttdtd_archivemetarformdata"      class="form-control"   placeholder="Enter the TT/TdTd" >
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">QNH(hpa)</span>
-                    <input type="text" name="qnhhpa_archivemetarformdata"  id="qnhhpa_archivemetarformdata" onkeyup="allowIntegerInputOnly(this)"  class="form-control"  placeholder="QNH(hpa)" id="qnhhpa">
+                    <input type="text" name="qnhhpa_archivemetarformdata"  id="qnhhpa_archivemetarformdata" onkeyup=""  class="form-control"  placeholder="Enter the QNH(hpa)" >
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">QNH(in)</span>
-                    <input type="text" name="qnhin_archivemetarformdata"  id="qnhin_archivemetarformdata" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="QNH(in)" id="qnhin">
+                    <input type="text" name="qnhin_archivemetarformdata"  id="qnhin_archivemetarformdata" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter the QNH(in)" >
                 </div>
             </div>
 
@@ -225,8 +266,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon">RE W1W1</span>
-                    <input type="text" name="rew1w1_archivemetarformdata"  id="rew1w1_archivemetarformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder=" Enter QFE(in)" >
+                    <span class="input-group-addon">RE W<sup>1</sup>W<sup>1</sup></span>
+                    <input type="text" name="rew1w1_archivemetarformdata"  id="rew1w1_archivemetarformdata" onkeyup="allowCharactersInputOnly(this)"  class="form-control"  placeholder=" Enter RE W1W1" >
 
 
                      </div>
@@ -276,16 +317,40 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Select Date</span>
-                        <input type="text" name="date" class="form-control" value="<?php echo $metadataform->Date;?>" placeholder="Enter select date" id="expdate">
+                        <input type="text" name="date" id="expdate"  class="form-control compulsory"  value="<?php echo $metadataform->Date;?>"  placeholder="Enter select date"  readonly class="form-control">
                           <input type="hidden" name="id" value="<?php echo $metadataform->id;?>">
                     </div>
                 </div>
 
+    <?php     if($userrole=="DataOfficer" || $userrole=="SeniorDataOfficer" ) { ?>
+                  <div class="form-group">
+                      <div class="input-group">
 
+                          <span class="input-group-addon">Station</span>
+                          <select name="station" id="stationManager"   class="form-control" placeholder="Select Station">
+                              <option value="<?php echo $metadataform->StationName;?>"><?php echo $metadataform->StationName;?></option>
+                              <?php
+                              if (is_array($stationsdata) && count($stationsdata)) {
+                                  foreach($stationsdata as $station){?>
+                                      <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                                  <?php }
+                              } ?>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon">Station Number</span>
+                          <input type="text" name="stationNo"  id="stationNoManager"  class="form-control compulsory" value="<?php echo $metadataform->StationNumber;?>"  readonly class="form-control"  >
+                      </div>
+                  </div>
+                <?php } else {?>
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon">Station</span>
-                            <input type="text" name="station" id="station" required class="form-control" value="<?php echo $metadataform->StationName;?>"  readonly class="form-control" >
+                            <span class="input-group-addon">Station Name</span>
+                            <input type="text" name="station" id="station"  class="form-control compulsory"  value="<?php echo $metadataform->StationName;?>"  readonly class="form-control" >
 
                         </div>
                     </div>
@@ -294,63 +359,58 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"> Station Number</span>
-                            <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $metadataform->StationNumber;?>" readonly="readonly" >
+                            <input type="text" name="stationNo"  class="form-control compulsory" id="stationNo" readonly class="form-control compulsory"  value="<?php echo $metadataform->StationNumber;?>" readonly="readonly" >
                         </div>
                     </div>
+<?php }?>
 
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">TIME</span>
+                        <input type="text" name="timeRecorded" id="timeRecorded"  readonly class="form-control"   class="form-control compulsory"  value="<?php echo $metadataform->TIME;?>" required placeholder="time" readonly="readonly" >
 
+                    </div>
+                </div>
 
 
 
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">METAR/SPECI</span>
-                        <select name="metarspeci" id="metarspeci"  required class="form-control">
-                            <option value="<?php echo $metadataform->METARSPECI;?>"> <?php echo $metadataform->METARSPECI;?></option>
-                            <option value="">Select Options</option>
-                            <option value="METAR">METAR</option>
-                            <option value="SPECI">SPECI</option>
-                        </select>
+                        <input type="text" name="metarspeci" id="metarspeci"   class="form-control compulsory"  value="<?php echo $metadataform->METARSPECI;?>" required placeholder="time" readonly="readonly">
+
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">CCCC</span>
-                        <input type="text" name="cccc" id="cccc" onkeyup="allowCharactersInputOnly(this)"  required class="form-control" value="<?php echo $metadataform->CCCC;?>" required placeholder="CCCC" >
+                        <input type="text" name="cccc" id="cccc" onkeyup="allowCharactersInputOnly(this)"  class="form-control "   class="form-control" value="<?php echo $metadataform->CCCC;?>" required placeholder="CCCC" >
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">YYGGgg</span>
-                        <input type="text" name="yyGGgg" id="yyGGgg"   required class="form-control" value="<?php echo $metadataform->YYGGgg;?>" required placeholder="YYGGgg" >
+                        <span class="input-group-addon">YYGGgg<sup>z</sup></span>
+                        <input type="text" name="yyGGgg" id="yyGGgg" readonly class="form-control"   required class="form-control" value="<?php echo $metadataform->YYGGgg;?>" required placeholder="YYGGgg" >
 
                     </div>
                 </div>
 
 
+
+
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">TIME</span>
-                        <input type="text" name="timeRecorded" id="timeRecorded"   required class="form-control" value="<?php echo $metadataform->TIME;?>" required placeholder="time" readonly="readonly" >
-
-
-
+                        <span class="input-group-addon">Dddff/f<sub>m</sub>/f<sub>m</sub></span>
+                        <input type="text" name="dddfffmfm" id="dddfffmfm"   required class="form-control" required value="<?php echo $metadataform->Dddfffmfm;?>" required placeholder="Dddfffmfm" >
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">Dddff/fm/fm</span>
-                        <input type="text" name="dddfffmfm" id="dddfffmfm"   required class="form-control" required value="<?php echo $metadataform->Dddfffmfm;?>" placeholder="Dddfffmfm" >
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">WW or COVAK</span>
-                        <input type="text" name="wwcovak" id="wwcovak"  onkeyup="allowIntegerInputOnly(this)" required class="form-control" value="<?php echo $metadataform->WWorCOVAK;?>" placeholder="WW or COVAK" >
+                        <span class="input-group-addon">WW or CAVOK</span>
+                        <input type="text" name="wwcavok" id="wwcavok"    class="form-control" value="<?php echo $metadataform->WWorCAVOK;?>" placeholder="Enter the WW or COVAK" >
                     </div>
                 </div>
 
@@ -360,7 +420,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">W1W1</span>
+                        <span class="input-group-addon">W<sup>1</sup>W<sup>1</sup></span>
                         <input type="text" name="w1w1" id="w1w1"   class="form-control" value="<?php echo $metadataform->W1W1;?>" placeholder="W1W1 ">
 
                        <!-- <select name="w1w1" id="w1w1"   required class="form-control">
@@ -387,14 +447,14 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">TT/TdTd</span>
-                        <input type="text" name="tttdtd"  id="tttdtd"  required class="form-control"  value="<?php echo $metadataform->TTTdTd;?>" required placeholder="TT" >
+                        <input type="text" name="tttdtd"  id="tttdtd"   class="form-control"  value="<?php echo $metadataform->TTTdTd;?>" required placeholder="TT" >
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">QNH(hpa)</span>
-                        <input type="text" name="qnhhpa" id="qnhhpa" onkeyup="allowIntegerInputOnly(this)"  class="form-control" value="<?php echo $metadataform->Qnhhpa;?>"  placeholder="QNH(hpa)" >
+                        <input type="text" name="qnhhpa" id="qnhhpa" onkeyup=""  class="form-control" value="<?php echo $metadataform->Qnhhpa;?>"  placeholder="QNH(hpa)" >
                     </div>
                 </div>
 
@@ -421,7 +481,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon">RE W1W1</span>
+                        <span class="input-group-addon">RE W<sup>1</sup>W<sup>1</sup></span>
                         <input type="text" name="rew1w1"  id="rew1w1" onkeyup="allowCharactersInputOnly(this)" value="<?php echo $metadataform->REW1W1;?>"  class="form-control"  placeholder=" Enter REW1W1" >
 
 
@@ -470,9 +530,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             <div class="col-xs-12">
 
                 <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title"> Archive Metar Form</h3>
-                    </div><!-- /.box-header -->
                     <?php require_once(APPPATH . 'views/error.php'); ?>
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
@@ -482,11 +539,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Date</th>
                                 <th>Station</th>
                                 <th>Station No</th>
-                                <th>Metar Speci</th>
+                                <th>Metar/ Speci</th>
                                 <th>CCCC</th>
                                 <th>YYGGgg</th>
                                 <th>Dddff/ fm/fm</th>
-                                <th>WW or COVAK</th>
+                                <th>WW or CAVOK</th>
                                 <th>W1 W1</th>
                                 <th>NCC</th>
 
@@ -496,9 +553,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>QFE (hpa)</th>
                                 <th>QFE (in)</th>
                                 <th>RE W1W1</th>
-                            <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
+                            <?php if( $userrole=='SeniorDataOfficer' || $userrole=='DataOfficer' || $userrole=='ObserverArchive' || $userrole=='OC' ){ ?>
                                     <th>Approved</th>
-
                                     <th>By</th>
                                     <th class="no-print">Action</th>
                                 <?php }?>
@@ -522,7 +578,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $metardata->CCCC;?></td>
                                         <td ><?php echo $metardata->YYGGgg;?></td>
                                         <td ><?php echo $metardata->Dddfffmfm;?></td>
-                                        <td ><?php echo $metardata->WWorCOVAK;?></td>
+                                        <td ><?php echo $metardata->WWorCAVOK;?></td>
                                         <td><?php echo $metardata->W1W1;?></td>
                                         <td><?php echo $metardata->NlCCNmCCNhCC;?></td>
 
@@ -533,19 +589,19 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td><?php echo $metardata->Qfehpa;?></td>
                                         <td><?php echo $metardata->Qfein;?></td>
                                         <td><?php echo $metardata->REW1W1;?></td>
-                                        <td><?php echo $metardata->Approved;?></td>
+                                  <?php if($userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive' || $userrole=='OC' ){ ?>
 
-                                        <td><?php echo $metardata->SubmittedBy;?></td>
-                                  <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><td class="no-print">
+                                    <td><?php echo $metardata->Approved;?></td>
+                                    <td><?php echo $metardata->SubmittedBy;?></td>
+                                    <td class="no-print">
 
                                             <a href="<?php echo base_url() . "index.php/ArchiveMetarFormData/DisplayArchivedMetarFormForUpdate/" .$metarid ;?>" style="cursor:pointer;">Edit</a>
-                                           <!-- or <a href="<?php echo base_url() . "index.php/ArchiveMetarFormData/deleteArchiveMetarFormData/" .$metarid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $metardata->StationName;?>');">Delete</a></td><?php }?> -->
                                     </tr>
 
                                 <?php
                                 }
                             }
+                          }
                             ?>
                             </tbody>
                         </table>
@@ -577,7 +633,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 //if true there is already an entry
                 if(returntruthvalue=="true"){
 
-                    alert("Archive Metar With the date,station,station Number and Time exists already in the db");
+                    alert("Archive Metar With the date,station,station Number, Time and Metar Speci Fields exists already in the db");
                     return false;
                 }else if(returntruthvalue=="Missing"){
 
@@ -585,6 +641,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
                 }
 
+
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveMetarFormData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveMetarFormData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveMetarFormData_hiddentextfield").focus();
+                    return false;
+
+                }
 
                 //Check that Date selected
                 var date=$('#date').val();
@@ -641,12 +707,22 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
 
-                //Check that WIW1 IS PICKED FROM A LIST
-                var w1w1=$('#w1w1_archivemetarformdata').val();
-                if(w1w1==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Please select W1 W1 from the list.");
-                    $('#w1w1_archivemetarformdata').val("");  //Clear the field.
-                    $("#w1w1_archivemetarformdata").focus();
+                //Check that CCCC IS PICKED FROM A LIST
+                var cccc=$('#cccc_archivemetarformdata').val();
+                if(cccc==""){  // returns true if the variable does NOT contain a valid number
+                    alert("CCCC not picked.");
+                    $('#cccc_archivemetarformdata').val("");  //Clear the field.
+                    $("#cccc_archivemetarformdata").focus();
+                    return false;
+
+                }
+
+                //Check that CCCC IS PICKED FROM A LIST
+                var yyGGgg=$('#yyGGgg_archivemetarformdata').val();
+                if(yyGGgg==""){  // returns true if the variable does NOT contain a valid number
+                    alert("yyGGgg not generated.");
+                    $('#yyGGgg_archivemetarformdata').val("");  //Clear the field.
+                    $("#yyGGgg_archivemetarformdata").focus();
                     return false;
 
                 }
@@ -710,11 +786,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             var truthvalue="Missing";
         }
 
-
-
-
             return truthvalue;
-
 
         }//end of check duplicate values in the DB
 
@@ -773,12 +845,22 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
 
                 }
-                //Check that WIW1 IS PICKED FROM A LIST
-                var w1w1=$('#w1w1').val();
-                if(w1w1==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Please select W1W1 from the list.");
-                    $('#w1w1').val("");  //Clear the field.
-                    $("#w1w1").focus();
+                //Check that CCCC IS PICKED FROM A LIST
+                var cccc=$('#cccc').val();
+                if(cccc==""){  // returns true if the variable does NOT contain a valid number
+                    alert("CCCC not picked.");
+                    $('#cccc').val("");  //Clear the field.
+                    $("#cccc").focus();
+                    return false;
+
+                }
+
+                //Check that CCCC IS PICKED FROM A LIST
+                var yyGGgg=$('#yyGGgg').val();
+                if(yyGGgg==""){  // returns true if the variable does NOT contain a valid number
+                    alert("yyGGgg not generated.");
+                    $('#yyGGgg').val("");  //Clear the field.
+                    $("#yyGGgg").focus();
                     return false;
 
                 }
@@ -802,37 +884,84 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         });  //document
         </script>
+        <script type="text/javascript">
+            //Once the Manager selects the Station the Station Number, should be picked from the DB.
+            // For Add User when user is OC
+            $(document).on('change','#stationManager',function(){
+                $('#stationNoManager').val("");  //Clear the field.
 
-    <script>
-        //Inform the user if they want to really update this textfield with a new value.
-        //On Editing
-        $(document).ready(function(){
+                var stationName = this.value;
+                if (stationName != "") {
+                    //alert(station);
+                    $('#stationNoManager').val("");
 
-            var newValue_yyGGgg;
-            var oldValue_yyGGgg=$('#yyGGgg').val();
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                        type: "POST",
+                        data: {'stationName': stationName},
+                        cache: false,
+                        //dataType: "JSON",
+                        success: function(data){
+                            if (data)
+                            {
+                                var json = JSON.parse(data);
 
-            $('#yyGGgg').live('change paste', function(){
-                //oldValue_yyGGgg = newValue_yyGGgg;
-                newValue_yyGGgg = $(this).val();
+                                $('#stationNoManager').empty();
 
-                var retVal = confirm("Do you want to make updates to this field ?");
-                if( retVal == true ){
-                    //document.write ("User wants to continue!");
+                                 //alert(data);
+                                $("#stationNoManager").val(json[0].StationNumber);
 
-                    $('#yyGGgg').val(newValue_yyGGgg);
-                    //alert("HI");
-                    return true;
+
+                            }
+                            else{
+
+                                $('#stationNoManager').empty();
+                                $('#stationNoManager').val("");
+
+
+
+
+                            }
+                        }
+
+                    });
+
+
+
                 }
-                else{
-                    //document.write ("User does not want to continue!");
-                    //alert("HItttttt");
-                    $('#yyGGgg').val(oldValue_yyGGgg);
-                    return false;
+                else {
+                    $('#stationNoManager').empty();
+                    $('#stationNoManager').val("");
+
                 }
 
-            });
-        });
-    </script>
+            })
+        </script>
+
+      <script type="text/javascript">
+          function str_pad(n) {
+              return String("0" + n).slice(-2);
+          }
+          $(document.body).on('.combo').change(function() {  //Add the date and TIME IN ZOLU SELECT to get another text field
+              $('#yyGGgg_archivemetarformdata').val("");  //Clear the field.
+              var dateSelected;
+              var timeInZolu;
+              dateSelected= new Date($('#date').val());
+             var getdayFrom_dateSelected=str_pad(dateSelected.getDate());
+              //var MyDateString;
+              //MyDateString =str_pad(getdayFrom_dateSelected);
+              timeInZolu= $('#time_archivemetarformdata').val();
+
+
+
+              var yyGGgg_value =getdayFrom_dateSelected+timeInZolu;
+
+
+              $('#yyGGgg_archivemetarformdata').val(yyGGgg_value);
+          });
+      </script>
+
+
 
     <script>
         $(document).ready(function(){
@@ -866,25 +995,55 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         //On Editing
         $(document).ready(function(){
             ///////////////////////////////////////////////////////////////////////////////////////////
-            var newValue_wwcovak;
-            var oldValue_wwcovak= $('#wwcovak').val()
+            var newValue_wwcavok;
+            var oldValue_wwcavok= $('#wwcavok').val()
 
-            $('#wwcovak').live('change paste', function(){
+            $('#wwcavok').live('change paste', function(){
                 // oldValue_wwcovak = newValue_dddfffmfm;
-                newValue_wwcovak = $(this).val();
+                newValue_wwcavok = $(this).val();
 
                 var retVal = confirm("Do you want to make updates to this field ?");
                 if( retVal == true ){
                     //document.write ("User wants to continue!");
 
-                    $('#wwcovak').val(newValue_wwcovak);
+                    $('#wwcavok').val(newValue_wwcavok);
                     //alert("HI");
                     return true;
                 }
                 else{
                     //document.write ("User does not want to continue!");
                     //alert("HItttttt");
-                    $('#wwcovak').val(oldValue_wwcovak);
+                    $('#wwcavok').val(oldValue_wwcavok);
+                    return false;
+                }
+
+            });
+        });
+    </script>
+    <script>
+        //Inform the user if they want to really update this textfield with a new value.
+        //On Editing
+        $(document).ready(function(){
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            var newValue_w1w1;
+            var oldValue_w1w1= $('#w1w1').val();
+
+            $('#w1w1').live('change paste', function(){
+                //oldValue_ncc = newValue_ncc;
+                newValue_w1w1 = $(this).val();
+
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
+
+                    $('#w1w1').val(newValue_w1w1);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#w1w1').val(oldValue_ncc);
                     return false;
                 }
 
@@ -1072,110 +1231,40 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             });
         });
     </script>
+    <script>
+        //Inform the user if they want to really update this textfield with a new value.
+        //On Editing
+        $(document).ready(function(){
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            var newValue_rew1w1;
+            var oldValue_rew1w1= $('#rew1w1').val();
 
+            $('#rew1w1').live('change paste', function(){
+                //oldValue_qfein = newValue_qfein;
+                newValue_rew1w1 = $(this).val();
 
-    <script type="text/javascript">
-        //When doing A Speci we end on TTTdTd for required fields
-        //On Add new Metar
-        $(document.body).on('change','#metarspeci_archivemetarform',function(){
+                var retVal = confirm("Do you want to make updates to this field ?");
+                if( retVal == true ){
+                    //document.write ("User wants to continue!");
 
-            var metarspeci = this.value;
-
-
-            if (metarspeci == "SPECI") {
-                $('#qnhhpametar').attr('required', false);
-
-
-                $('#qnhinmetar').attr('readonly', false);
-                $('#qnhinmetar').attr('required', false);
-
-            }
-            else if(metarspeci == "METAR"){
-                $('#qnhhpametar').attr('required', true);
-
-                $('#qnhinmetar').attr('readonly', true);
-                $('#qnhinmetar').attr('required', true);
-
-            }
-
-
-        })
-
+                    $('#rew1w1').val(newValue_rew1w1);
+                    //alert("HI");
+                    return true;
+                }
+                else{
+                    //document.write ("User does not want to continue!");
+                    //alert("HItttttt");
+                    $('#rew1w1').val(oldValue_rew1w1);
+                    return false;
+                }
+            });
+        });
     </script>
-    <script type="text/javascript">
-        //When doing A Speci we end on TTTdTd for required fields
-        //On Edit Metar
-        $(document.body).on('change','#metarspeci',function(){
-
-            var metarspeci = this.value;
-
-
-            if (metarspeci == "SPECI") {
-                $('#qnhhpa').attr('required', false);
-
-
-                $('#qnhin').attr('readonly', false);
-                $('#qnhin').attr('required', false);
-
-            }
-            else if(metarspeci == "METAR"){
-                $('#qnhhpa').attr('required', true);
-
-                $('#qnhin').attr('readonly', true);
-                $('#qnhin').attr('required', true);
-
-       }
-
-
-        })
-
-    </script>
-    <script type="text/javascript">
-        //Once the AdmManagerlects the Station the Station Number shoulManagerpicked from the DB Automatically.
-       // Managerr Insert/Add Archieve metar Form Data
-    (document.body).on('change','#stationmetarManager',function(){
-            $('#stationNometarManager').val("");  //Clear the field.
-            var stationName = this.value;
-
-
-       if (stationName != "") {
-                //alert(station);
-                $('#stationNometarAdmin').val("");
-                $.ajax({
-                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
-                    type: "POST",
-                    data: {'stationName': stationName},
-                    cache: false,
-                    //dataType: "JSON",
-               success: function(data){
-                        if (data)
-                        {
-                   var json = JSON.parse(data);
-
-                            $('#stationNometarManager').val("");
-
-                       // alert(data);
-                            $("#stationNometarManager").val(json[0].StationNumber);
-                    }
-                        else{
-
-                       $('#stationNometarManager').empty();
-                            $('#statiManageretarAdmin').val("");
-
-                        }
-               }
-
-                });
 
 
 
-                    else {
 
-                $('#stationNometarManager').empty();
-                $('#stationNometarManager').val("");
-            }     })
-
-    </script>
 
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

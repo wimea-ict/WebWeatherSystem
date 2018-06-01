@@ -1,5 +1,6 @@
-<?php require_once(APPPATH . 'views/header.php'); ?>
-<?php  $session_data = $this->session->userdata('logged_in');
+<?php require_once(APPPATH . 'views/header.php');
+
+$session_data = $this->session->userdata('logged_in');
 $userrole=$session_data['UserRole'];
 $userstation=$session_data['UserStation'];
 $userstationNo=$session_data['StationNumber'];
@@ -61,7 +62,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
 
 
-
+<?php if(  $userrole== "ObserverDataEntrant"  ||  $userrole== "OC" ){ ?>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">Station Name</span>
@@ -78,8 +79,32 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                             <input type="text" name="stationNo_archivedekadalformreportdata"  id="stationNo_archivedekadalformreportdata" required class="form-control" readonly  value="<?php echo $userstationNo;?>" readonly="readonly" >
                                         </div>
                                     </div>
+<?php } elseif($userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" ) {?>
+  <div class="form-group">
+      <div class="input-group">
 
+          <span class="input-group-addon">Station</span>
+          <select name="station_archivedekadalformreportdata" id="stationManager"   class="form-control" placeholder="Select Station">
+              <option value="">Select Stations</option>
+              <?php
+              if (is_array($stationsdata) && count($stationsdata)) {
+                  foreach($stationsdata as $station){?>
+                      <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
+                  <?php }
+              } ?>
+          </select>
+      </div>
+  </div>
+
+  <div class="form-group">
+      <div class="input-group">
+
+          <span class="input-group-addon">Station Number</span>
+          <input type="text" name="stationNo_archivedekadalformreportdata"  id="stationNoManager" required class="form-control" value=""  readonly class="form-control"  >
+      </div>
+  </div>
+<?php }?>
 
                                 <div class="form-group">
                                     <div class="input-group">
@@ -152,7 +177,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">RAINFALL</span>
-                                        <input type="text" name="rainfall0600Z_archivedekadalformreportdata" id="rainfall0600Z_archivedekadalformreportdata" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter RAINFALL 9:00 AM" >
+                                        <input type="text" name="rainfall0600Z_archivedekadalformreportdata" id="rainfall0600Z_archivedekadalformreportdata"  required class="form-control" required placeholder="Enter RAINFALL 9:00 AM" >
 
                                     </div>
                                 </div>
@@ -209,12 +234,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="clearfix"></div>
                         </div>
 
-                        <div class="modal-footer clearfix">
+                        <center>
 
-                            <a href="<?= base_url(); ?>index.php/ArchiveDekadalFormReportData/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                            <a href="<?= base_url(); ?>index.php/ArchiveDekadalFormReportData/" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-                            <button type="submit" id="postarchiveDekadalFormReportdata_button" name="postarchiveDekadalFormReportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Save  New Archive Dekadal Form</button>
-                        </div>
+                            <button type="submit" id="postarchiveDekadalFormReportdata_button" name="postarchiveDekadalFormReportdata_button" class="btn btn-primary"><i class="fa fa-plus"></i> SUBMIT</button>
+                        </center>
                     </form>
                 </div>
                 <?php
@@ -255,25 +280,47 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         </div>
                                     </div>
 
+                            <?php        if($userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" ) {?>
+                                      <div class="form-group">
+                                          <div class="input-group">
 
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Station</span>
-                                                <input type="text" name="station" id="station" required class="form-control" value="<?php echo $archiveddekadalformreportdata->StationName;?>"  readonly class="form-control" >
+                                              <span class="input-group-addon">Station</span>
+                                              <select name="station" id="stationManager"   class="form-control" placeholder="Select Station">
+                                                  <option value="<?php echo $archiveddekadalformreportdata->StationName;?>"><?php echo $archiveddekadalformreportdata->StationName;?></option>
+                                                  <?php
+                                                  if (is_array($stationsdata) && count($stationsdata)) {
+                                                      foreach($stationsdata as $station){?>
+                                                          <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
-                                            </div>
-                                        </div>
+                                                      <?php }
+                                                  } ?>
+                                              </select>
+                                          </div>
+                                      </div>
 
+                                      <div class="form-group">
+                                          <div class="input-group">
 
+                                              <span class="input-group-addon">Station Number</span>
+                                              <input type="text" name="stationNo"  id="stationNoManager" required class="form-control" value="<?php echo $archiveddekadalformreportdata->StationNumber;?>"  readonly class="form-control"  >
+                                          </div>
+                                      </div>
+                                    <?php } else {?>
+                      <div class="form-group">
+                          <div class="input-group">
+                              <span class="input-group-addon">Station</span>
+                              <input type="text" name="station" id="station" required class="form-control" value="<?php echo $archiveddekadalformreportdata->StationName;?>"  readonly class="form-control" >
 
+                          </div>
+                      </div>
 
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"> Station Number</span>
-                                                <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $archiveddekadalformreportdata->StationNumber;?>" readonly="readonly" >
-                                            </div>
-                                        </div>
-
+                      <div class="form-group">
+                          <div class="input-group">
+                              <span class="input-group-addon"> Station Number</span>
+                              <input type="text" name="stationNo" required class="form-control" id="stationNo" readonly class="form-control" value="<?php echo $archiveddekadalformreportdata->StationNumber;?>" readonly="readonly" >
+                          </div>
+                      </div>
+<?php }?>
 
 
                                     <div class="form-group">
@@ -303,6 +350,14 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <div class="input-group">
                                             <span class="input-group-addon">WET BULB TIME 9:00 AM</span>
                                             <input type="text" name="wetBulb0600Z" id="wetBulb0600Z" value="<?php echo $archiveddekadalformreportdata->WET_BULB_0600Z;?>" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter MIN" >
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">DEW POINT TIME 9:00 AM</span>
+                                            <input type="text" name="dewPoint0600Z" id="dewPoint0600Z" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter DEW POINT 9:00 AM" >
 
                                         </div>
                                     </div>
@@ -339,7 +394,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">RAINFALL</span>
-                                            <input type="text" name="rainfall0600Z" id="rainfall0600Z" value="<?php echo $archiveddekadalformreportdata->RAINFALL_0600Z;?>" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required placeholder="Enter MIN" >
+                                            <input type="text" name="rainfall0600Z" id="rainfall0600Z" value="<?php echo $archiveddekadalformreportdata->RAINFALL_0600Z;?>"  required class="form-control" required placeholder="Enter MIN" >
 
                                         </div>
                                     </div>
@@ -408,12 +463,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="modal-footer clearfix">
+                            <center>
 
-                                <a href="<?php echo base_url()."index.php/ArchiveDekadalFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                                <a href="<?php echo base_url()."index.php/ArchiveDekadalFormReportData/"; ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> BACK</a>
 
-                                <button type="submit" name="updatearchiveDekadalformreportdata_button" id="updatearchiveDekadalformreportdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Update Archive Metar Form</button>
-                            </div>
+                                <button type="submit" name="updatearchiveDekadalformreportdata_button" id="updatearchiveDekadalformreportdata_button" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE</button>
+                            </center>
                         </form>
                     </div>
                     <?php
@@ -423,7 +478,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="row">
                     <div class="col-xs-3"><a class="btn btn-primary no-print"
                                              href="<?php echo base_url()."index.php/ArchiveDekadalFormReportData/DisplayNewArchiveDekadalForm/";?>"
-                        <i class="fa fa-plus"></i> Add new Archive Dekadal Form</a>
+                        <i class="fa fa-plus"></i> Add Archive Dekadal</a>
 
 
 
@@ -435,9 +490,6 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     <div class="col-xs-12">
 
                         <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title"> Archive Dekadal Form Report</h3>
-                            </div><!-- /.box-header -->
                             <?php require_once(APPPATH . 'views/error.php'); ?>
                             <div class="box-body table-responsive">
                                 <table id="example1" class="table table-bordered table-striped">
@@ -461,12 +513,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <th>WET BULB</th>
                                         <th>DEW POINT</th>
                                         <th>RELATIVE HUMIDITY</th>
-                                        <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?>
+                                        <?php if( $userrole=='SeniorDataOfficer' || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC'){ ?>
                                             <th>Approved</th>
-
                                             <th>By</th>
                                             <th class="no-print">Action</th>
-                                        <?php }?>
+                                        <?php
+
+                                     }?>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -490,32 +543,32 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                                 <td ><?php echo $data->DEW_POINT_0600Z;?></td>
                                                 <td><?php echo $data->RELATIVE_HUMIDITY_0600Z;?></td>
                                                 <td><?php echo $data->WIND_DIRECTION_0600Z;?></td>
-
-
                                                 <td ><?php echo $data->WIND_SPEED_0600Z;?></td>
                                                 <td ><?php echo $data->RAINFALL_0600Z;?></td>
                                                 <td><?php echo $data->DRY_BULB_1200Z;?></td>
                                                 <td><?php echo $data->WET_BULB_1200Z;?></td>
                                                 <td><?php echo $data->DEW_POINT_1200Z;?></td>
                                                 <td><?php echo $data->RELATIVE_HUMIDITY_1200Z;?></td>
-                                                <td><?php echo $data->Approved;?></td>
 
-                                                <td><?php echo $data->SubmittedBy;?></td>
-                                                <?php if($userrole=="OC"|| $userrole=="ObserverDataEntrant"){ ?><td class="no-print">
+                                                <?php if( $userrole=='SeniorDataOfficer' || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC'  ){ ?>
+                                                  <td><?php echo $data->Approved;?></td>
+
+                                                  <td><?php echo $data->SubmittedBy;?></td>
+                                                  <td class="no-print">
 
                                                     <a href="<?php echo base_url() . "index.php/ArchiveDekadalFormReportData/DisplayArchivedDekadalFormForUpdate/" .$id ;?>" style="cursor:pointer;">Edit</a>
-                                                   <!-- or <a href="<?php echo base_url() . "index.php/ArchiveDekadalFormReportData/deleteArchivedDekadalFormData/" .$id ;?>"
-                                                          onClick="return confirm('Are you sure you want to delete <?php echo $data->StationName;?>');">Delete</a></td><?php }?> -->
+
                                             </tr>
 
                                             <?php
                                         }
                                     }
+                                  }
                                     ?>
                                     </tbody>
                                 </table>
                                 <br><br>
-                                <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
+                                <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT</button>
                             </div><!-- /.box-body -->
                         </div><!-- /.box -->
                     </div>
@@ -550,6 +603,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
                 }
 
+
+
+                //Check value of the hidden text field.That stores whether a row is duplicate
+                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').val();
+                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+                    alert("Value not picked");
+                    $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').val("");  //Clear the field.
+                    $("#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield").focus();
+                    return false;
+
+                }
 
 
                 //Check that Date selected
@@ -605,30 +669,33 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').val("");
 
             if ((date != undefined) &&  (stationName != undefined) && (stationNumber != undefined) ) {
+
                 $.ajax({
                     url: "<?php echo base_url(); ?>"+"index.php/ArchiveDekadalFormReportData/checkInDBIfArchiveDekadalFormReportRecordExistsAlready",
                     type: "POST",
                     data:{'date':date,'stationName': stationName,'stationNumber':stationNumber},
                     cache: false,
                     async: false,
-
                     success: function(data){
 
                         if(data=="true"){
 
                             $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').empty();
 
-                            // alert(data);
+                            //alert(data);
                             $("#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield").val(data);
 
                         }
                         else if(data=="false"){
                             $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').empty();
 
-                            // alert(data);
+                             //alert(data);
                             $("#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield").val(data);
 
                         }
+                    },
+                    error:function(data){
+                        alert();
                     }
 
                 });//end of ajax
@@ -1303,3 +1370,4 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         }
     </script>
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>

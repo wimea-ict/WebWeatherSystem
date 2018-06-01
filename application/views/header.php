@@ -9,7 +9,7 @@ $created=$session_data['CreationDate'];
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Weather Admin <?php if(isset($_GET['page'])){ echo "- ". $_GET['page']; }?></title>
+    <title>Weather | <?php echo $userrole; if(isset($_GET['page'])){ echo "- ". $_GET['page']; }?></title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- jQuery 2.0.2
 <script src="js/jquery.min.js"></script>-->
@@ -31,19 +31,61 @@ $created=$session_data['CreationDate'];
     <!-- Bootstrap time Picker -->
     <link href="<?php echo base_url(); ?>css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
-    <!-- DATA TABLES -->
-    <link href="<?php echo base_url(); ?>css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <link href="<?php echo base_url(); ?>css/bootstrap-timepicker/css/bootstrap-timepicker.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>css/bootstrap-timepicker/css/timepicker.less" rel="stylesheet" type="text/css" />  <!-- DATA TABLES -->
+    <link href="<?php echo base_url(); ?>css/bootstrap-timepicker/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+	<!-- Multiple Form section -->
+    <link href="<?php echo base_url(); ?>css/form.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
     <link href="<?php echo base_url(); ?>css/AdminLTE.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>css/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>css/dashboard.css" rel="stylesheet" type="text/css" />
     <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
     <script src="<?php echo base_url(); ?>js/jquery.table2excel.js"></script>
     <script src="<?php echo base_url(); ?>js/jquery.tabletoCSV.js"></script>
+<script src="<?php echo base_url(); ?>js/form0.js"></script>
+    <script src="<?php echo base_url(); ?>js/bootstrap-timepicker-gh-pages/js/bootstrap-timepicker.js"></script>
+	<style type="text/css" media="print">
+	  @page { size: landscape; }
+	  width: 100%;
+	</style>
+  <style>
+    /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+}
+
+/* The Close Button */
 
 
-
-    <style>
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
         .report-table{
             width:100%;
         }
@@ -134,7 +176,7 @@ $created=$session_data['CreationDate'];
 
 
 
-                <?php  if( $userrole== "OC" || $userrole== "Observer"){
+                <?php  if( $userrole== "OC" || $userrole=="WeatherForecaster" || $userrole== "Observer" || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" ){
                 ?>
                 <li class="treeview">
                     <a href="#">
@@ -142,17 +184,21 @@ $created=$session_data['CreationDate'];
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
 
-
+                    <?php if($userrole=="WeatherForecaster") {?>
                     <ul class="treeview-menu">
-                        <li><a href="<?php echo base_url();?>index.php/ObservationSlipForm"><i class="fa fa-angle-double-right"></i> Observation Slip Form </a></li>
-                        <li><a href="<?php echo base_url();?>index.php/MetarForm"><i class="fa fa-angle-double-right"></i> Metar Form</a></li>
-                        <li><a href="<?php echo base_url();?>index.php/MoreFormFieldsForm"><i class="fa fa-angle-double-right"></i> More Form Fields</a></li>
+                       <li><a href="<?php echo base_url();?>index.php/ObservationSlipForm/showWebmobiledata"><i class="fa fa-angle-double-right"></i> manual observations data</a></li>
+                      </ul>
+                  <?php }else{?>
+                    <ul class="treeview-menu">
 
+                       <li><a href="<?php echo base_url();?>index.php/ObservationSlipForm/showWebmobiledata"><i class="fa fa-angle-double-right"></i> MS observation data</a></li>
+                        <li><a href="<?php echo base_url();?>index.php/ObservationSlipForm/showAwsdata"><i class="fa fa-angle-double-right"></i> AWS observation data</a></li>
                     </ul>
+                  <?php }?>
                 </li>
                 <?php } ?>
 
-                <?php  if( $userrole== "ObserverDataEntrant"){
+                <?php  if( $userrole== "ObserverDataEntrant"  || $userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" || $userrole== "OC"){
                 ?>
 
                 <li class="treeview">
@@ -165,6 +211,7 @@ $created=$session_data['CreationDate'];
                     <ul class="treeview-menu">
                         <li><a href="<?php echo base_url();?>index.php/ArchiveObservationSlipFormData"><i class="fa fa-angle-double-right"></i>Observation Slip Form</a></li>
                         <li><a href="<?php echo base_url();?>index.php/ArchiveWeatherSummaryFormReportData"><i class="fa fa-angle-double-right"></i>Weather Summary Form</a></li>
+
                         <li><a href="<?php echo base_url();?>index.php/ArchiveMetarFormData"><i class="fa fa-angle-double-right"></i>Metar Form</a></li>
                         <li><a href="<?php echo base_url();?>index.php/ArchiveSynopticFormReportData"><i class="fa fa-angle-double-right"></i>Synoptic Form</a></li>
                         <li><a href="<?php echo base_url();?>index.php/ArchiveDekadalFormReportData"><i class="fa fa-angle-double-right"></i>Dekadal Form</a></li>
@@ -174,7 +221,7 @@ $created=$session_data['CreationDate'];
                 </li>
                 <?php } ?>
 
-                <?php  if($userrole == "Manager" || $userrole== "OC"){
+                <?php  if($userrole == "ManagerData" || $userrole== "OC" || $userrole=="SeniorDataOfficer" || $userrole=='DataOfficer' || $userrole=='ObserverArchive'){
                 ?>
 
                 <li class="treeview">
@@ -182,7 +229,6 @@ $created=$session_data['CreationDate'];
                         <i class="fa fa-bars"></i> <span> Archived Form Reports</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
-
 
                     <ul class="treeview-menu">
                         <li><a href="<?php echo base_url();?>index.php/DisplayArchivedObservationSlipFormData"><i class="fa fa-angle-double-right"></i> Observation Slip Report</a></li>
@@ -197,7 +243,7 @@ $created=$session_data['CreationDate'];
                 </li>
                 <?php } ?>
 
-              <?php  if( $userrole== "ObserverArchive"){
+              <?php  if( $userrole== "ObserverArchive" ||  $userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" || $userrole== "OC"){
                 ?>
                 <li class="treeview">
                     <a href="#">
@@ -222,7 +268,7 @@ $created=$session_data['CreationDate'];
                 </li>
                 <?php } ?>
 
-                <?php if($userrole == "Manager" || $userrole== "OC"){
+                <?php if($userrole == "ManagerData" || $userrole== "OC" || $userrole == "DataOfficer" || $userrole == "SeniorDataOfficer"){
                 ?>
                 <li class="treeview">
                     <a href="#">
@@ -248,7 +294,7 @@ $created=$session_data['CreationDate'];
         <?php  }?>
 
                 <?php
-                if($userrole == "Manager" || $userrole== "OC"){
+                if($userrole == "ManagerData" || $userrole== "OC" || $userrole=="ZonalOfficer" || $userrole=="SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster" ){
                     ?>
                     <li class="treeview">
                         <a href="#">
@@ -257,18 +303,23 @@ $created=$session_data['CreationDate'];
                         </a>
 
                         <ul class="treeview-menu">
-                            <li><a href="<?php echo base_url();?>index.php/ObservationSlipReport"><i class="fa fa-angle-double-right"></i> Observation Slip Report</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/MetarReport"><i class="fa fa-angle-double-right"></i> Metar Report</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/WeatherSummaryReport"><i class="fa fa-angle-double-right"></i> Weather Summary Report</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/DekadalReport"><i class="fa fa-angle-double-right"></i> Dekadal Report</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/SynopticReport"><i class="fa fa-angle-double-right"></i> Synoptic Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initialiseObservationSlipReport"><i class="fa fa-angle-double-right"></i> Observation Slip Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeMetarReport"><i class="fa fa-angle-double-right"></i> Metar Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeSpeciReport"><i class="fa fa-angle-double-right"></i> Speci Report</a></li>
 
-                            <li><a href="<?php echo base_url();?>index.php/MonthlyRainfallReport"><i class="fa fa-angle-double-right"></i> Monthly Rainfall Report</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/YearlyRainfallReport"><i class="fa fa-angle-double-right"></i> Annual Rainfall Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializerainfallTempReport"><i class="fa fa-angle-double-right"></i> Rainfall temp Report</a></li>
+                          <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeWeatherSummnaryReport"><i class="fa fa-angle-double-right"></i> Weather Summary Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeDekadalReport"><i class="fa fa-angle-double-right"></i> Dekadal Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeSynopticReport"><i class="fa fa-angle-double-right"></i> Synoptic Report</a></li>
+
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeMonthlyRainfallReport"><i class="fa fa-angle-double-right"></i> Monthly Rainfall Report</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeRainfallYearlyReport"><i class="fa fa-angle-double-right"></i> Annual Rainfall Report</a></li>
                         </ul>
                     </li>
-
-
+                <?php } ?>
+                <?php
+                if($userrole == "ManagerData" || $userrole== "OC" ){
+                ?>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bars"></i> <span> Users</span>
@@ -280,7 +331,9 @@ $created=$session_data['CreationDate'];
                             <li><a href="<?php echo base_url();?>index.php/Users/userlogs"><i class="fa fa-angle-double-right"></i> User Logs</a></li>
                         </ul>
                     </li>
-
+                     <?php }  ?>
+                <?php
+                if($userrole == "ManagerStationNetworks"){   ?>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bars"></i> <span> System Data</span>
@@ -290,12 +343,14 @@ $created=$session_data['CreationDate'];
                         <ul class="treeview-menu">
 
                             <li><a href="<?php echo base_url();?>index.php/Stations"><i class="fa fa-angle-double-right"></i> Stations</a></li>
-                          <!--  <li><a href="<?php echo base_url();?>index.php/StationInstruments"><i class="fa fa-angle-double-right"></i> Instruments</a></li>
-                            <li><a href="<?php echo base_url();?>index.php/StationElements"><i class="fa fa-angle-double-right"></i> Elements</a></li> -->
+                            <li><a href="<?php echo base_url();?>index.php/StationInstruments"><i class="fa fa-angle-double-right"></i> Instruments</a></li>
+                            <li><a href="<?php echo base_url();?>index.php/StationElements"><i class="fa fa-angle-double-right"></i> Elements</a></li>
+
+                            <li><a href="<?php echo base_url(); ?>index.php/NewStations/DisplayStationsForm/" ><i class="fa fa-angle-double-right"></i>Add New Station</a></li>
 
                         </ul>
                     </li>
-                <?php } ?>
+                   <?php } ?>
 
             </ul>
         </section>

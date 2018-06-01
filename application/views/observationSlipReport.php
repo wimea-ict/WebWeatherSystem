@@ -23,13 +23,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         </ol>
     </section>
+    <?php require_once(APPPATH . 'views/error.php'); ?>
 
     <!-- Main content -->
     <section class="content report">
+
     <div class="no-print">
         <div id="output"></div>
         <div class="row">
-            <form action="<?php echo base_url(); ?>index.php/ObservationSlipReport/displayobservationslipreport/" method="post" enctype="multipart/form-data">
+            <form action="<?php echo base_url(); ?>index.php/ReportsController/displayobservationslipreport/" method="post" enctype="multipart/form-data">
                 <?php  if($userrole=='OC'){?>
                     <div class="col-xs-3">
                         <div class="form-group">
@@ -40,7 +42,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             </div>
                         </div>
                     </div>
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -73,7 +75,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         </div>
                     </div>
 
-                <?php }elseif($userrole=='Manager'){?>
+                <?php }elseif($userrole=='ManagerData' || $userrole== "ZonalOfficer" || $userrole== "SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster"){?>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <div class="input-group">
@@ -86,28 +88,21 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     </div>
                 <?php }?>
                 <div class="col-xs-3">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">Select Time</span>
-                            <!-- <input type="text" name="day" id="day" class="form-control sumyear" placeholder="Please select the day" > -->
-                            <select name="ObservationSlipTime"  id="ObservationSlipTime" required class="form-control">
-                                <option value="0">--Select TIME Options--</option>
-                                <option value="0500Z">0500Z</option>
-                                <option value="0600Z">0600Z</option>
-                                <option value="0700Z">0700Z</option>
-                                <option value="0800Z">0800Z</option>
-                                <option value="0900Z">0900Z</option>
-                                <option value="1000Z">1000Z</option>
-                                <option value="1100Z">1100Z</option>
-                                <option value="1200Z">1200Z</option>
-                                <option value="1300Z">1300Z</option>
-                                <option value="1400Z">1400Z</option>
-                                <option value="1500Z">1500Z</option>
-                            </select>
 
-                        </div>
-                    </div>
+            <div class="input-group">
+            <span class="input-group-addon" >Select Time</span>
+            <div class="input-group bootstrap-timepicker timepicker">
+             <input id="timepicker2" type="text" name="ObservationSlipTime" id="time_observationslipform"  class="form-control">
+
+           </div>
+           <script type="text/javascript">
+                       $('#timepicker2').timepicker();
+            </script>
+           <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+         </div>
+
                 </div>
+
                 <div class="col-xs-3">
                     <div class="form-group">
                         <div class="input-group">
@@ -119,10 +114,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="col-xs-2">
                     <input type="submit" name="generateobservationslipreport_button" id="generateobservationslipreport_button" class="btn btn-primary" value="Generate report" >
                 </div>
+
             </form>
-        </div>
-        <hr>
+
+
+
     </div>
+
 
 <?php
 if(is_array($displayObservationSlipReportHeaderFields) &&
@@ -130,7 +128,11 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
     is_array($observationslipdataforspecifictimeofaday) &&
     !empty($observationslipdataforspecifictimeofaday)){
 
-    // $day= $displayObservationSlipReportHeaderFields['day'];
+   $numbers="1234";
+    $resi=str_split($numbers);
+    //$ff=rsort($resi);
+   //echo $ff;
+// $day= $displayObservationSlipReportHeaderFields['day'];
     $timeInZoo= $displayObservationSlipReportHeaderFields['TimeInZoo'];
     $date= $displayObservationSlipReportHeaderFields['date'];
     $stationName=$displayObservationSlipReportHeaderFields['stationName'];
@@ -142,7 +144,7 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
     <span><strong>FORM OBS001OBSERVATION SLIP</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <br>
     <span><strong>TIME</strong></span><span class="dotted-line"><?php echo $timeInZoo;?></span>
-    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
     <span><strong>DATE</strong></span> <span class="dotted-line"><?php echo $date;?></span>
 
     <div class="clearfix"></div>
@@ -157,6 +159,7 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
         $observationslipid = $data->id;
 
         ?>
+        <form action="<?php echo base_url(); ?>index.php/ObservationSlipReport/reportIssues" method="post" >
 
         <table class="report-table" id="table2excel">
 
@@ -205,23 +208,61 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
                 </tr>
 
                 <tr>
-                    <td class="main"><?php echo $data->TypeOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfLowClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfLowClouds;?></td>
+                    <td class="main"><?php echo $data->TypeOfLowClouds1;?></td>
+                    <td class="main"><?php echo $data->OktasOfLowClouds1;?></td>
+                    <td class="main"><?php echo $data->HeightOfLowClouds1;?></td>
+                    <td class="main"><?php echo $data->CLCODEOfLowClouds1;?></td>
 
 
-                    <td class="main"><?php echo $data->TypeOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfMediumClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfMediumClouds;?></td>
+                    <td class="main"><?php echo $data->TypeOfMediumClouds1;?></td>
+                    <td class="main"><?php echo $data->OktasOfMediumClouds1;?></td>
+                    <td class="main"><?php echo $data->HeightOfMediumClouds1;?></td>
+                    <td class="main"><?php echo $data->CLCODEOfMediumClouds1;?></td>
 
-                    <td class="main"><?php echo $data->TypeOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->OktasOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->HeightOfHighClouds;?></td>
-                    <td class="main"><?php echo $data->CLCODEOfHighClouds;?></td>
+                    <td class="main"><?php echo $data->TypeOfHighClouds1;?></td>
+                    <td class="main"><?php echo $data->OktasOfHighClouds1;?></td>
+                    <td class="main"><?php echo $data->HeightOfHighClouds1;?></td>
+                    <td class="main"><?php echo $data->CLCODEOfHighClouds1;?></td>
 
                 </tr>
+
+               <tr>
+                   <td class="main"><?php echo $data->TypeOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfLowClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfLowClouds2;?></td>
+
+
+                   <td class="main"><?php echo $data->TypeOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfMediumClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfMediumClouds2;?></td>
+
+                   <td class="main"><?php echo $data->TypeOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->OktasOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->HeightOfHighClouds2;?></td>
+                   <td class="main"><?php echo $data->CLCODEOfHighClouds2;?></td>
+
+               </tr>
+
+            <tr>
+                <td class="main"><?php echo $data->TypeOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfLowClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfLowClouds3;?></td>
+
+
+                <td class="main"><?php echo $data->TypeOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfMediumClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfMediumClouds3;?></td>
+
+                <td class="main"><?php echo $data->TypeOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->OktasOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->HeightOfHighClouds3;?></td>
+                <td class="main"><?php echo $data->CLCODEOfHighClouds3;?></td>
+
+            </tr>
 
                 <tr>
 
@@ -394,25 +435,31 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
 
                 </tr>
             </table>
-
-
         </table>
-
-
-
-
          <?php
                 }
     ?>
-    <br><br>
+
+    <br><br><br>
+    <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
+    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
+    <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
+
+   <input type="hidden"  name="date" value="<?php echo $data->Date;?>"/>
+   <input type="hidden"  name="time" value="<?php echo $data->TIME;?>"/>
+   <input type="hidden"  name="stationName" value="<?php echo $data->StationName;?>"/>
+   <input type="hidden"  name="stationNumber" value="<?php echo $data->StationNumber;?>"/>
+
+    <br><br><br>
     <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> Print info on this page</button>
     <button id="export" class="btn btn-primary no-print"><i class="fa fa-print"></i> Export to excel</button>
     <button id="exportcsv" class="btn btn-primary no-print"  data-export="export"><i class="fa fa-print"></i> Export to csv</button>
+    <button id="reportIssue" type="submit" class="btn btn-primary no-print" style="margin-left:150px;"  ><i class="fa fa-envelope-o"></i> Report Issues to OC</button>
 
 
     <a href="<?php echo base_url()."index.php/ObservationSlipReport/"; ?>" class="btn btn-warning pull-right"><i class="fa fa-times"></i> Close report</a>
     <div class="clearfix"></div>
-    <br><br>
+    <br><br></form>
 
 <?php }elseif(is_array($displayObservationSlipReportHeaderFields) &&
     count($displayObservationSlipReportHeaderFields) &&
@@ -495,16 +542,7 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
                     return false;
 
                 }
-                //////////////////////////////////////////////////////////////////////////////////////////////               //////////////////////////////////////////////////////////////////////////////////////////////////
-                //Check that the DATE is selected from the list of TIME for the METAR
-                var time= $('#ObservationSlipTime').val();
-                if(time==""){  // returns true if the variable does NOT contain a valid number
-                    alert("Time not Selected from the List");
-                    $('#ObservationSlipTime').val("");  //Clear the field.
-                    $("#ObservationSlipTime").focus();
-                    return false;
 
-                }
 ///////////////////////////////////////////////////////////////////////////////////////////////
                 //Check that the DATE is selected from the list of TIME for the METAR
                 var date=$('#date').val();
@@ -576,3 +614,4 @@ if(is_array($displayObservationSlipReportHeaderFields) &&
 
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>
+<script src="<?php echo base_url(); ?>js/form.js"></script>
