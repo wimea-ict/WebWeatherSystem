@@ -10,7 +10,10 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+        if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
         // $this->unsetflashdatainfo();
@@ -103,8 +106,8 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
         $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
-
         $config['remove_spaces'] = TRUE;
+        $config['file_name'] ='MonthlyRainfall' .'-'.date("Y-m-d").'-'.$_FILES['userfile']['name'];
 
         $this->load->library('upload', $config);
 
@@ -139,15 +142,17 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
             $firstname=$session_data['FirstName'];
             $surname=$session_data['SurName'];
             $SubmittedBy=$user=$firstname.' '.$surname;
+            $stationId=$this->DbHandler->identifyStationById($station, $stationNo);//station name and station number
+
 
             $insertScannedMonthlyRainfallFormReportDataDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'Month' => $monthOFScannedMonthlyRainfallFormReport,'Year' => $yearOFScannedMonthlyRainfallFormReport,
-                'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                'Description'=>$description,'FileName' => $filename);
+                'Form_scanned' => $formname, 'station' => $stationId,
+                'Month' => $monthOFScannedMonthlyRainfallFormReport,'Year' => $yearOFScannedMonthlyRainfallFormReport,
+                'Approved'=> $Approved,'SM_SubmittedBy'=>$SubmittedBy,
+                'Description'=>$description,'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $insertsuccess= $this->DbHandler->insertData($insertScannedMonthlyRainfallFormReportDataDetails,'scannedarchivemonthlyrainfallformreportcopydetails'); //Array for data to insert then  the Table Name
+            $insertsuccess= $this->DbHandler->insertData($insertScannedMonthlyRainfallFormReportDataDetails,'scans_monthly'); //Array for data to insert then  the Table Name
 
             //Redirect the user back with  message
             if($insertsuccess){
@@ -160,13 +165,14 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
                 $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
+               $userid =$session_data['Userid'];
+               $userlogs = array('Userid' => $userid,
+                   'Action' => 'Added new Scanned Metar Form details',
                     'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'station' => $userstationId,
+            
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+               $this->DbHandler->saveUserLogs($userlogs);
 
 
                 $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
@@ -195,7 +201,7 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
 
         if (isset($_FILES[$file_element_name]) && is_uploaded_file($_FILES[$file_element_name]['tmp_name'])) { //file has been uploaded
 
-            $config['upload_path'] = 'archive/';
+        $config['upload_path'] = 'archive/';
         // $config['upload_path'] = '/uploads/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx|xlsx|ppt|pptx';
         $config['encrypt_name'] = FALSE;
@@ -205,8 +211,8 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
         $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
-
         $config['remove_spaces'] = TRUE;
+         $config['file_name'] ='UpdatedMonthlyRainfallScan' .'-'.date("Y-m-d").'-'.$_FILES['userfile']['name'];
 
         $this->load->library('upload', $config);
 
@@ -258,13 +264,14 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
                 $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
+                $userid =$session_data['Userid'];
+                $userlogs = array('Userid' => $userid,
+                    'Action' => 'Added new Scanned Metar Form details',
                     'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'station' => $userstationId,
+            
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                   $this->DbHandler->saveUserLogs($userlogs);
 
 
                 $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
@@ -280,12 +287,30 @@ class ArchiveScannedMonthlyRainfallFormDataReportCopy extends CI_Controller {
         //}
 
     }
+	public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"scans_monthly");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function deleteInformationForArchiveScannedMonthlyRainfallFormReport() {
         $this->unsetflashdatainfo();
 
         $id = $this->uri->segment(3); // URL Segment Three.
 
-        $rowsaffected = $this->DbHandler->deleteData('scannedarchivemonthlyrainfallformreportcopydetails',$id);  //$rowsaffected > 0
+        $rowsaffected = $this->DbHandler->deleteData('scans_monthly',$id);  //$rowsaffected > 0
 
         if ($rowsaffected) {
             //Store User logs.

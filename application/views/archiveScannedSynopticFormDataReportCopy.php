@@ -11,12 +11,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Archive Scanned Metar Form Copy
+            Archive Scanned Synoptic Form Copy
             <small> Page</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Archive Scanned Metar Form Copy</li>
+            <li class="active">Archive Scanned Synoptic Form Copy</li>
 
         </ol>
     </section>
@@ -53,7 +53,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Form</span>
-                                <input type="text" name="formname_synoptic" id="formname_synoptic" readonly="readonly" required class="form-control" value="<?php echo 'Synoptic Form';?>"  readonly class="form-control" >
+                                <input type="text" name="formname_synoptic" id="formname_synoptic" readonly="readonly" required class="form-control" value="<?php echo 'SynopticForm';?>"  readonly class="form-control" >
                                 <input type="hidden" name="checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield" id="checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield">
 
                             </div>
@@ -63,7 +63,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station</span>
-                                    <input type="text" name="station_ArchiveScannedSynopticFormReport" id="station_ArchiveScannedSynopticFormReport" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+
+                                    <select name="station_ArchiveScannedSynopticFormReport" id="stationManager"   class="form-control" placeholder="Select Station">
+                                    <option value="">Select Station</option>
+                                    <?php
+                                    if (is_array($stationsdata) && count($stationsdata)) {
+                                        foreach($stationsdata as $station){?>
+                                            <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
+
+                                        <?php }
+                                    } ?>
+                                </select>
 
                                 </div>
                             </div>
@@ -72,7 +82,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNo_ArchiveScannedSynopticFormReport" required class="form-control" id="stationNo_ArchiveScannedSynopticFormReport" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+
+                                     <input type="text" name="stationNo_ArchiveScannedSynopticFormReport"  id="stationNoManager" required class="form-control" value=""  readonly   >
                                 </div>
                             </div>
 
@@ -320,12 +331,20 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Approved</span>
-                                    <select name="approval" id="approval"  required class="form-control">
-                                        <option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
-                                        <option value="">--Select Approval Options--</option>
-                                        <option value="TRUE">TRUE</option>
-                                        <option value="FALSE">FALSE</option>
-                                    </select>
+                                    <?php if($userrole=="DataOfficer" || $idDetails->Approved=='TRUE'){?>
+								<select name="approval" id="approval" disabled  class="form-control" >
+									<option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<input type="hidden" name="approval" value="<?php echo $idDetails->Approved;?>">
+								<?php }else{?>
+								   <select name="approval" id="approval"  class="form-control" >
+									<option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<?php }?>
                                 </div>
                             </div>
 
@@ -372,10 +391,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Station Name</th>
                                 <th>Station Number</th>
                                 <th>Date</th>
+								<th>First page</th>
+                                <th>Second Page</th>
                                 <th>Description</th>
                                 <th>Approved</th>
                                 <th>By</th>
-                            <?php if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?>
+                            <?php if($userrole=="OC"|| $userrole=="ObserverArchive"||$userrole=="DataOfficer"||$userrole=="SeniorDataOfficer"){ ?>
                                     <th class="no-print">Action</th><?php }?>
                             </tr>
                             </thead>
@@ -385,10 +406,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                             if (is_array($archivedscannedsynopticformreportcopydetails) && count($archivedscannedsynopticformreportcopydetails)) {
                                 foreach($archivedscannedsynopticformreportcopydetails as $data){
-                                    $count++;
+                                  
 
                                     $scannedsynopticformdatadetails = $data->id;
-
+										if($userrole =='DataOfficer' && $data->Approved =='TRUE' ){
+									   $count++;
+									   }else{
+										   $count++;
 
                                     ?>
                                     <tr>
@@ -396,18 +420,37 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $data->StationName;?></td>
                                         <td ><?php echo $data->StationNumber;?></td>
                                         <td ><?php echo $data->form_date;?></td>
+										  <td class="no-print">
+                                   <a title="click to view file" href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedSynopticFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileName_FirstPage;?>" target = "blank"><?php echo $data->FileName_FirstPage;?></a>
+                                  
+                                </td>
+                                <td class="no-print">
+                                   <a title="click to view file" href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedSynopticFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileName_SecondPage;?>" target = "blank"><?php echo $data->FileName_SecondPage;?></a>
+                                  
+                                </td>
                                         <td><?php echo $data->Description;?></td>
-                                        <td ><?php echo $data->Approved?"TRUE":"FALSE";?></td>
-                                        <td><?php echo $data->SubmittedBy;?></td>
-                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?>
+                                        <td ><?php echo $data->Approved;?></td>
+                                        <td><?php echo $data->SD_SubmittedBy;?></td>
+                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"||$userrole=="DataOfficer"||$userrole=="SeniorDataOfficer"){?>
                                      <td class="no-print">
 
-                                            <a href="<?php echo base_url() . "index.php/ArchiveScannedSynopticFormDataReportCopy/DisplayFormToArchiveScannedSynopticFormReportForUpdate/" .$data->id ;?>" style="cursor:pointer;">Edit</a>
+									<table>
+                                         <tr><td>
+                                          
+                                            <a  class= "btn btn-primary" href="<?php echo base_url() . "index.php/ArchiveScannedSynopticFormDataReportCopy/DisplayFormToArchiveScannedSynopticFormReportForUpdate/" .$data->id ;?>" style="cursor:pointer;"><li class="fa fa-edit"></li> Edit</a>
                                     </td>
+											<?php if($userrole=='SeniorDataOfficer'){?>
+											<td>
+											
+											<form method="post" action="<?php echo base_url() . "index.php/ArchiveScannedSynopticFormDataReportCopy/update_approval/" .$data->id;?>"> <input type="hidden" name="id" value="<?php echo $data->id; ?>" ><input type="hidden" name="approve" value="TRUE" ><button class="btn btn-success" <?php if($data->Approved=='TRUE'){ echo "disabled";}?> type="submit"  ><li class='fa fa-check'></li>Approve</button></form>
+											</td><?php }?> 
+									     </tr>
+										 </table>
+									</td>
                                     </tr>
 
                                 <?php
-                                }
+									   }}
                             }
                           }
                             ?>
@@ -451,14 +494,14 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                 //Check value of the hidden text field.That stores whether a row is duplicate
-                var hiddenvalue=$('#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield').val();
+             /*   var hiddenvalue=$('#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield').val();
                 if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
                     alert("Value not picked");
                     $('#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield').val("");  //Clear the field.
                     $("#checkduplicateEntryOnAddArchieveScannedSynopticFormDataReportCopy_hiddentextfield").focus();
                     return false;
 
-                }
+                }*/
 
                 //Check that Form name  is picked
                 var formname=$('#formname_synoptic').val();
@@ -534,8 +577,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             var date= $('#date').val();
 
 
-            var stationName = $('#station_ArchiveScannedSynopticFormReport').val();
-          var stationNumber = $('#stationNo_ArchiveScannedSynopticFormReport').val();
+            var stationName = $('#stationManager').val();
+          var stationNumber = $('#stationNoManager').val();
 
 
 
@@ -643,15 +686,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     return false;
 
                 }
-                //Check that the a file has been uploaded and also the previously Uploaded file
-                var updatefilenameselected1_1=$('#updatearchievescannedcopy_synopticformreport_firstpage').val();
-                var previouslyuploadedfileName1_1=$('#PreviouslyUploadedFileName_synopticformreport_firstpage').val();
-                if((updatefilenameselected1_1!="") && (previouslyuploadedfileName1_1!="")){  // returns true if the variable does NOT contain a valid number
-                    alert(" A file has been  Uploaded and also previously uploaded file");
-                    $('#updatearchievescannedcopy_synopticformreport_firstpage').val("");  //Clear the field.
-                    $("#updatearchievescannedcopy_synopticformreport_firstpage").focus();
-                    return false;
-                }
+                // //Check that the a file has been uploaded and also the previously Uploaded file
+                // var updatefilenameselected1_1=$('#updatearchievescannedcopy_synopticformreport_firstpage').val();
+                // var previouslyuploadedfileName1_1=$('#PreviouslyUploadedFileName_synopticformreport_firstpage').val();
+                // if((updatefilenameselected1_1!="") && (previouslyuploadedfileName1_1!="")){  // returns true if the variable does NOT contain a valid number
+                //     alert(" A file has been  Uploaded and also previously uploaded file");
+                //     $('#updatearchievescannedcopy_synopticformreport_firstpage').val("");  //Clear the field.
+                //     $("#updatearchievescannedcopy_synopticformreport_firstpage").focus();
+                //     return false;
+                // }
 
                 //Check that the a file has been uploaded
                 var updatefilenameselected2=$('#updatearchievescannedcopy_synopticformreport_secondpage').val();
@@ -664,7 +707,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
                 //Check that the a file has been uploaded and also the previously Uploaded file
-                var updatefilenameselected2_1=$('#updatearchievescannedcopy_synopticformreport_secondpage').val();
+              /*  var updatefilenameselected2_1=$('#updatearchievescannedcopy_synopticformreport_secondpage').val();
                 var previouslyuploadedfileName2_1=$('#PreviouslyUploadedFileName_synopticformreport_secondpage').val();
                 if((updatefilenameselected2_1!="") && (previouslyuploadedfileName2_1!="")){  // returns true if the variable does NOT contain a valid number
                     alert(" A file has been  Uploaded and also previously uploaded file");
@@ -672,7 +715,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $("#updatearchievescannedcopy_synopticformreport_secondpage").focus();
                     return false;
                 }
-
+*/
 
 
 
@@ -774,6 +817,56 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $('#stationNoArchiveScannedSynopticFormReportManager').val("");
                 }     })
 
+    </script>
+
+     <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
+
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            //alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
     </script>
 
 

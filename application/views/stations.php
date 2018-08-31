@@ -130,7 +130,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Latitude</span>
-                                <input type="text" name="latitudestation" id="latitudestation" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter latitude " >
+                                <input type="text" name="latitudestation" id="latitudestation"   class="form-control"  placeholder="Enter latitude " >
                             </div>
                         </div>
 
@@ -145,7 +145,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">Longitude</span>
-                                <input type="text" name="longitudestation" id="longitudestation" onkeyup="allowIntegerInputOnly(this)"   class="form-control"  placeholder="Enter longitude" >
+                                <input type="text" name="longitudestation" id="longitudestation"    class="form-control"  placeholder="Enter longitude" >
                             </div>
                         </div>
 
@@ -175,8 +175,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <span class="input-group-addon">Status Of Station</span>
                                 <select name="statusstation" id="statusstation" onkeyup="allowCharactersInputOnly(this)"  class="form-control"   placeholder="Enter Status" >
                                     <option value="">--Select Status Of Station--</option>
-                                    <option value="Active">Active</option>
-                                    <option value="InActive">InActive</option>
+                                    <option value="on">Active</option>
+                                    <option value="off">InActive</option>
 
 
                                 </select>
@@ -253,7 +253,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNo" required class="form-control" id=stationNo" value="<?php echo $stationdata->StationNumber;?>"  class="form-control"  >
+                                    <input type="text" name="stationNo" required class="form-control" id="stationNo" value="<?php echo $stationdata->StationNumber;?>"  class="form-control"  >
                                     <input type="hidden" name="id" id="id" value="<?php echo $stationdata->station_id;?>">
                                 </div>
                             </div>
@@ -319,24 +319,42 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Latitude</span>
-                                    <input type="text" name="stationlatitude" id="stationlatitude" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required value="<?php echo $stationdata->Latitude;?>" required placeholder="Enter latitude " >
+                                    <input type="text" name="stationlatitude" id="stationlatitude"  required class="form-control" required value="<?php echo $stationdata->Latitude;?>" required placeholder="Enter latitude " >
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Longitude</span>
-                                    <input type="text" name="stationlongitude" id="stationlongitude" onkeyup="allowIntegerInputOnly(this)" required class="form-control" required value="<?php echo $stationdata->Longitude;?>" required placeholder="Enter longitude" >
+                                    <input type="text" name="stationlongitude" id="stationlongitude"  required class="form-control" required value="<?php echo $stationdata->Longitude;?>" required placeholder="Enter longitude" >
+                                </div>
+                            </div>
+							 <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Height(meters)</span>
+                                    <input type="text" name="height" id="height" onkeyup="allowIntegerInputOnly(this)" class="form-control" value="<?php echo $stationdata->Height;?>"  placeholder="Enter height" >
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="input-group">
-                                    <span class="input-group-addon">Altitude</span>
+                                    <span class="input-group-addon">Ft A.M.S.L (Altitude)</span>
                                     <input type="text" name="stationaltitude" id="stationaltitude" onkeyup="allowIntegerInputOnly(this)"  required class="form-control" required value="<?php echo $stationdata->Altitude;?>" required placeholder="Enter altitude" >
                                 </div>
                             </div>
+							
+                             <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Status Of Station</span>
+                                <select name="statusstation" id="statusstation" onchange="Disabled()" onkeyup="allowCharactersInputOnly(this)"  class="form-control"   placeholder="Enter Status" >
+                                    <option value="">--Select Status Of Station--</option>
+                                    <option value="on">Active</option>
+                                    <option value="off">InActive</option>
 
+
+                                </select>
+                            </div>
+                        </div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Opened Date</span>
@@ -350,7 +368,22 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <input type="text" name="stationclosed" id="closed" required class="form-control" required value="<?php echo $stationdata->Closed;?>"  required placeholder="Enter closed" >
                                 </div>
                             </div>
+                            <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Type Of Station</span>
+                                <select name="typestation" id="typestation" onkeyup="allowCharactersInputOnly(this)" required class="form-control"  placeholder="Enter type" >
+                                    <option value="">--Select Type Of Station--</option>
+                                    <option value="Synoptic">Synoptic</option>
+                                    <option value="Agrometeorological">Agrometeorological</option>
+                                    <option value="Rainfall">Rainfall</option>
+                                    <option value="Hydrometeorological">Hydrometeorological</option>
+                                    <option value="Climatological">Climatological</option>
 
+
+
+                                </select>
+                            </div>
+                        </div>
 
                            <?php if($userrole=="OC"){  ?>
                             <div class="form-group">
@@ -360,8 +393,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <!--  <select name="stationstatus" id="stationstatus" onkeyup="allowCharactersInputOnly(this)" required class="form-control"   required placeholder="Enter Status" >
                                           <option value="<?php echo $stationdata->StationStatus;?>"><?php echo $stationdata->StationStatus;?></option>
                                           <option value="">--Select Status--</option>
-                                          <option value="Active">Active</option>
-                                          <option value="InActive">InActive</option>
+                                          <option value="on">Active</option>
+                                          <option value="off">InActive</option>
 
 
                                       </select>  -->
@@ -464,7 +497,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <h3 class="box-title">Stations</h3>
                     </div><!-- /.box-header -->
                     <?php require_once(APPPATH . 'views/error.php'); ?>
-                    <div class="box-body table-responsive">
+                    <div class="box-body table-responsive" style="overflow:auto;">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -478,11 +511,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Region</th>
                                 <th>Country</th>
 
-
+                                <th>Height</th>
                                 <th>Latitude</th>
                                 <th>Longitude</th>
                                 <th>Altitude</th>
-
+                                 <th>Users</th>
 
                                     <th class="no-print">Action</th>
 
@@ -508,17 +541,17 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $stationdata->StationRegion;?></td>
                                         <td ><?php echo $stationdata->Country;?></td>
 
-
+                                        <td ><?php echo $stationdata->Height;?></td>
                                         <td><?php echo $stationdata->Latitude;?></td>
                                         <td ><?php echo $stationdata->Longitude;?></td>
                                         <td ><?php echo $stationdata->Altitude;?></td>
-
-
-                                        <td class="no-print">
-
-                                            <a href="<?php echo base_url() . "index.php/Stations/DisplayStationsFormForUpdate/" .$stationdata->station_id;?>" style="cursor:pointer;">Edit</a>
-                                            <!--  or <a href="<?php echo base_url() . "index.php/Stations/deleteStation/" .$stationid ;?>"
-                                                  onClick="return confirm('Are you sure you want to delete <?php echo $stationdata->StationName;?>');">Delete</a></td>-->
+                                          <td > <a data-toggle="modal" class="modalLink" data-id="<?php echo $stationdata->station_id; ?>" href="<?php echo base_url() . "index.php/Stations/stationUsers/" .$stationdata->station_id;?>" class="open-dialog"   >more info</a> </td>
+                                        <td class="no-print" >
+                                         <table>
+										 <tr><td>
+                                            <a class="btn btn-primary" href="<?php echo base_url() . "index.php/Stations/DisplayStationsFormForUpdate/" .$stationdata->station_id;?>" style="cursor:pointer;"><li class="fa fa-edit"></li>Edit</a>
+                                           </td><td> <a class="btn btn-danger" href="<?php echo base_url() . "index.php/Stations/deleteStation/" .$stationdata->station_id ;?>"
+                                                  onClick="return confirm('Are you sure you want to delete <?php echo $stationdata->StationName;?>');"><li class="fa fa-times"></li> Delete</a></td></tr></table> </td>
                                     </tr>
 
                                 <?php
@@ -527,24 +560,80 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             ?>
                             </tbody>
                         </table>
-                        <br><br>
+						         
+		              
+												<br><br>
                         <button onClick="print();" class="btn btn-primary no-print"><i class="fa fa-print"></i> PRINT </button>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div>
         </div>
+		 
     <?php
     }
     ?>
     </section><!-- /.content -->
     </aside><!-- /.right-side -->
     </div><!-- ./wrapper -->
+	                           <div  id="user1" class="modal" role="dialog"  aria-labelledby="myModalLabel"  tabindex="-1" style="z-index: 9000;" data-backdrop = "false" >
+                      
+						<!-- Modal content-->
+						<div class="modal-content">
+						
+						  <div class="modal-header">
+							<button type="button"  class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title"style="align:center;">Station Users</h4>
+							<br/>
+						  </div>
+						  <div class="modal-body"id="modal-body">
+						    
+						  </div>
+						  <div class="modal-footer">
+						  <button style="color:white;float:right;" type="button" id="closex" class="btn btn-primary" data-dismiss="modal" ><li class="glyphicon glyphicon-remove"></li> &nbsp; Close</button>
+							 </div>
+						</div>
+
+						</div>
     <!-- jQuery 2.0.2
 <script src="js/jquery.min.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="<?php echo base_url(); ?>js/jquery-1.7.1.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="<?php echo base_url(); ?>js/bootstrap.min.js" type="text/javascript"></script>
+				<script>
+$('.modalLink').click(function(){
+    var stationid = $(this).attr('data-id');
+         $('#modal-body').empty();
+
+     $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/stationUsers/",
+                    type: "POST",
+                    data: {'stationid': stationid},
+                    cache: false,
+                    //dataType: "JSON",
+	                 success: function(data){
+						   if (data)
+                        {
+							//alert(stationid); 
+                            var json = JSON.parse(data);
+						 //var jsondata = JSON.parse(data);
+						 $('#modal-body').append("<table  border='1' class='table table-bordered table-responsive table-striped' width='100%'><tr><th>Name</th><th>Role</th></tr>" );
+						//alert(json[1].FirstName +"here");
+                   // alert(data);						
+                    for(var key in json) {
+						
+						$('#modal-body').append("<tr style='font-size:1.1em;'><td>" + json[key].FirstName+" &nbsp;&nbsp;&nbsp;&nbsp; "+json[key].SurName+"</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+json[key].UserRole +"</td></tr>");  
+					
+					}
+					$('#modal-body').append("</table>");
+					$('#user1').modal('show');
+						}else{
+						  $('#modal-body').append("<table  border='1' class='table table-bordered table-responsive table-striped' width='100%'><tr><th>Name</th><th>Role</th></tr>" 
+						+"<tr><td colspan='2'> <em><strong>No user is yet assigned to this station</strong> </em></td></tr>"+
+						"</table>");
+					     $('#user1').modal('show');
+						}
+					 }
+	 });
+});
+</script>
+    
     <script>
         $(document).ready(function() {
             //Post metar form data into the DB
@@ -1308,5 +1397,27 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             });
         });
     </script>
+	<script>
+	
+	
+function Disabled(){
+    if(document.getElementById("statusstation").value === "on"){
+
+        document.getElementById("closed").disabled=true;
+    }
+    else{
+        document.getElementById("closed").disabled='';
+    }
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</script>
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>

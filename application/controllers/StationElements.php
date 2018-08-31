@@ -10,6 +10,10 @@ class StationElements extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
+		if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
 
     }
     public function index(){
@@ -167,12 +171,13 @@ class StationElements extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Inserted new element details',
-                'Details' => $name . ' inserted element details in the system ',
-                'station' => $userstationId,
+           $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+               'Action' => 'Inserted new element details',
+                'Details' => $name . ' added new element details in the system ',
+          
                 'IP' => $this->input->ip_address());
-
+           $this->DbHandler->saveUserLogs($userlogs); 
             $this->session->set_flashdata('success', 'New Element info was added successfully!');
             $this->index();
 
@@ -263,13 +268,14 @@ class StationElements extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated element details',
+             $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+               'Action' => 'Updated element details',
                 'Details' => $name . ' updated element details in the system ',
-                'station' => $userstationId,
+               
                 'IP' => $this->input->ip_address());
             //  save user logs
-            // $this->DbHandler->saveUserLogs($userlogs);
+             $this->DbHandler->saveUserLogs($userlogs);
 
 
             $this->session->set_flashdata('success', 'Elements info was updated successfully!');

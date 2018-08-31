@@ -65,8 +65,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">Station Name</span>
-                                            <input type="text" name="station_archivedailymonthlyrainfalldata" id="station_archivedailymonthlyrainfalldata"  class="form-control compulsory" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                                           <select name="station_archivedailymonthlyrainfalldata" id="stationManager"   class="form-control" placeholder="Select Station">
+											  <option value="">Select Stations</option>
+											  <?php
+											  if (is_array($stationsdata) && count($stationsdata)) {
+												  foreach($stationsdata as $station){?>
+													  <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
+												  <?php }
+											  } ?>
+										  </select>
                                         </div>
                                     </div>
 
@@ -75,8 +83,9 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon"> Station Number</span>
-                                            <input type="text" name="stationNo_archivedailymonthlyrainfalldata"  class="form-control compulsory" id="stationNo_archivedailymonthlyrainfalldata" readonly  value="<?php echo $userstationNo;?>" readonly="readonly" >
-                                        </div>
+                                           
+                                             <input type="text" name="stationNo_archivedailymonthlyrainfalldata"  id="stationNoManager"  class="form-control compulsory" value=""  readonly class="form-control"  >
+										</div>
                                     </div>
 
 
@@ -171,12 +180,20 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">Approved</span>
-                                            <select name="approval" id="approval"  required class="form-control">
-                                                <option value="<?php echo $rainfalldata->Approved;?>"><?php echo $rainfalldata->Approved;?> </option>
-                                                <option value="">--Select Approval Options--</option>
-                                                <option value="TRUE">TRUE</option>
-                                                <option value="FALSE">FALSE</option>
-                                            </select>
+                                           <?php if($userrole=="DataOfficer" || $rainfalldata->Approved=='TRUE'){?>
+									<select name="approval" id="approval" disabled  class="form-control" >
+										<option value="<?php echo $rainfalldata->Approved;?>"><?php echo $rainfalldata->Approved;?></option>
+										<option value="TRUE">TRUE</option>
+										<option value="FALSE">FALSE</option>
+									</select>
+									<input type="hidden" name="approval" value="<?php echo $rainfalldata->Approved;?>">
+									<?php }else{?>
+									   <select name="approval" id="approval"  class="form-control" >
+										<option value="<?php echo $rainfalldata->Approved;?>"><?php echo $rainfalldata->Approved;?></option>
+										<option value="TRUE">TRUE</option>
+										<option value="FALSE">FALSE</option>
+									</select>
+									<?php }?>
                                         </div>
                                     </div>
 
@@ -218,7 +235,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <h3 class="box-title"> Archive Monthly Rainfall Report</h3>
                             </div><!-- /.box-header -->
                             <?php require_once(APPPATH . 'views/error.php'); ?>
-                            <div class="box-body table-responsive">
+                            <div class="box-body table-responsive" style="overflow:auto">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
@@ -228,12 +245,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <th>Station No</th>
 
                                         <th>RAINFALL</th>
-                                    <?php if($userrole=='SeniorDataOfficer'){ ?>
+                                   
                                             <th>Approved</th>
 
                                             <th>By</th>
                                             <th class="no-print">Action</th>
-                                        <?php }?>
+                                        
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -241,8 +258,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     $count = 0;
                                     if (is_array($archivedrainfalldata) && count($archivedrainfalldata)) {
                                         foreach($archivedrainfalldata as $data){
-                                            $count++;
+                                         
                                             $id = $data->id;
+											 if($userrole =='DataOfficer'&& $data->Approved =='TRUE' ){
+										   $count++;
+										   }else{
+											   $count++;
 
                                             ?>
                                             <tr>
@@ -251,17 +272,27 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                                 <td ><?php echo $data->StationName;?></td>
                                                 <td ><?php echo $data->StationNumber;?></td>
                                                 <td ><?php echo $data->Rainfall;?></td>
-                                           <?php if($userrole=='SeniorDataOfficer'  ){ ?>
+                                           
                                              <td><?php echo $data->Approved;?></td>
 
-                                             <td><?php echo $data->SubmittedBy;?></td>
+                                             <td><?php echo $data->AR_SubmittedBy;?></td>
                                              <td class="no-print">
-                                                    <a href="<?php echo base_url() . "index.php/ArchiveMonthlyRainfallFormReportData/DisplayArchivedMonthlyRainfallFormForUpdate/" .$id ;?>" style="cursor:pointer;">Edit</a>
-                                              </tr>
+										  <table>
+                                         <tr><td>
+                                            <a class="btn btn-primary" href="<?php echo base_url() . "index.php/ArchiveMonthlyRainfallFormReportData/DisplayArchivedMonthlyRainfallFormForUpdate/" .$id ;?>" style="cursor:pointer;"><li class="fa fa-edit"></li>Edit</a>
+                                           </td>
+											<?php if($userrole=='SeniorDataOfficer'){?>
+											<td>
+											<form method="post" action="<?php echo base_url() . "index.php/ArchiveMonthlyRainfallFormReportData/update_approval/" .$id ;?>"> <input type="hidden" name="id" value="<?php echo $id; ?>" ><input type="hidden" name="approve" value="TRUE" ><button class="btn btn-success" <?php if($data->Approved=='TRUE'){ echo "disabled";}?> type="submit"  ><li class='fa fa-check'></li>Approve</button></form>
+											</td><?php }?> 
+									     </tr>
+										 </table>
+											  </td>
+											  </tr>
 
                                             <?php
-                                        }
-                                    }
+										   }}
+                                    
                                   }
                                     ?>
                                     </tbody>
@@ -325,7 +356,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
 
                 //Check that the a station is selected from the list of stations(Manager)
-                var station=$('#station_archivedailymonthlyrainfalldata').val();
+                var station=$('#stationManager').val();
                 if(station==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station not picked");
                     $('#station_archivedailymonthlyrainfalldata').val("");  //Clear the field.
@@ -334,7 +365,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
                 //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNo=$('#stationNo_archivedailymonthlyrainfalldata').val();
+                var stationNo=$('#stationNoManager').val();
                 if(stationNo==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station Number not picked");
                     $('#stationNo_archivedailymonthlyrainfalldata').val("");  //Clear the field.
@@ -356,8 +387,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             var date= $('#date').val();
 
 
-            var stationName = $('#station_archivedailymonthlyrainfalldata').val();
-            var stationNumber = $('#stationNo_archivedailymonthlyrainfalldata').val();
+            var stationName = $('#stationManager').val();
+            var stationNumber = $('#stationNoManager').val();
 
 
 
@@ -543,7 +574,59 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         })
 
     </script>
+ <script type="text/javascript">
+            //Once the Manager selects the Station the Station Number, should be picked from the DB.
+            // For Add User when user is OC
+            $(document).on('change','#stationManager',function(){
+                $('#stationNoManager').val("");  //Clear the field.
 
+                var stationName = this.value;
+                if (stationName != "") {
+                    //alert(station);
+                    $('#stationNoManager').val("");
+
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                        type: "POST",
+                        data: {'stationName': stationName},
+                        cache: false,
+                        //dataType: "JSON",
+                        success: function(data){
+                            if (data)
+                            {
+                                var json = JSON.parse(data);
+
+                                $('#stationNoManager').empty();
+
+                                 //alert(data);
+                                $("#stationNoManager").val(json[0].StationNumber);
+
+
+                            }
+                            else{
+
+                                $('#stationNoManager').empty();
+                                $('#stationNoManager').val("");
+
+
+
+
+                            }
+                        }
+
+                    });
+
+
+
+                }
+                else {
+                    $('#stationNoManager').empty();
+                    $('#stationNoManager').val("");
+
+                }
+
+            })
+        </script>
 
 <?php require_once(APPPATH . 'views/footer.php'); ?>
 <script src="<?php echo base_url(); ?>js/form0.js"></script>

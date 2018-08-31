@@ -10,6 +10,10 @@ class ArchiveSynopticFormReportData extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
+		if(!$this->session->userdata('logged_in')){
+	    $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
 
     }
     public function index(){
@@ -273,7 +277,7 @@ $from = $this->input->post('from');
         $insertSynopticFormData=array(
             'Date'=>$date,'Time'=>$ztime,'UWS'=>$unitofwindspeed,'BN'=>$blockNo,
             'station'=>$stationId,
-            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
+            'AS_SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
             'IOOP'=> $incorommissionofprecipitation, 'TSPPW'=>$typeofstation,
 
             'HLC'=>$heightoflowestcloud,'HV'=>$horizontalvisibility,
@@ -342,10 +346,11 @@ $from = $this->input->post('from');
             $userstationId = $session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added archived synoptic info',
+          $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Added archived synoptic info',
                 'Details' => $name . ' added archived synoptic info into the system',
-                'station' => $userstationId,
+              
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -363,6 +368,25 @@ $from = $this->input->post('from');
 
 
     }
+	
+	 public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"archivesynopticformreportdata");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function updateSynopticFormData(){
         $this->unsetflashdatainfo();
         $session_data = $this->session->userdata('logged_in');
@@ -616,10 +640,11 @@ $from = $this->input->post('from');
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Update archieve Synoptic info',
+           $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                 'Action' => 'Update archieve Synoptic info',
                 'Details' => $name . ' updated  archieve  Synoptic info in the system',
-                'station' => $userstationId,
+            
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);

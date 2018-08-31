@@ -10,7 +10,10 @@ class ArchiveDekadalFormReportData extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+      if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
         //  $this->unsetflashdatainfo();
@@ -132,7 +135,7 @@ class ArchiveDekadalFormReportData extends CI_Controller {
 $stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
         $insertArchiveDekadalFormDataIntoDB=array(
             'Date'=>$date,'station'=>$stationId,
-            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
+            'AD_SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
             'MAX_TEMP'=> $maxTemp, 'MIN_TEMP'=>$minTemp,
 
             'DRY_BULB_0600Z'=>$dryBulb0600Z,'WET_BULB_0600Z'=>$wetBulb0600Z,
@@ -161,11 +164,10 @@ $stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
             $userstationNo=$session_data['StationNumber'];
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added  Archive Dekadal Form  info',
+            $userid = $session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Added  Archive Dekadal Form  info',
                 'Details' => $name . ' added  Archive Dekadal Form info into the system',
-                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             // save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -182,6 +184,24 @@ $stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
         }
 
     }
+	 public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"archivedekadalformreportdata");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function updateArchiveDekadalFormReportData(){
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
@@ -251,11 +271,10 @@ $stationId=$this->DbHandler->identifyStationById($station, $stationNumber);
             $userstationNo=$session_data['StationNumber'];
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated Archived Dekadal Form info',
+             $userid = $session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Updated Archived Dekadal Form info',
                 'Details' => $name . ' updated Archived Dekadal Form info into the system',
-                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);

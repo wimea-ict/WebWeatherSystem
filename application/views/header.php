@@ -1,6 +1,7 @@
 <?php  $session_data = $this->session->userdata('logged_in');
 $userrole=$session_data['UserRole'];
 $userstation=$session_data['UserStation'];
+$userregion= $session_data['UserRegion'];
 $surname=$session_data['SurName'];
 $created=$session_data['CreationDate'];
 
@@ -9,6 +10,7 @@ $created=$session_data['CreationDate'];
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="<?php echo base_url(); ?>img/wimea-icon.png" >
     <title>Weather | <?php echo $userrole; if(isset($_GET['page'])){ echo "- ". $_GET['page']; }?></title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- jQuery 2.0.2
@@ -132,14 +134,50 @@ $created=$session_data['CreationDate'];
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
-        <div class="navbar-right">
-            <ul class="nav navbar-nav">
-                <!-- Messages: style can be found in dropdown.less-->
+		 <a href="" class="logo" style="color:white;text-transform:uppercase;">
+                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                <?php
+				if($userrole == 'ManagerData'){echo "DataManager"."&nbsp" . "panel";}
+							 else{echo $userrole ."&nbsp" . "panel";}
+				 ?> 
+                 </a>
+        <div class="navbar-right" >
 
+        <?php if($userrole == 'OC' || $userrole == 'ManagerData'){ ?>
+         <ul class="nav navbar-nav">
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="label label-pill label-danger count" style="border-radius:10px;"></span> 
+                <span class="glyphicon glyphicon-bell" style="font-size:18px;"></span></a>
+                <ul id="ips" class="dropdown-menu dropdown-menu1">
+                </ul>
+                </li>
+                
+         </ul>
+        <?php } ?>
+		
+		<ul class="nav navbar-nav" >
+                <!-- Messages: style can be found in dropdown.less-->
+                
                 <li class="user user-menu">
-                    <a href="<?php echo base_url(); ?>index.php/UserLogin/logout">
+                    <a style="color : white;">
+                        <span >
+							 <?php if($userrole == 'ManagerData'){echo "Hello"."&nbsp" ."DataManager"."&nbsp" . $surname;}
+							 else{
+							 echo"Hello"."&nbsp". $userrole ."&nbsp" . $surname;} ?> 
+						</span>
+                    </a>
+                </li>
+
+            </ul>
+		
+            <ul class="nav navbar-nav" >
+                <!-- Messages: style can be found in dropdown.less-->
+                
+                <li class="user user-menu">
+                    <a style="color : white;" href="<?php echo base_url(); ?>index.php/UserLogin/logout">
                         <i class="fa fa-sign-out"></i>
-                        <span>Sign out</span>
+                        <span >Sign out</span>
                     </a>
                 </li>
 
@@ -207,7 +245,11 @@ $created=$session_data['CreationDate'];
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
 
-
+                     <?php if($userrole=="OC"){?>
+					   <ul class="treeview-menu">
+						<li><a href="<?php echo base_url();?>index.php/ArchiveObservationSlipFormData"><i class="fa fa-angle-double-right"></i>Observation Slip Form</a></li>
+                         </ul>
+					<?php }else{?>
                     <ul class="treeview-menu">
                         <li><a href="<?php echo base_url();?>index.php/ArchiveObservationSlipFormData"><i class="fa fa-angle-double-right"></i>Observation Slip Form</a></li>
                         <li><a href="<?php echo base_url();?>index.php/ArchiveWeatherSummaryFormReportData"><i class="fa fa-angle-double-right"></i>Weather Summary Form</a></li>
@@ -218,10 +260,11 @@ $created=$session_data['CreationDate'];
                         <li><a href="<?php echo base_url();?>index.php/ArchiveMonthlyRainfallFormReportData"><i class="fa fa-angle-double-right"></i> Archive  Rainfall</a></li>
 
                     </ul>
+					<?php } ?>
                 </li>
                 <?php } ?>
 
-                <?php  if($userrole == "ManagerData" || $userrole== "OC" || $userrole=="SeniorDataOfficer" || $userrole=='DataOfficer' || $userrole=='ObserverArchive'){
+                <?php  if($userrole == "ManagerData"  || $userrole=="SeniorDataOfficer" ){
                 ?>
 
                 <li class="treeview">
@@ -243,7 +286,7 @@ $created=$session_data['CreationDate'];
                 </li>
                 <?php } ?>
 
-              <?php  if( $userrole== "ObserverArchive" ||  $userrole== "DataOfficer" || $userrole=="SeniorDataOfficer" || $userrole== "OC"){
+              <?php  if( $userrole== "ObserverArchive" ||  $userrole== "DataOfficer" || $userrole=="SeniorDataOfficer"){
                 ?>
                 <li class="treeview">
                     <a href="#">
@@ -268,7 +311,7 @@ $created=$session_data['CreationDate'];
                 </li>
                 <?php } ?>
 
-                <?php if($userrole == "ManagerData" || $userrole== "OC" || $userrole == "DataOfficer" || $userrole == "SeniorDataOfficer"){
+                <?php if($userrole == "ManagerData"  || $userrole == "SeniorDataOfficer"){
                 ?>
                 <li class="treeview">
                     <a href="#">
@@ -294,7 +337,7 @@ $created=$session_data['CreationDate'];
         <?php  }?>
 
                 <?php
-                if($userrole == "ManagerData" || $userrole== "OC" || $userrole=="ZonalOfficer" || $userrole=="SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster" ){
+                if($userrole == "ManagerData" ||  $userrole=="ZonalOfficer" || $userrole=="SeniorZonalOfficer" || $userrole=="ManagerStationNetworks" || $userrole=="Director" || $userrole=="WeatherAnalyst" || $userrole=="WeatherForecaster" ){
                     ?>
                     <li class="treeview">
                         <a href="#">
@@ -314,6 +357,7 @@ $created=$session_data['CreationDate'];
 
                             <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeMonthlyRainfallReport"><i class="fa fa-angle-double-right"></i> Monthly Rainfall Report</a></li>
                             <li><a href="<?php echo base_url();?>index.php/ReportsController/initializeRainfallYearlyReport"><i class="fa fa-angle-double-right"></i> Annual Rainfall Report</a></li>
+							<li><a href="<?php echo base_url();?>index.php/ReportsController/initializeRainfallCustomReport"><i class="fa fa-angle-double-right"></i> Customized Rainfall Report</a></li>
                         </ul>
                     </li>
                 <?php } ?>
@@ -356,3 +400,119 @@ $created=$session_data['CreationDate'];
         </section>
         <!-- /.sidebar -->
     </aside>
+
+    <div id='popupwindow'>
+<div style="z-index:200;" id="myModal2"  data-backdrop="false" class="modal">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button  type="button" class="close" data-dismiss="modal">&times;
+                    </button><h3 id="title1" class="modal-title"></h3></div><div id="popbody" class="modal-body">
+                    </div><div id="footer"class="modal-footer">
+                    
+                </div></div></div>
+
+
+</div>
+
+    <script>
+
+var getData = function (obj) {
+    var link = obj.getAttribute("href");
+    var content =  $('#popupwindow');
+//alert(link);
+    $.ajax({
+    url: "<?php echo base_url(); ?>"+link,
+    type: "POST",
+    cache: false,
+    success: function(data)
+                {
+                    $('#title1').empty();
+                    $('#popbody').empty();
+                    $('#footer').empty();
+                var jsondata = JSON.parse(data);
+                    for(var key in jsondata.result) {
+                        
+                        $('#title1').append(jsondata.result[key].FirstName+' '+jsondata.result[key].SurName+', '+
+                        jsondata.result[key].UserRole);
+                        $('#popbody').append('<span style="font-size:14px;float:left"><em>No. '+
+                        jsondata.result[key].data_id+'</em></span><span style="font-size:18px;"><em><center>'+jsondata.result[key].Action+
+                        '</em></span><span style="font-size:14px;float:right"><em>'+
+                        jsondata.result[key].Date+'</em></span><br><br>');
+                        var baseurl= "<?php echo base_url(); ?>"+
+                        "index.php/ObservationSlipForm/getPopupRecord/"+jsondata.result[key].data_id+
+                        "/"+jsondata.result[key].Userid+"/"+jsondata.result[key].Date;
+                            break;
+                    } 
+
+                    
+                    for(var key in jsondata.result) {
+                        $('#popbody').append('<p>Changed <em><b>'+jsondata.result[key].field+'</b></em> from &nbsp;&nbsp;<em><b>'
+                        +jsondata.result[key].old_value+
+                        '</b></em>&nbsp;&nbsp; to &nbsp;&nbsp;<em><b>'+jsondata.result[key].new_value+'</b></em></em></p>'); 
+                    } 
+                    $('#footer').append('<a  href="'+baseurl+'" class="btn btn-success">View</a>'+
+                    '&nbsp;&nbsp;<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+                    $('#myModal2').modal('show');
+                }
+});
+
+};
+
+ var count;
+        $(document).ready(function(){
+       function load_unseen_notification(view = '')
+        {
+        $.ajax({
+        url:"<?php echo base_url(); ?>"+"index.php/ObservationSlipForm/getNotification",
+        method:"POST",
+        data:{view:view},
+        dataType:"json",
+        success:function(data)
+        {
+            count=data.unseen_notification;
+            if(data.unseen_notification > 0)
+            {
+            $('.count').html(data.unseen_notification);
+            }
+        }
+        });
+        }
+        
+        load_unseen_notification();
+        
+        $(document).on('click', '.dropdown-toggle', function(){
+        $('.count').html('');
+        if(count >0){
+            load_unseen_data();
+        }else{
+            var output = '<li><a href="#" class="text-bold text-italic">No New Notification Found</a></li>';
+            $('.dropdown-menu1.dropdown-menu').html(output);
+        }
+        
+        });
+        
+        setInterval(function(){ 
+        load_unseen_notification();; 
+        }, 5000);
+        
+        });
+
+        function load_unseen_data(view = '')
+        {
+        $.ajax({
+        url:"<?php echo base_url(); ?>"+"index.php/ObservationSlipForm/getNotificationData",
+        method:"POST",
+        data:{view:view},
+        dataType:"json",
+        success:function(data)
+        {
+            $('.dropdown-menu1.dropdown-menu').html(data.notification+'<span style="cursor:pointer" id = "viewall"><center><li>View All</li></center></span>');
+        }
+        });
+        }
+
+      $(document).on('click', '#viewall', function(){
+          document.location.href="<?php echo base_url(); ?>"+"index.php/ObservationSlipForm/viewAllNotifications";
+          
+        });
+        </script>

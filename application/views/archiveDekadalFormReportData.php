@@ -451,12 +451,21 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">Approved</span>
-                                            <select name="approval" id="approval"  required class="form-control">
-                                                <option value="<?php echo $archiveddekadalformreportdata->Approved;?>"><?php echo $archiveddekadalformreportdata->Approved;?> </option>
-                                                <option value="">--Select Approval Options--</option>
-                                                <option value="TRUE">TRUE</option>
-                                                <option value="FALSE">FALSE</option>
-                                            </select>
+                                            
+											<?php if($userrole=="DataOfficer" || $archiveddekadalformreportdata->Approved=='TRUE'){?>
+									<select name="approval" id="approval" disabled  class="form-control" >
+										<option value="<?php echo $archiveddekadalformreportdata->Approved;?>"><?php echo $archiveddekadalformreportdata->Approved;?></option>
+										<option value="TRUE">TRUE</option>
+										<option value="FALSE">FALSE</option>
+									</select>
+									<input type="hidden" name="approval" value="<?php echo $archiveddekadalformreportdata->Approved;?>">
+									<?php }else{?>
+									   <select name="approval" id="approval"  class="form-control" >
+										<option value="<?php echo $archiveddekadalformreportdata->Approved;?>"><?php echo $archiveddekadalformreportdata->Approved;?></option>
+										<option value="TRUE">TRUE</option>
+										<option value="FALSE">FALSE</option>
+									</select>
+									<?php }?>
                                         </div>
                                     </div>
 
@@ -491,7 +500,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                         <div class="box">
                             <?php require_once(APPPATH . 'views/error.php'); ?>
-                            <div class="box-body table-responsive">
+                            <div class="box-body table-responsive" style="overflow:auto">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
@@ -527,8 +536,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     $count = 0;
                                     if (is_array($archivedDekadalformreportdata) && count($archivedDekadalformreportdata)) {
                                         foreach($archivedDekadalformreportdata as $data){
-                                            $count++;
+                                           
                                             $id = $data->id;
+											 if($userrole =='DataOfficer'&& $data->Approved =='TRUE' ){
+									   $count++;
+									   }else{
+										   $count++;
 
                                             ?>
                                             <tr>
@@ -553,15 +566,27 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                                 <?php if( $userrole=='SeniorDataOfficer' || $userrole=='DataOfficer' || $userrole=='ObserverArchive'  || $userrole=='OC'  ){ ?>
                                                   <td><?php echo $data->Approved;?></td>
 
-                                                  <td><?php echo $data->SubmittedBy;?></td>
+                                                  <td><?php echo $data->AD_SubmittedBy;?></td>
                                                   <td class="no-print">
 
-                                                    <a href="<?php echo base_url() . "index.php/ArchiveDekadalFormReportData/DisplayArchivedDekadalFormForUpdate/" .$id ;?>" style="cursor:pointer;">Edit</a>
-
-                                            </tr>
+                                                    
+													  <table>
+                                         <tr><td>
+                                            <a class="btn btn-primary" href="<?php echo base_url() . "index.php/ArchiveDekadalFormReportData/DisplayArchivedDekadalFormForUpdate/" .$id ;?>" style="cursor:pointer;"><li class="fa fa-edit"></li> Edit</a>
+													
+										   </td>
+											<?php if($userrole=='SeniorDataOfficer'){?>
+											<td>
+											
+											<form method="post" action="<?php echo base_url() . "index.php/ArchiveDekadalFormReportData/update_approval/" .$id ;?>"> <input type="hidden" name="id" value="<?php echo $id; ?>" ><input type="hidden" name="approve" value="TRUE" ><button class="btn btn-success" <?php if($data->Approved=='TRUE'){ echo "disabled";}?> type="submit"  ><li class='fa fa-check'></li>Approve</button></form>
+											</td><?php }?> 
+									     </tr>
+										 </table>
+                                            </td>
+											</tr>
 
                                             <?php
-                                        }
+									   }}
                                     }
                                   }
                                     ?>
@@ -628,7 +653,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                 //Check that the a station is selected from the list of stations(OC)
-                var station=$('#station_archivedekadalformreportdata').val();
+                var station=$('#stationManager').val();
                 if(station==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station not picked");
                     $('#station_archivedekadalformreportdata').val("");  //Clear the field.
@@ -637,7 +662,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
                 //Check that the a station Number is selected from the list of stations(OC)
-                var stationNo=$('#stationNo_archivedekadalformreportdata').val();
+                var stationNo=$('#stationNoManager').val();
                 if(stationNo==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station Number not picked");
                     $('#stationNo_archivedekadalformreportdata').val("");  //Clear the field.
@@ -663,8 +688,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             //Check against the date,stationName,StationNumber,Time and Metar Option.
             var date = $('#date').val();
 
-                var stationName=$('#station_archivedekadalformreportdata').val();
-                var stationNumber=$('#stationNo_archivedekadalformreportdata').val();
+                var stationName=$('#stationManager').val();
+                var stationNumber=$('#stationNoManager').val();
 
             $('#checkduplicateEntryOnAddArchieveDekadalFormReportData_hiddentextfield').val("");
 

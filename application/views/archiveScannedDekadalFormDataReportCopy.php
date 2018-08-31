@@ -65,8 +65,16 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Station</span>
-                                    <input type="text" name="station_ArchiveScannedDekadalFormReport" id="station_ArchiveScannedDekadalFormReport" required class="form-control" value="<?php echo $userstation;?>"  readonly class="form-control" >
+                                       <select name="station_ArchiveScannedDekadalFormReport" id="stationManager"   class="form-control" placeholder="Select Station">
+                                    <option value="">Select Station</option>
+                                    <?php
+                                    if (is_array($stationsdata) && count($stationsdata)) {
+                                        foreach($stationsdata as $station){?>
+                                            <option value="<?php echo $station->StationName;?>"><?php echo $station->StationName;?></option>
 
+                                        <?php }
+                                    } ?>
+                                </select>
                                 </div>
                             </div>
 
@@ -74,7 +82,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"> Station Number</span>
-                                    <input type="text" name="stationNo_ArchiveScannedDekadalFormReport" required class="form-control" id="stationNo_ArchiveScannedDekadalFormReport" readonly class="form-control" value="<?php echo $userstationNo;?>" readonly="readonly" >
+                                     <input type="text" name="stationNo_ArchiveScannedDekadalFormReport"  id="stationNoManager" required class="form-control" value=""  readonly   >
+
                                 </div>
                             </div>
 
@@ -251,6 +260,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                     <span class="input-group-addon"><i class = "pull-left"> Previously Uploaded File </i>
 									<a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/ViewImageFromBrowser/<?php echo $idDetails->FileRef;?>" target = "blank"> <?php echo $idDetails->FileRef;?> </a>
 									</span>
+                                     <input type="hidden" name="PreviouslyUploadedFileName_dekadalformdatareportcopy" id="PreviouslyUploadedFileName_dekadalformdatareportcopy" required class="form-control"  value="<?php echo $idDetails->FileRef;?>"  readonly="readonly" readonly class="form-control">
 
                                 </div>
                             </div>
@@ -259,12 +269,20 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">Approved</span>
-                                    <select name="approval" id="approval"  required class="form-control">
-                                        <option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
-                                        <option value="">--Select Approval Options--</option>
-                                        <option value="TRUE">TRUE</option>
-                                        <option value="FALSE">FALSE</option>
-                                    </select>
+                                    <?php if($userrole=="DataOfficer" || $idDetails->Approved=='TRUE'){?>
+								<select name="approval" id="approval" disabled  class="form-control" >
+									<option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<input type="hidden" name="approval" value="<?php echo $idDetails->Approved;?>">
+								<?php }else{?>
+								   <select name="approval" id="approval"  class="form-control" >
+									<option value="<?php echo $idDetails->Approved;?>"><?php echo $idDetails->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<?php }?>
                                 </div>
                             </div>
 
@@ -311,10 +329,11 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <th>Station Number</th>
                                 <th>From Date</th>
                                 <th>To Date</th>
+								<th>File Name</th>
                                 <th>Description</th>
                                 <th>Approved</th>
                                 <th>By</th>
-                             <?php  if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?>
+                             <?php  if($userrole=="OC"|| $userrole=="ObserverArchive"||$userrole=="DataOfficer"||$userrole=="SeniorDataOfficer"){ ?>
                                     <th class="no-print">Action</th><?php }?>
                             </tr>
                             </thead>
@@ -324,10 +343,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                             if (is_array($archivedscanneddekadalformreportdetails) && count($archivedscanneddekadalformreportdetails)) {
                                 foreach($archivedscanneddekadalformreportdetails as $data){
-                                    $count++;
+                                   
 
                                     $scanneddekadalformreportdetails = $data->id;
-
+									 if($userrole =='DataOfficer' && $data->Approved =='TRUE' ){
+									   $count++;
+									   }else{
+										   $count++;
 
                                     ?>
                                     <tr>
@@ -336,16 +358,33 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                         <td ><?php echo $data->StationNumber;?></td>
                                         <td ><?php echo $data->from_date;?></td>
                                         <td ><?php echo $data->to_date;?></td>
+										 <td>
+										 <a title="click to view file" href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileRef; ?>"> <?php echo $data->FileRef;?></a> 
+										   
+										</td>
                                         <td><?php echo $data->Description;?></td>
-                                        <td ><?php echo $data->Approved?"TRUE":"FALSE";?></td>
-                                        <td><?php echo $data->SubmittedBy;?></td>
-                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"){ ?>
+                                        <td ><?php echo $data->Approved;?></td>
+                                        <td><?php echo $data->SDE_SubmittedBy;?></td>
+                                   <?php if($userrole=="OC"|| $userrole=="ObserverArchive"||$userrole=="DataOfficer"||$userrole=="SeniorDataOfficer"){ ?>
                                      <td class="no-print">
-                                        <a href="<?php echo base_url() . "index.php/ArchiveScannedDekadalFormDataReportCopy/DisplayFormToArchiveScannedDekadalFormReportForUpdate/" .$data->id ;?>" style="cursor:pointer;">Edit</a>
-                                  </td>  </tr>
+                                        <table>
+												<tr><td>
+                                           
+												<a class="btn btn-primary" href="<?php echo base_url() . "index.php/ArchiveScannedDekadalFormDataReportCopy/DisplayFormToArchiveScannedDekadalFormReportForUpdate/" .$data->id ;?>" style="cursor:pointer;"> <li class="fa fa-edit"></li> Edit</a>
+												</td>
+												<?php if($userrole=='SeniorDataOfficer'){?>
+												<td>
+											
+											<form method="post" action="<?php echo base_url() . "index.php/ArchiveScannedDekadalFormDataReportCopy/update_approval/" .$data->id;?>"> <input type="hidden" name="id" value="<?php echo $data->id; ?>" ><input type="hidden" name="approve" value="TRUE" ><button class="btn btn-success" <?php if($data->Approved=='TRUE'){ echo "disabled";}?> type="submit"  ><li class='fa fa-check'></li>Approve</button></form>
+											</td><?php }?> 
+									     </tr>
+										 </table>
+
+
+								 </td>  </tr>
 
                                 <?php
-                                }
+									   }}
                             }
                           }
                             ?>
@@ -390,13 +429,13 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 //Check value of the hidden text field.That stores whether a row is duplicate
                 var hiddenvalue=$('#checkduplicateEntryOnAddArchieveScannedDekadaFormDataReportCopy_hiddentextfield').val();
-                if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
+            /*    if(hiddenvalue==""){  // returns true if the variable does NOT contain a valid number
                     alert("Value not picked");
                     $('#checkduplicateEntryOnAddArchieveScannedDekadaFormDataReportCopy_hiddentextfield').val("");  //Clear the field.
                     $("#checkduplicateEntryOnAddArchieveScannedDekadaFormDataReportCopy_hiddentextfield").focus();
                     return false;
 
-                }
+                }*/
 
                 //Check that Form name  is picked
                 var formname=$('#formname_dekadal').val();
@@ -527,8 +566,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
             var fromdate = $('#expdate').val();
             var todate=$('#opened').val();
 
-            var stationName = $('#station_ArchiveScannedDekadalFormReport').val();
-            var stationNumber = $('#stationNo_ArchiveScannedDekadalFormReport').val();
+            var stationName = $('#stationManager').val();
+            var stationNumber = $('#stationNoManager').val();
 
 
 
@@ -578,6 +617,57 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
         // return false;
 
     </script>
+
+     <script type="text/javascript">
+        //Once the Admin selects the Station the Station Number should be picked from the DB.
+        // For Add Update Daily
+        $(document).on('change','#stationManager',function(){
+            $('#stationNoManager').val("");  //Clear the field.
+            var stationName = this.value;
+
+
+            if (stationName != "") {
+                //alert(station);
+                $('#stationNoManager').val("");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>"+"index.php/Stations/getStationNumber",
+                    type: "POST",
+                    data: {'stationName': stationName},
+                    cache: false,
+                    //dataType: "JSON",
+                    success: function(data){
+                        if (data)
+                        {
+                            var json = JSON.parse(data);
+
+                            $('#stationNoManager').empty();
+
+                            //alert(data);
+                            $("#stationNoManager").val(json[0].StationNumber);
+
+                        }
+                        else{
+
+                            $('#stationNoManager').empty();
+                            $('#stationNoManager').val("");
+
+                        }
+                    }
+
+                });
+
+
+
+            }
+            else {
+
+                $('#stationNoManager').empty();
+                $('#stationNoManager').val("");
+            }
+
+        })
+    </script>
+
     <script>
         $(document).ready(function() {
             //Update  Archive Dekadal form Report data into the DB
@@ -618,7 +708,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                 //Check that the a file has been uploaded and also the previously Uploaded file
-                var updatefilenameselected=$('#updatearchievescannedcopy_dekadalformdatareportcopy').val();
+                /*var updatefilenameselected=$('#updatearchievescannedcopy_dekadalformdatareportcopy').val();
                 var previouslyuploadedfileName=$('#PreviouslyUploadedFileName_dekadalformdatareportcopy').val();
                 if((updatefilenameselected!="") && (previouslyuploadedfileName!="")){  // returns true if the variable does NOT contain a valid number
                     alert(" A file has been  Uploaded and also previously uploaded file");
@@ -626,7 +716,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                     $("#updatearchievescannedcopy_dekadalformdatareportcopy").focus();
                     return false;
                 }
-
+*/
                 //Check that Approved IS PICKED FROM A LIST
                 var approved=$('#approval').val();
                 if(approved==""){  // returns true if the variable does NOT contain a valid number

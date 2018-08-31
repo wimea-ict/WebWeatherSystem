@@ -6,46 +6,53 @@ class ObservationSlipForm extends CI_Controller {
     function __construct() {
 
         parent::__construct();
-        error_reporting(E_PARSE);
+        error_reporting(0);
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('pagination');
-
+		$this->load->helper('url');
+        $this->load->library('user_agent');
+		 
+      
+      if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
-    public function index(){
-      $session_data = $this->session->userdata('logged_in');
-      $userstation=$session_data['UserStation'];
+   public function index(){
+				  $session_data = $this->session->userdata('logged_in');
+				  $userstation=$session_data['UserStation'];
 
-$config = array();
-$config["base_url"] = base_url()."index.php/ObservationSlipForm/index";
-$total_row = $this->DbHandler->record_count('StationName',$userstation);
-$config["total_rows"] = $total_row;
-$config["per_page"] = 100;
-$config['use_page_numbers'] = TRUE;
-$config['num_links'] = 10;
-$config['cur_tag_open'] = '&nbsp;<a class="current">';
-$config['cur_tag_close'] = '</a>';
-$config['next_link'] = 'Next';
-$config['prev_link'] = 'Previous';
+			$from= $this->input->post('datefrom');
+				  $to=$this->input->post('dateto');
+				  $week=$this->input->post('week');
+				  $data['recentFormdateDate'] = array('to' => $to,'from' => $from,'week' => $week);
 
-$this->pagination->initialize($config);
+			//if($from=="" || $from==NULL || $to=="" || $to==NULL){
 
-if($this->uri->segment(3)){
-$page = ($this->uri->segment(3)) ;
-}
-else{
-$page = 1;
-}
+			 // $to=  date("Y-m-d");
+			  //$date=date_create($to);
+			  //$intermideateDate=date_sub($date,date_interval_create_from_date_string("7 days"));
+			  //$from=date_format($intermideateDate,"Y-m-d");
 
-$str_links = $this->pagination->create_links();
-$data["links"] = explode('&nbsp;',$str_links );
+			//}
+
+			$data['dateform_action'] = base_url()."index.php/ObservationSlipForm/";
+			if($this->uri->segment(3)){
+			$page = ($this->uri->segment(3)) ;
+			}
+			else{
+			$page = 1;
+			}
+
+		$str_links = $this->pagination->create_links();
+		$data["links"] = explode('&nbsp;',$str_links );
 
 
         if($userrole=="WeatherForecaster" || $userrole=="Observer" || $userrole=="ObserverDataEntrant" )
-        $query = $this->DbHandler->selectAll2conditions($userstation,'StationName','observationslip',0,"Approved",$config["per_page"],$page,$total_row);
+       $query = $this->DbHandler->selectAll2conditions($userstation,'StationName','observationslip',0,"Approved",$from,$to);
         else
-        $query = $this->DbHandler->selectAll($userstation,'StationName','observationslip',$config["per_page"],$page,$total_row);
-
+        $query = $this->DbHandler->selectAll($userstation,'StationName','observationslip',$from,$to);
         //  var_dump($query);
         if ($query) {
             $data['observationslipformdata'] = $query;
@@ -59,78 +66,76 @@ $data["links"] = explode('&nbsp;',$str_links );
        // $this->unsetflashdatainfo();
         $session_data = $this->session->userdata('logged_in');
         $userstation=$session_data['UserStation'];
+           
+				   if($this->uri->segment(3)){
+		$page = ($this->uri->segment(3)) ;
+		}
+		else{
+		$page = 1;
+		}
+      $from= $this->input->post('datefrom');
+        $to=$this->input->post('dateto');
+        $week=$this->input->post('week');
+        $data['recentFormdateDate'] = array('to' => $to,'from' => $from,'week' => $week);
 
-        $config = array();
-        $config["base_url"] = base_url() . "index.php/ObservationSlipForm/showAwsdata";
-        $total_row = $this->DbHandler->record_count_aws('StationName',$userstation);
-        $config["total_rows"] = $total_row;
-        $config["per_page"] = 100;
-        $config['use_page_numbers'] = TRUE;
-        $config['num_links'] = 10;
-        $config['cur_tag_open'] = '&nbsp;<a class="current">';
-        $config['cur_tag_close'] = '</a>';
-        $config['next_link'] = 'Next';
-        $config['prev_link'] = 'Previous';
+       // if($from=="" || $from==NULL || $to=="" || $to==NULL){
 
-        $this->pagination->initialize($config);
+          //$to=  date("Y-m-d");
+          //$date=date_create($to);
+          //$intermideateDate=date_sub($date,date_interval_create_from_date_string("7 days"));
+          //$from=date_format($intermideateDate,"Y-m-d");
 
-        if($this->uri->segment(3)){
-        $page = ($this->uri->segment(3)) ;
-        }
-        else{
-        $page = 1;
-        }
+        //}
 
-        $str_links = $this->pagination->create_links();
-        $data["links"] = explode('&nbsp;',$str_links );
+        $data['dateform_action'] = base_url()."index.php/ObservationSlipForm/showAwsdata/";
 
-        $query = $this->DbHandler->selectAll2conditions($userstation,'StationName','observationslip',"AWS","DeviceType",$config["per_page"],$page,$total_row);
+       $query = $this->DbHandler->selectAll2conditions($userstation,'StationName','observationslip',"AWS","DeviceType",$from,$to);
 
         //  var_dump($query);
         if ($query) {
             $data['observationslipformdata'] = $query;
         } else {
+			
             $data['observationslipformdata'] = array();
         }
 
         $this->load->view('observationSlipForm', $data);
     }
     public function showWebmobiledata(){
-       // $this->unsetflashdatainfo();
+       //$this->unsetflashdatainfo();
+      $this->load->helper(array('form', 'url'));
        $session_data = $this->session->userdata('logged_in');
        $userstation=$session_data['UserStation'];
        $userrole=$session_data['UserRole'];
+	   if($this->uri->segment(3)){
+		$page = ($this->uri->segment(3)) ;
+		}
+		else{
+		$page = 1;
+		}
+	   
+      $from= $this->input->post('datefrom');
+      $to=$this->input->post('dateto');
+      $week=$this->input->post('week');
+      $data['recentFormdateDate'] = array('to' => $to,'from' => $from,'week' => $week);
 
-       $config = array();
-       $config["base_url"] = base_url() . "index.php/ObservationSlipForm/showWebmobiledata";
-       $total_row =$this->DbHandler->record_count_webmobile('StationName',$userstation);
-       $config["total_rows"] = $total_row;
-       $config["per_page"] = 100;
-       $config['use_page_numbers'] = TRUE;
-       $config['num_links'] = 10;
-       $config['cur_tag_open'] = '&nbsp;<a class="current">';
-       $config['cur_tag_close'] = '</a>';
-       $config['next_link'] = 'Next';
-       $config['prev_link'] = 'Previous';
+		//if($from=="" || $from==NULL || $to=="" || $to==NULL){
 
-       $this->pagination->initialize($config);
+		  //$to=  date("Y-m-d");
+		  //$date=date_create($to);
+		  //$intermideateDate=date_sub($date,date_interval_create_from_date_string("7 days"));
+		  //$from=date_format($intermideateDate,"Y-m-d");
 
-       if($this->uri->segment(3)){
-       $page = ($this->uri->segment(3)) ;
-       }
-       else{
-       $page = 1;
-       }
+		//}
 
-       $str_links = $this->pagination->create_links();
-       $data["links"] = explode('&nbsp;',$str_links );
+		 $data['dateform_action'] = base_url()."index.php/ObservationSlipForm/showWebmobiledata/";
+       
 
 
         if($userrole=="WeatherForecaster" || $userrole=="Observer" || $userrole=="ObserverDataEntrant" )
-        $query = $this->DbHandler->selectAll3conditionsOneNegative($userstation,'StationName','observationslip',0,"Approved","AWS","DeviceType",$config["per_page"],$page,$total_row);
+        $query = $this->DbHandler->selectAll3conditionsOneNegative($userstation,'StationName','observationslip',0,"Approved","AWS","DeviceType",$from,$to);
         else
-        $query = $this->DbHandler->selectAll2conditionsOneNegative($userstation,'StationName','observationslip',"AWS","DeviceType",$config["per_page"],$page,$total_row);
-
+        $query = $this->DbHandler->selectAll2conditionsOneNegative($userstation,'StationName','observationslip',"AWS","DeviceType",$from,$to);
         //  var_dump($query);
         if ($query) {
             $data['observationslipformdata'] = $query;
@@ -188,6 +193,59 @@ elseif ($userrole=="OC") {
 
 
   }
+
+
+//get number of unseen notifications
+public function getNotification(){
+    $count = $this->DbHandler->getNotification();
+            $data = array(
+            'unseen_notification' => $count
+            );
+            echo json_encode($data);
+}
+
+//get notification dropdown data
+public function getNotificationData(){
+    $output = $this->DbHandler->getNotificationData();
+
+    $data = array(
+        'notification'   => $output
+        );
+        echo json_encode($data);
+}
+
+public function getPopupRecord(){
+    $data_id=$this->uri->segment(3);
+    $userid=$this->uri->segment(4);
+    $date=$this->uri->segment(5);
+    $query = $this->DbHandler->getPopupRecord($data_id);
+    $query1 = $this->DbHandler->updatePopupRecord($userid,$date);
+    if ($query && $query1) {
+
+        $data['observationslipformdata'] = $query;
+    } else {
+        $data['observationslipformdata'] = array();
+    }
+
+    $this->load->view('observationSlipForm', $data);
+}
+
+function viewAllNotifications(){
+    $query = $this->DbHandler->getLogViews();
+    $result = $this->DbHandler->updateLogViewstatus($query);
+    if ($query) {
+
+        $data['observationslipformdata'] = $query;
+    } else {
+        $data['observationslipformdata'] = array();
+    }
+
+    $this->load->view('observationSlipForm', $data);
+    
+}
+
+
+
   public function sendObservationSpeci_note_Email($station,$stationNo,$date,$time){
     //get detaile of user who made changes
    $session_data = $this->session->userdata('logged_in');
@@ -266,6 +324,33 @@ elseif ($userrole=="OC") {
         $this->load->view('observationSlipForm', $data);
 
     }
+
+    public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$approved = $this->input->post('approve');
+		$name=$session_data['FirstName'].' '.$session_data['SurName'];
+		if($approved=="ENDORSE"){
+			$data = array(
+		'Endorsed' => $approved,
+		'EndorsedBy' => $name
+		);
+		}else{
+		$data = array(
+		'Approved' => $approved,
+		'ApprovedBy' => $user_id
+		);}
+		$query=$this->DbHandler->updateApproval($id,$data);
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->showWebmobiledata();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->showWebmobiledata();	
+		}
+		}
     public function DisplayObservationSlipFormForUpdate(){
         $this->unsetflashdatainfo();
         $session_data = $this->session->userdata('logged_in');
@@ -290,7 +375,6 @@ elseif ($userrole=="OC") {
             $data['observationslipidupdate'] = array();
         }
 
-
         $this->load->view('observationSlipForm', $data);
     }
 
@@ -301,8 +385,10 @@ elseif ($userrole=="OC") {
         $role=$session_data['UserRole'];
         $firstname=$session_data['FirstName'];
         $surname=$session_data['SurName'];
+        $id=$session_data['Userid'];
 
         $date = $this->input->post('date_observationslipform');
+		
         $station = firstcharuppercase(chgtolowercase($this->input->post('station_observationslipform')));
         $stationNumber = $this->input->post('stationNo_observationslipform');
         $totalAmountOfAllClouds =intval( $this->input->post('totalamountofallclouds_observationslipform'));
@@ -374,6 +460,8 @@ elseif ($userrole=="OC") {
         $Remarks = $this->input->post('remarks_observationslipform');
         $WindRun=$this->input->post('windRun_observationslipform');
         $DurationOfSunshine=$this->input->post('durationOfSunshine_observationslipform');
+		$max_temp = $this->input->post('max_temp');
+		$min_temp = $this->input->post('min_temp');
 
 $UnitOfWindSpeed_mff =$this->input->post("UnitOfWindSpeed_mff");
 $IndOrOmissionOfPrecipitation_mff =$this->input->post("IndOrOmissionOfPrecipitation_mff");
@@ -392,10 +480,15 @@ $supplementaryinformation_mff=$this->input->post("supplementaryinformation_mff")
 $VapourPressure_mff =$this->input->post("VapourPressure_mff");
 $thgraph_mff =$this->input->post("thgraph_mff");
 $Trend_mff =$this->input->post("Trend_mff");
-$approved=0;
+$approved="FALSE";
         $user=$firstname.' '.$surname;
         $InputType="Web";
-$metarOrSpeci=$this->input->post('metar_speci');
+$ms=$this->input->post('metar_speci');
+if($ms=='metar'){
+    $metarOrSpeci='normal';
+}else{
+    $metarOrSpeci=$ms;
+}
 $timeobservationslip= $metarOrSpeci=="speci"? $this->input->post('speci_time_observationslipform'):$this->input->post('metar_time_observationslipform');
 $station_id= $this->DbHandler->identifyStationById($station,$stationNumber);
 
@@ -414,8 +507,10 @@ $TimeMarksHygro =floatval( $this->input->post('timemarksHygro_observationslipfor
 $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationslipform'));
 
 
+        
+
         $insertObservationSlipFormData=array(
-            'Date'=>$date,'station'=>$station_id,
+            'Date'=>$date,'station'=>$station_id,'Userid'=>$id,
             'TIME'=> $timeobservationslip,'DeviceType '=> $InputType,
             'TotalAmountOfAllClouds'=>$totalAmountOfAllClouds,  'TotalAmountOfLowClouds'=> $totalAmountOfLowClouds,
             'TypeOfLowClouds1'=> $TypeOfLowClouds1, 'OktasOfLowClouds1'=> $OktasOfLowClouds1,
@@ -459,7 +554,7 @@ $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationsli
             'CLP'=>$CLP,            'MSLPr'=>$MSLPr,
             'TimeMarksBarograph'=>$TimeMarksBarograph,     'TimeMarksAnemograph'=>$TimeMarksAnemoograph,
             'OtherTMarks'=>$OtherTMarks,
-            'Remarks'=>$Remarks,    'windrun'=> $WindRun,
+            'Remarks'=>$Remarks,    'windrun'=> $WindRun,'Max_temp'=>$max_temp,'Min_temp'=>$min_temp,
             'sunduration'=> $DurationOfSunshine,'Approved'=>$approved,
 
             'trend'=>$Trend_mff,'speciOrMetar'=>$metarOrSpeci,
@@ -470,66 +565,80 @@ $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationsli
             'CI_OfPrecipitation'=>$CI_OfPrecipitation_mff, 'BE_OfPrecipitation'=>$BE_OfPrecipitation_mff,
             'IndicatorOfTypeOfIntrumentation'=>$IndicatorOfTypeOfIntrumentation_mff, 	'SignOfPressureChange'=>$SignOfPressureChange_mff,
             'Supp_Info'=>$supplementaryinformation_mff, 'VapourPressure'=>$VapourPressure_mff,
-            'T_H_Graph'=>$thgraph_mff ,'SubmittedBy'=>$user);
+            'T_H_Graph'=>$thgraph_mff ,'O_SubmittedBy'=>$user);
+                   
+            
+            $checkduplicateform = $this->DbHandler->checkforduplicate($date,$station_id,$timeobservationslip);
+            
 
+            if($checkduplicateform){
+                $this->session->set_flashdata('error', 'Sorry, A Record for this time has Already Been Submitted');
+                $this->showWebmobiledata();
+            }
+            else{
 
+                $insertsuccess= $this->DbHandler->insertData($insertObservationSlipFormData,'observationslip'); //Array for data to insert then  the Table Name
+                $data_id=$this->DbHandler->getdataid($insertObservationSlipFormData,'observationslip','id');
+                //Redirect the user back with  message
+                if($insertsuccess){
+                  if($metarOrSpeci=="speci")
+                  $this->sendObservationSpeci_note_Email($station,$stationNumber,$date,$timeobservationslip);
+                    $session_data = $this->session->userdata('logged_in');
+                    $userrole=$session_data['UserRole'];
+                    $userstation=$session_data['UserStation'];
+                    $stationId= $session_data['StationId'];
+                    $StationRegion=$session_data['StationRegion'];
+                    $name=$session_data['FirstName'].' '.$session_data['SurName'];
+        
+                    $userlogs = array('Userid' => $id,'Action' => 'Added Observation Slip',
+                        'Details' => $name . ' added Observation Slip information into the system','data_id'=>$data_id,
+                        'IP' => $this->input->ip_address());
+                    //  save user logs
+                     $this->DbHandler->saveUserLogs($userlogs);
+        
+        
+        
+                    $this->session->set_flashdata('success', 'New Observation Slip info was added successfully!');
+                    $this->showWebmobiledata();
+        
+                }
+                else{
+                    $this->session->set_flashdata('error', '"Sorry, we encountered an issue Observation Slip Data not inserted! ');
+                    $this->showWebmobiledata();
+        
+                }
 
+            }
 
-        $insertsuccess= $this->DbHandler->insertData($insertObservationSlipFormData,'observationslip'); //Array for data to insert then  the Table Name
-
-
-        //Redirect the user back with  message
-        if($insertsuccess){
-          if($metarOrSpeci=="speci")
-          $this->sendObservationSpeci_note_Email($station,$stationNumber,$date,$timeobservationslip);
-            $session_data = $this->session->userdata('logged_in');
-            $userrole=$session_data['UserRole'];
-            $userstation=$session_data['UserStation'];
-            $stationId= $session_data['StationId'];
-            $StationRegion=$session_data['StationRegion'];
-            $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added Observation Slip info',
-                'Details' => $name . ' added Observation Slip info into the system',
-                'station' => $stationId,
-                'IP' => $this->input->ip_address());
-            //  save user logs
-             $this->DbHandler->saveUserLogs($userlogs);
-
-
-
-            $this->session->set_flashdata('success', 'New Observation Slip info was added successfully!');
-            $this->index();
-
-        }
-        else{
-            $this->session->set_flashdata('error', '"Sorry, we encountered an issue Observation Slip Data uninserted! ');
-            $this->index();
-
-        }
-
-
-
-    }
+}
 
     public function UpdateObservationSlipFormData(){
         $this->unsetflashdatainfo();
         $this->load->helper(array('form', 'url'));
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
-
+         
         $date = $this->input->post('date');
-        $metarOrSpeci=$this->input->post('metar_speci');
-        $timeobservationslip= $metarOrSpeci=="speci"? $this->input->post('speci_time_observationslipform'):$this->input->post('metar_time_observationslipform');
+        $ms = $this->input->post('metar_speci');
+        if($ms == 'metar'){
+            $metarOrSpeci='normal';
+        }else{
+            $metarOrSpeci = $ms;  
+        }
+        
+        //exit('hello....'.$metarOrSpeci);
+
+        $timeobservationslip= $metarOrSpeci=="speci"? $this->input->post('speci_time'):$this->input->post('metar_time');
 
         $stationName = firstcharuppercase(chgtolowercase($this->input->post('station')));
         $stationNumber = $this->input->post('stationNo');
         $station = $this->DbHandler->identifyStationById($stationName,$stationNumber);
 
-
+        
 
         $totalAmountOfAllClouds = $this->input->post('totalamountofallclouds');
+       // $totalAmountOfAllClouds =intval( $this->input->post('totalamountofallclouds_observationslipform'));
+       //exit('hey....'.$totalAmountOfAllClouds );
         $totalAmountOfLowClouds = $this->input->post('totalamountoflowclouds');
         $TypeOfLowClouds1 = $this->input->post('TypeOfLowClouds1');
         $OktasOfLowClouds1= $this->input->post('OktasOfLowClouds1');
@@ -598,7 +707,8 @@ $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationsli
         $MSLPr = floatval($this->input->post('MSLPR'));
         $TimeMarksBarograph = floatval($this->input->post('timeMarksBarograph'));
         $TimeMarksAnemoograph = floatval($this->input->post('timeMarksAnemograph'));
-
+         $max_temp = $this->input->post('max_temp');
+		$min_temp = $this->input->post('min_temp');
         $OtherTMarks = $this->input->post('otherTMarks');
         $Remarks = $this->input->post('remarks');
         $WindRun=$this->input->post('windRun');
@@ -622,12 +732,26 @@ $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationsli
        $thgraph_mff =$this->input->post("thgraph_mff");
        $Trend_mff =$this->input->post("Trend_mff");
         $approved=$this->input->post('approval');
+        
 
         $id = $this->input->post('id');
 
+        $approvalStatus = $this->DbHandler->checkifApproved($id);
+	       
+			
+		if($approvalStatus == 0 && $approved=="TRUE" ){
+			
+				$approvedby=$session_data['Userid'];
+			
+		}else{
+			$approvedby=$approvalStatus;
+				
+		}
+
+        
 
         $updateObservationSlipFormData=array(
-            'Date'=>$date,'station'=>$station,
+            'Date'=>$date,'station'=>$station,'ApprovedBy'=>$approvedby,
             'TIME'=> $timeobservationslip,
             'TotalAmountOfAllClouds'=>$totalAmountOfAllClouds,'TotalAmountOfLowClouds'=> $totalAmountOfLowClouds,
             'TypeOfLowClouds1'=> $TypeOfLowClouds1, 'OktasOfLowClouds1'=> $OktasOfLowClouds1,
@@ -662,8 +786,8 @@ $TimeMarksRainRec =floatval( $this->input->post('timemarksRainRec_observationsli
             'Correction'=>$Correction,            'CLP'=>$CLP,
             'MSLPr'=>$MSLPr,            'TimeMarksBarograph'=>$TimeMarksBarograph,
             'TimeMarksAnemograph'=>$TimeMarksAnemoograph,    'OtherTMarks'=>$OtherTMarks,
-            'Remarks'=>$Remarks,        'windrun'=> $WindRun,
-            'sunduration'=> $DurationOfSunshine, 'speciOrMetar'=>$speciOrmetar,
+            'Remarks'=>$Remarks,        'windrun'=> $WindRun,'Max_temp'=>$max_temp,'Min_temp'=>$min_temp,
+            'sunduration'=> $DurationOfSunshine, 'speciormetar'=>$metarOrSpeci,
             'trend'=>$Trend_mff,
             'UnitOfWindSpeed'=>$UnitOfWindSpeed_mff, 	'IndOrOmissionOfPrecipitation'=>$IndOrOmissionOfPrecipitation_mff,
             'TypeOfStation_Present_Past_Weather'=>$TypeOfStation_Present_Past_Weather_mff,
@@ -681,14 +805,6 @@ foreach ($updateObservationSlipFormData as $key => $value) {
   $updateObservationSlipFormData[$key]=NULL;
 }
 
-        $updatesuccess=$this->DbHandler->updateData($updateObservationSlipFormData,"",'observationslip',$id);
-
-     //Redirect the user back with  message
-        if($updatesuccess){
-          //alert zonal officer by email
-           $this->sendObservationEditEmail($stationName,$stationNumber,$date,$timeobservationslip);
-            //Store User logs.
-            //Create user Logs
             $session_data = $this->session->userdata('logged_in');
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
@@ -696,24 +812,31 @@ foreach ($updateObservationSlipFormData as $key => $value) {
             $StationRegion=$session_data['StationRegion'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated Observation Slip info',
-                'Details' => $name . ' updated Observation Slip info into the system',
-                'station' => $userstationId,
+            $userlogs = array('Userid' => $id,'Action' => 'Updated Observation Slip',
+                'Details' => $name . ' Updated Observation Slip information in the system',
                 'IP' => $this->input->ip_address());
+        $updatesuccess=$this->DbHandler->updateData($updateObservationSlipFormData,"",'observationslip',$id,$userlogs);
+
+     //Redirect the user back with  message
+        if($updatesuccess){
+          //alert zonal officer by email
+           $this->sendObservationEditEmail($stationName,$stationNumber,$date,$timeobservationslip);
+            //Store User logs.
+            //Create user Logs
+            
             //  save user logs
-             $this->DbHandler->saveUserLogs($userlogs);
+            // $this->DbHandler->saveUserLogs($userlogs);
 
 
 
             $this->session->set_flashdata('success', 'Observation Slip info was updated successfully!');
-            $this->index();
+            $this->showWebmobiledata();
 
         }
         else{
 
             $this->session->set_flashdata('error', 'Sorry, we encountered an issue! Observation Slip did not update');
-            $this->index();
+            $this->showWebmobiledata();
 
         }
 
@@ -759,7 +882,7 @@ foreach ($updateObservationSlipFormData as $key => $value) {
     ///Check DB against the DATE,STATIONName,StationNumber,TIME,METAR/SPECI OPTION
     function checkInDBIfObservationSlipFormRecordExistsAlready($date,$time_OfObservationSlipForm,$stationName,$stationNumber) {  //Pass the StationName to get the Station Number.
         $this->load->helper(array('form', 'url'));
-
+        
         $stationName = ($stationName == "") ? $this->input->post('stationName') : $stationName;
         $date = ($date == "") ? $this->input->post('date') : $date;
         $stationNumber = ($stationNumber == "") ? $this->input->post('stationNumber') : $stationNumber;

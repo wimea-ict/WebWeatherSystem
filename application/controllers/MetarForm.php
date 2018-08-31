@@ -9,7 +9,11 @@ class MetarForm extends CI_Controller {
         error_reporting(E_PARSE);
         $this->load->model('DbHandler');
         $this->load->library('session');
-        //$this->load->library('encrypt');
+        $this->load->library('encrypt');
+		if(!$this->session->userdata('logged_in')){
+	    $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
 
     }
     public function index(){
@@ -160,11 +164,11 @@ class MetarForm extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added metar book info',
+           $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Added metar book info',
                 'Details' => $name . ' added metar book info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+              
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -262,11 +266,11 @@ class MetarForm extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated metar book info',
+            $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+           'Action' => 'Updated metar book info',
                 'Details' => $name . ' updated metar book info into the system',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);

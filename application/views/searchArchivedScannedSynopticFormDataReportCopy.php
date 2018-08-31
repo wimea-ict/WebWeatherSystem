@@ -151,7 +151,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                 <td><?php echo $data->Description;?></td>
 
                                 <td class="no-print">
-                                   <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedSynopticFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileRef;?>" target = "blank"><?php echo $data->FileRef;?></a>
+                                   <a title="click to view file" href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedSynopticFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileRef;?>" target = "blank"><?php echo $data->FileRef;?></a>
                                    
                                     
 
@@ -164,12 +164,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         }
                     ?>
                 </table>
-            <br><br>
-
-            <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
-            </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
-            <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
-
+            
                 <br><br>
 
                 <div class="clearfix"></div>

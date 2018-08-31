@@ -172,12 +172,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 </table>
 
                 <br><br>
-            <br><br>
-
-            <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
-            </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
-    <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
-
+            
                 <div class="clearfix"></div>
 
                 <br><br><br><br>

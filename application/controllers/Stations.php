@@ -10,7 +10,10 @@ class Stations extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+        if(!$this->session->userdata('logged_in')){
+	   $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
         // $this->unsetflashdatainfo();
@@ -18,7 +21,8 @@ class Stations extends CI_Controller {
         $session_data = $this->session->userdata('logged_in');
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
-
+		
+        
         //View Station.Load all the previous Stations
         $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
         //  var_dump($query);
@@ -30,6 +34,29 @@ class Stations extends CI_Controller {
 
         $this->load->view('stations', $data);
     }
+	public function stationUsers(){
+		  //$this->unsetflashdatainfo();
+		 $this->load->helper(array('form', 'url'));
+
+        $stationid  = ($stationid == "") ? $this->input->post('stationid') : $stationid; // URL Segment Three.
+		
+	
+		$query = $this->DbHandler->StationUsers($stationid);  //value,field,table
+        //  var_dump($query);
+		 //exit($stationid);
+		 //exit($stationid."am here");
+        if($query){
+                echo json_encode($query);
+         
+            }
+            else{
+
+              return false;
+	}
+	}
+       
+    
+	
     public function DisplayStationsForm(){
         $this->unsetflashdatainfo();
         $name='displaynewstationsform';
@@ -130,12 +157,12 @@ class Stations extends CI_Controller {
             //$creationDate= date('Y-m-d H:i:s');
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $SubmittedBy=$name;
-
+		    $height = $this->input->post('height');
             $insertStationData=array(
                 'StationName'=> $stationname,'StationNumber'=>$stationnumber,'StationRegNumber'=>$stationregNo,
                 'Location'=>$stationlocation,'Country'=>$country,
                 'StationRegion'=>$region,'Indicator'=>$indicator,
-                'Latitude'=>$latitude,'Longitude'=>$longitude,
+                'Latitude'=>$latitude,'Longitude'=>$longitude,'Height'=>$height,
                 'Altitude'=>$altitude,'Opened'=>$opened,
                 'Closed'=>$closed,'StationStatus'=>$status,
                 'StationType'=>$type,'SubmittedBy'=>$SubmittedBy);
@@ -155,14 +182,14 @@ class Stations extends CI_Controller {
                 //$StationRegion=$session_data['StationRegion'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $UserRole,'Action' => 'Inserted new station details',
+                $userid =$session_data['Userid'];
+                $userlogs = array('Userid' => $userid,
+                   'Action' => 'Inserted new station details',
                     'Details' => $name . ' inserted new station details in the system ',
-                    'StationName' => $StationName,
-                    'StationNumber' => $StationNumber,
+                    
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                $this->DbHandler->saveUserLogs($userlogs);
 
 
 
@@ -197,13 +224,13 @@ class Stations extends CI_Controller {
             $longitude = $this->input->post('stationlongitude');
             $altitude=$this->input->post('stationaltitude');
             $opened = $this->input->post('stationopened');
-            $status=$this->input->post('stationstatus');
+            $status=$this->input->post('statusstation');
             $closed = $this->input->post('stationclosed');
 
-            $type = $this->input->post('stationtype');
+            $type = $this->input->post('typestation');
 
             $id = $this->input->post('id');
-
+             $height = $this->input->post('height');
 
 
 
@@ -212,7 +239,7 @@ class Stations extends CI_Controller {
                 'Location'=>$stationlocation,'Country'=>$country,
                 'StationRegion'=>$region,'Indicator'=>$indicator,
                 'Latitude'=>$latitude,'Longitude'=>$longitude,
-                'Altitude'=>$altitude,'Opened'=>$opened,
+                'Altitude'=>$altitude,'Height'=>$height,'Opened'=>$opened,
                 'Closed'=>$closed,'StationStatus'=>$status,
                 'StationType'=>$type);
 
@@ -229,14 +256,14 @@ class Stations extends CI_Controller {
 
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $UserRole,'Action' => 'Updated station details',
+                $userid =$session_data['Userid'];
+                $userlogs = array('Userid' => $userid,
+                    'Action' => 'Updated station details',
                     'Details' => $name . ' updated station details in the system ',
-                    'StationName' => $StationName,
-                    'StationNumber' => $StationNumber,
+                   
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                $this->DbHandler->saveUserLogs($userlogs);
 
 
                 $this->session->set_flashdata('success', 'Station info was updated successfully!');
@@ -290,6 +317,21 @@ class Stations extends CI_Controller {
 
         }
 
+    }
+
+    function getZonalRegion($zonalnumber){
+        $this->load->helper(array('form', 'url'));
+        $zonalnumber = ($zonalnumber == "") ? $this->input->post('zonalnumber') : $zonalnumber;
+        if ($zonalnumber  == "") {
+            echo '<span style="color:#f00">sorry we encountered an issue. </span>';
+        } else {
+
+            $get_result = $this->DbHandler->getResults($zonalnumber, 'Userid', 'systemusers');   // $value, $field, $table
+
+            echo json_encode($get_result);
+
+
+        }
     }
 
 

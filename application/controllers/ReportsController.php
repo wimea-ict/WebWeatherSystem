@@ -10,7 +10,10 @@ class ReportsController extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+        if(!$this->session->userdata('logged_in')){
+	   $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
 
     public function initializeRainfallYearlyReport(){
@@ -31,6 +34,26 @@ class ReportsController extends CI_Controller {
 
         //View the dekadal form.
         $this->load->view('yearlyRainfallReport',$data);
+
+    }
+	 public function initializeRainfallCustomReport(){
+        //$this->unsetflashdatainfo();
+        $session_data = $this->session->userdata('logged_in');
+        $userrole=$session_data['UserRole'];
+        $userstation=$session_data['UserStation'];
+
+        //Get all Stations.
+        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','stations');  //value,field,table
+        //  var_dump($query);
+        if ($query) {
+            $data['stationsdata'] = $query;
+        } else {
+            $data['stationsdata'] = array();
+        }
+
+
+        //View the dekadal form.
+        $this->load->view('CustomRainfallReport',$data);
 
     }
     public function displayyearlyrainfallreport(){
@@ -673,9 +696,10 @@ public function  sendMail($htmlmsgbody,$msgreceiver)
 
 }
 public function displayobservationslipreport(){
+	
     $session_data = $this->session->userdata('logged_in');
     $userrole=$session_data['UserRole'];
-
+    
 
     $ObservationslipTimeInZoo = $this->input->post('ObservationSlipTime');
 
@@ -693,15 +717,16 @@ public function displayobservationslipreport(){
 
     }
 
-
+      
     $data['displayObservationSlipReportHeaderFields'] = array('stationName'=>$stationName,'stationNumber'=>$stationNumber,
         'TimeInZoo'=>$ObservationslipTimeInZoo,'date'=>$date);
-
+   
     //$query = $this->DbHandler->selectAll($stationName,'StationName','observationslip');  //value,field,table
     $query = $this->DbHandler->selectObservationSlipReportForSpecificTimeOfADay($ObservationslipTimeInZoo,$date,$stationName,$stationNumber,'observationslip');  //value,field,table
-
+    // exit("am here");
     if ($query) {
         $data['observationslipdataforspecifictimeofaday'] = $query;
+		
     } else {
         $data['observationslipdataforspecifictimeofaday'] = array();
     }

@@ -10,6 +10,10 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
+	    if(!$this->session->userdata('logged_in')){
+	    $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
 
     }
     public function index(){
@@ -23,8 +27,10 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         //  var_dump($query);
         if ($query) {
             $data['archivedrainfalldata'] = $query;
+		
         } else {
             $data['archivedrainfalldata'] = array();
+			
         }
 
         //Get all Stations.
@@ -100,14 +106,15 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
         $station = firstcharuppercase(chgtolowercase($this->input->post('station_archivedailymonthlyrainfalldata')));
 
         $stationNumber = $this->input->post('stationNo_archivedailymonthlyrainfalldata');
+        $station_id= $this->DbHandler->identifyStationById($station,$stationNumber);
 
         $rainfall = $this->input->post('rainfall_archivedailymonthlyrainfalldata');
         $approved="FALSE";
         $session_data = $this->session->userdata('logged_in');
         $name=$session_data['FirstName'].' '.$session_data['SurName'];
         $insertDailyPeriodicRainfallData=array('Date'=> $date,'Rainfall'=>$rainfall,
-            'station' => $station, 'station' => $stationNumber,
-            'Approved'=>$approved,'SubmittedBy' => $name);
+            'station' => $station_id, 
+            'Approved'=>$approved,'AR_SubmittedBy' => $name);
         // $this->DbHandler->insertData($insertDailyPeriodicRainfallData,'dailyperiodicrainfall'); //Array for data to insert then  the Table Name
         $insertsuccess= $this->DbHandler->insertData($insertDailyPeriodicRainfallData,'archivemonthlyrainfallformreportdata'); //Array for data to insert then  the Table Name
 
@@ -125,11 +132,10 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
            // $userstationNo=$session_data['station'];
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added archived daily periodic rainfall info',
+             $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Added archived daily periodic rainfall info',
                 'Details' => $name . ' added archived daily periodic rainfall info into the system',
-                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -188,10 +194,10 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
             $userstationNo=$session_data['station'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated archived periodic rainfall info',
+            $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Updated archived periodic rainfall info',
                 'Details' => $name . ' updated archived periodic rainfall info into the system',
-                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -211,6 +217,24 @@ class ArchiveMonthlyRainfallFormReportData extends CI_Controller {
 
 
     }
+	public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"archivemonthlyrainfallformreportdata");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function DeleteRainfallData() {
         $this->unsetflashdatainfo();
 

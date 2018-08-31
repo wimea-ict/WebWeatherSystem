@@ -34,6 +34,17 @@
 
 <script src="<?php echo base_url(); ?>js/jquery.table2excel.js"></script>
 <script src="<?php echo base_url(); ?>js/jquery.tabletoCSV.js"> </script>
+ <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" rel="stylesheet" />
+
+   
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<!-- date range picker here-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
 <!-- Page script -->
 <script type="text/javascript">
     $("#export").click(function(){
@@ -67,7 +78,7 @@
 </script>
 <script type="text/javascript">
     $('#period').daterangepicker(
-        {
+        {   maxDate: "today",
             ranges: {
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
@@ -87,7 +98,9 @@
 
 <script type="text/javascript">
     $('#range').daterangepicker(
-        {
+        { 
+			maxDate: "today",
+			
             ranges: {
 
                 'Last 10 Days': [moment().subtract('days', 9), moment()]
@@ -105,31 +118,49 @@
     // When the document is ready
     $(document).ready(function () {
 
+        $('#datepickrange').daterangepicker({
+    timePicker: true,
+    startDate: moment().startOf('hour'),
+    endDate: moment().startOf('hour').add(32, 'hour'),
+    locale: {
+      format: 'M/DD hh:mm A'
+    }
+  });
+        
         $('#datepicker').datepicker({
-            format: "dd/mm/yyyy",
+             dateFormat: "dd-mm-yyyy",
             autoclose: true,
+			maxDate: "today",
             endDate: '-4380d'
         });
         $('#date').datepicker({
-            format: "yyyy-mm-dd",
-            autoclose: true
+           
+            dateFormat: "yy-mm-dd",
+			maxDate: "today",
+            autoclose: true,
+			
+			
         });
         $('#expdate').datepicker({
-            format: "yyyy-mm-dd",
+           dateFormat: "yy-mm-dd",
+			maxDate: "today",
             autoclose: true
 
         });
         $('#opened').datepicker({
-            format: "yyyy-mm-dd",
+            dateFormat: "yy-mm-dd",
+			maxDate: "today",
             autoclose: true
 
         });
         $('#closed').datepicker({
-            format: "yyyy-mm-dd",
+            dateFormat: "yy-mm-dd",
+			maxDate: "today",
             autoclose: true
 
         });
         $('#time').timepicker({
+			maxDate: "today",
             showInputs: false
 
         });
@@ -137,7 +168,9 @@
         $("#year").datepicker({
             autoclose: true,
             format: "yyyy", // Notice the Extra space at the beginning
+			maxDate: "today",
             viewMode: "years",
+			
             minViewMode: "years"
 
         });
@@ -171,11 +204,48 @@
     });
 </script>
 <script type="text/javascript">
+
+
     $(function() {
-        $("#example1").dataTable();
+        $("#example1").dataTable({
+            "bPaginate": true,
+            "bLengthChange": true,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "order": [[ 0, "asc" ]],
+            "aaSorting": [ [0,'asc'] ],
+			"scrollY":        "300px",
+            "scrollX":        true,
+           "scrollCollapse": true,
+            "paging":         true,
+            "fixedColumns":   {
+            "ileftColumns": 1,
+            "irightColumns": 1
+        }
+        });
+		$("#example4").dataTable({
+            "bPaginate": true,
+            "bLengthChange": true,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "order": [[ 1, "desc" ]],
+            "aaSorting": [ [1,'desc'] ],
+			"scrollY":        "300px",
+            "scrollX":        true,
+           "scrollCollapse": true,
+            "paging":         true,
+            "fixedColumns":   {
+            "ileftColumns": 1,
+            "irightColumns": 1
+        }
+        });
         $("#example3").dataTable();
         $('#example2').dataTable({
-            "bPaginate": true,
+            "bPaginate": false,
             "bLengthChange": false,
             "bFilter": false,
             "bSort": true,

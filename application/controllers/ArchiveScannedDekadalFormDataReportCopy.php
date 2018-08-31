@@ -10,6 +10,11 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
+		if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
+		
 
     }
     public function index(){
@@ -105,6 +110,9 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
+        $config['file_name'] ='scanDekadal' .'-'.date("Y-m-d").'-'.$_FILES['userfile']['name'];
+
+
 
         $config['remove_spaces'] = TRUE;
 
@@ -120,6 +128,8 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $data = $this->upload->data();
             $filename = $data['file_name'];
 
+           // $filename = md5(uniqid(mt_rand())).$this->$filename;
+
 
 
 
@@ -128,8 +138,8 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
 
 
                 $station = $this->input->post('station_ArchiveScannedDekadalFormReport');
-                $stationNo = $this->input->post('stationNo_ArchiveScannedDekadalFormReport');
-
+                $stationNumber = $this->input->post('stationNo_ArchiveScannedDekadalFormReport');
+                $station_id= $this->DbHandler->identifyStationById($station,$stationNumber);
 
 
             $FromdateOnScannedDekadalFormReport = $this->input->post('FromdateOnScannedDekadalFormReport_dekadal');
@@ -142,15 +152,16 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $firstname=$session_data['FirstName'];
             $surname=$session_data['SurName'];
             $SubmittedBy=$user=$firstname.' '.$surname;
+            $stationId=$this->DbHandler->identifyStationById($station, $stationNumber);//station name and station number
 
             $insertScannedDekadalFormReportDataDetails=array(
-                'Form' => $formname, 'StationName' => $station,
-                'StationNumber' => $stationNo, 'FromDate' => $FromdateOnScannedDekadalFormReport,'ToDate' => $TodateOnScannedDekadalFormReport,
-                'Approved'=> $Approved,'SubmittedBy'=>$SubmittedBy,
-                'Description'=>$description,'FileName' => $filename);
+                'station' => $stationId,
+                 'from_date' => $FromdateOnScannedDekadalFormReport,'to_date' => $TodateOnScannedDekadalFormReport,
+                'Approved'=> $Approved,'SDE_SubmittedBy'=>$SubmittedBy,
+                'Description'=>$description,'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
-            $insertsuccess= $this->DbHandler->insertData($insertScannedDekadalFormReportDataDetails,'scannedarchivedekadalformreportcopydetails'); //Array for data to insert then  the Table Name
+            $insertsuccess= $this->DbHandler->insertData($insertScannedDekadalFormReportDataDetails,'scans_dekadals'); //Array for data to insert then  the Table Name
 
             //Redirect the user back with  message
             if($insertsuccess){
@@ -163,16 +174,16 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
                 $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
-                    'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'station' => $userstationId,
+               $userid =$session_data['Userid'];
+               $userlogs = array('Userid' => $userid,
+                   'Action' => 'Added new Scanned dekadal form details',
+                    'Details' => $name . ' added new Scanned dekadal Form details into the system ',
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                 $this->DbHandler->saveUserLogs($userlogs);
 
 
-                $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
+                $this->session->set_flashdata('success', 'New Scanned dekadal Form details info was added successfully!');
                 $this->index();
 
             }
@@ -209,8 +220,8 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         $config['max_size'] = '2097152';  // Can be set to particular file size , here it is 2 MB(2048 Kb)
         $config['max_height'] = '768';
         $config['max_width'] = '1024';
-
         $config['remove_spaces'] = TRUE;
+        $config['file_name'] ='UpdatedscanDekadal' .'-'.date("Y-m-d").'-'.$_FILES['userfile']['name'];
 
         $this->load->library('upload', $config);
 
@@ -249,10 +260,15 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
             $id = $this->input->post('id');
             $approved=$this->input->post('approval');
 
+            $firstname=$session_data['FirstName'];
+            $surname=$session_data['SurName'];
+            $UpdatedBy=$firstname.' '.$surname;
+
+
             $updateScannedDekadalFormReportDataDetails=array(
-                'station' => $stationId,'Approved'=>$approved,
+                'station' => $stationId,'Approved'=>$approved, 
                 'from_date' => $FromdateOnScannedDekadalFormReport,'to_date'=>$TodateOnScannedDekadalFormReport,
-                'Description'=>$description,'FileRef' => $filename);
+                'Description'=>$description, 'SDE_SubmittedBy'=>$UpdatedBy, 'FileRef' => $filename);
 
             //$this->DbHandler->insertInstrument($insertInstrumentData);
             $updatesuccess=$this->DbHandler->updateData($updateScannedDekadalFormReportDataDetails,'','scans_dekadals',$id);
@@ -268,16 +284,16 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
                 $userstationId=$session_data['StationId'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $userrole,'Action' => 'Added new Scanned Metar Form details',
-                    'Details' => $name . ' added new Scanned Metar Form details into the system ',
-                    'station' => $userstationId,
+                  $userid =$session_data['Userid'];
+                  $userlogs = array('Userid' => $userid,
+                    'Action' => 'Added new Scanned dekadal Form details',
+                    'Details' => $name . ' added new Scanned dekadal Form details into the system ',
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                $this->DbHandler->saveUserLogs($userlogs);
 
 
-                $this->session->set_flashdata('success', 'New Scanned Metar Form details info was added successfully!');
+                $this->session->set_flashdata('success', 'New Scanned dekadal Form details info was added successfully!');
                 $this->index();
 
             }
@@ -290,12 +306,30 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
        // }
 
     }
+	public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"scans_dekadals");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function deleteInformationForArchiveScannedDekadalFormReport() {
         $this->unsetflashdatainfo();
 
         $id = $this->uri->segment(3); // URL Segment Three.
 
-        $rowsaffected = $this->DbHandler->deleteData('scannedarchivedekadalformreportcopydetails',$id);  //$rowsaffected > 0
+        $rowsaffected = $this->DbHandler->deleteData('scans_dekadals',$id);  //$rowsaffected > 0
 
         if ($rowsaffected) {
             //Store User logs.
@@ -367,7 +401,7 @@ class ArchiveScannedDekadalFormDataReportCopy extends CI_Controller {
         else {
 
 
-            $get_result = $this->DbHandler->checkInDBIfArchiveScannedDekadalFormDataReportCopyRecordExistsAlready($fromdate,$todate,$stationName,$stationNumber,'scannedarchivedekadalformreportcopydetails');   // $value, $field, $table
+            $get_result = $this->DbHandler->checkInDBIfArchiveScannedDekadalFormDataReportCopyRecordExistsAlready($fromdate,$todate,$stationName,$stationNumber,'scans_dekadals');   // $value, $field, $table
 
             if( $get_result){
                 echo json_encode($get_result);

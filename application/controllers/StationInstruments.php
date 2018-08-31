@@ -10,7 +10,10 @@ class StationInstruments extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+        if(!$this->session->userdata('logged_in')){
+	   $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
        // $this->unsetflashdatainfo();
@@ -161,14 +164,14 @@ class StationInstruments extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added new instrument details',
+             $userid =$session_data['Userid'];
+             $userlogs = array('Userid' => $userid,
+                'Action' => 'Added new instrument details',
                 'Details' => $name . ' added new instrument details into the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+               
                 'IP' => $this->input->ip_address());
             //  save user logs
-            // $this->DbHandler->saveUserLogs($userlogs);
+            $this->DbHandler->saveUserLogs($userlogs);
 
 
             $this->session->set_flashdata('success', 'New Instrument info was added successfully!');
@@ -242,14 +245,14 @@ class StationInstruments extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated instrument details',
+            $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+               'Action' => 'Updated instrument details',
                 'Details' => $name . ' updated instrument details in the system ',
-                'StationName' => $userstation,
-                'StationNumber' => $userstationNo ,
+                
                 'IP' => $this->input->ip_address());
             //  save user logs
-            // $this->DbHandler->saveUserLogs($userlogs);
+             $this->DbHandler->saveUserLogs($userlogs);
 
 
             $this->session->set_flashdata('success', 'Instrument info was updated successfully!');

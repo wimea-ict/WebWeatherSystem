@@ -81,7 +81,6 @@ class Users extends CI_Controller {
         ///////////////////////////////////////////////////////////////////////
 
         $userid = $this->uri->segment(3);
-
         $query = $this->DbHandler->selectUserById($userid,'Userid','systemusers');  //$value, $field,$table
         if ($query) {
             $data['stationuserdataid'] = $query;
@@ -118,19 +117,20 @@ class Users extends CI_Controller {
           $stationNo = $this->input->post('user_stationNo_OC');
         }
 
-      if($userRoleAssigned=="OC" || $userRoleAssigned=="Observer" || $userRoleAssigned=="ObserverArchive" || $userRoleAssigned=="ObserverDataEntrant" || $userRoleAssigned=="WeatherForecaster"){
+      if($userRoleAssigned=="OC" || $userRoleAssigned=="Observer" || $userRoleAssigned=="ObserverArchive" || 
+      $userRoleAssigned=="WeatherAnalyst" || $userRoleAssigned=="ObserverDataEntrant" || $userRoleAssigned=="WeatherForecaster"){
 
                 $stationRegion = "NULL";
 
-            }elseif($UserRole=="ZonalOfficer" || $UserRole=="SeniorDataOfficer"){
+            }elseif($userRoleAssigned=="ZonalOfficer" || $userRoleAssigned=="SeniorZonalOfficer"){
 
-              $station ="NULL";
-              $stationNo ="NULL";
+              $station ="";
+              $stationNo ="";
               $stationRegion = $this->input->post('user_stationRegion_AssignedBy_Manager');
             }else{
-          $station ="NULL";
-          $stationNo ="NULL";
-          $stationRegion = "NULL";
+          $station ="";
+          $stationNo ="";
+          $stationRegion = "";
         }
 
         $createdBy=$UserRole;
@@ -140,13 +140,18 @@ class Users extends CI_Controller {
 
         //Before you insert check for Duplicate User.
         //Send User Credentials to the Email Address
-        $result=$this->DbHandler->checkforDuplicateUserDetails($firstname,$surname,$useremail,$station,$stationNo,$stationRegion);
+        $result=$this->DbHandler->checkforDuplicateUserDetails($firstname,$surname,$useremail,$station,$stationNo,$stationRegion,$userRoleAssigned);
+        //print_r($result); exit('hey...');
         if(!$result){
            $stationId=$this->DbHandler->identifyStationById($station,$stationNo);
-            $username = firstcharlowercase(firstletter($firstname)).'.'.firstcharlowercase($surname);
+            $generatedusername = firstcharlowercase(firstletter($firstname)).'.'.firstcharlowercase($surname);
             //Check if username to be generated Exists in the DB Already
-            $usernameExists=$this->DbHandler->checkIfUserNameExistsAlreadyInDB($username);
-            if(!$usernameExists){
+            //$usernameExists=$this->DbHandler->checkIfUserNameExistsAlreadyInDB($username);
+            $counter =-1;
+            $username = $this->DbHandler->generateUniqueUsername($generatedusername,$surname,$counter);
+            
+
+            if($username != false){
 
             $randompassword = $this->generatePasswdString();
             if($randompassword){
@@ -160,74 +165,64 @@ class Users extends CI_Controller {
 
 
 
-                    $insertUserData=array(
-                        'FirstName' => $firstname, 'SurName' => $surname,
-                        'UserPassword' => $encryptpassword,'UserName' => $username,
-                        'UserEmail' => $useremail, 'UserPhone' => $userphone,
-                        'UserRole' => $userRoleAssigned, 'station' => $stationId,
-                        "region_zone" => $stationRegion,
-                        'LastPasswdChange'=> date('Y-m-d H:i:s'),
-                        'LastLoggedIn'=>date('Y-m-d H:i:s'),
-                        'Active'=>$active,
-                        'Reset'=>$reset,'CreatedBy'=>$createdBy);
-
-                    $insertsuccess= $this->DbHandler->insertData($insertUserData,'systemusers');
-                    if($insertsuccess){
-
-                      $session_data = $this->session->userdata('logged_in');
-                      $userrole=$session_data['UserRole'];
-                      $userstationId=$session_data['StationId'];
-                      $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-                      $userlogoutlogs = array('User' => $name,
-                          'UserRole' => $userrole,'Action' => 'Inserted New User',
-                          'Details' => $name . ' Inserted new user in the system ',
-                          'station' => $userstationId,
-                          'IP' => $this->input->ip_address());
-                      //  save user logs
-                       $this->DbHandler->saveUserLogs($userlogoutlogs);
-
-
                       //Send the User Credentials.
-                      $htmlmessage = 'Hello'.''.$firstname.' '.$surname.'<br></br><br></br>'.
+                      $htmlmessage = 'Hello '.''.$firstname.' '.$surname.'<br></br><br></br>'.
+                      'You have been assigned as '.$userRoleAssigned.'<br></br><br></br>'.
                           'Your  New WIMEA-ICT Web Interface  Credentials are'.'<br></br><br></br>'.
-                          'UserName:'.''.''.$username.'<br></br><br></br>'.
-                          'Password:'.''.''.$randompassword.'<br></br><br></br>'.
-                          '<a href="http://www.wimea.mak.ac.ug/weather/">Click here to login!</a>'.
+                          'UserName:'.''.'<b><em>'.$username.'</b></em><br></br><br></br>'.
+                          'Password:'.''.'<b><em>'.$randompassword.'</b></em><br></br><br></br>'.
+                          '<a href="http://196.0.11.146/weather/">Click here to login!</a>'.
                           'Thank You'.'<br></br><b></br><b></br>'.'WIMEA-ICT';
 
                       //If true an Email has been sent Else
                       $results=$this->sendMail($htmlmessage,$useremail);
-                      if($results){  //Email has been sent
-                          //Redirect the user back with  message
-                          //Insert the user if email has been sent.
-                        //Store User logs.
-                        //Create user Logs
+                      if($results){ 
+
+                  $insertUserData=array(
+                      'FirstName' => $firstname, 'SurName' => $surname,
+                      'UserPassword' => $encryptpassword,'UserName' => $username,
+                      'UserEmail' => $useremail, 'UserPhone' => $userphone,
+                      'UserRole' => $userRoleAssigned, 'station' => $stationId,
+                      "region_zone" => $stationRegion,
+                      'LastPasswdChange'=> date('Y-m-d H:i:s'),
+                      'LastLoggedIn'=>date('Y-m-d H:i:s'),
+                      'Active'=>$active,
+                      'Reset'=>$reset,'CreatedBy'=>$createdBy);
+                  $insertsuccess= $this->DbHandler->insertData($insertUserData,'systemusers');
+                  
+                  if($insertsuccess){
+
+                    $session_data = $this->session->userdata('logged_in');
+                        $userrole=$session_data['UserRole'];
+                        $userstationId=$session_data['StationId'];
+                        $id=$session_data['Userid'];
+                        $name=$session_data['FirstName'].' '.$session_data['SurName'];
+
+                        $data_id = $this->DbHandler->getdataid($insertUserData,'systemusers','Userid');
+                        $userlogoutlogs = array('Userid' => $id,'Action' => 'Added User Details','data_id'=>$data_id,
+                            'Details' => $name . ' Inserted '.$userRoleAssigned.' '.$firstname.' '.$surname. ' in the system ',
+                            'IP' => $this->input->ip_address());
+                        //  save user logs
+                         $this->DbHandler->saveUserLogs($userlogoutlogs);
+
+                    $this->session->set_flashdata('success', 'New User info was added successfully and User Password has been sent to their email!');
+                      $this->index();
+
+
+
+                  }//end of if failed to insert
+                  //Failed to insert the user
+                  else{
+                      $this->session->set_flashdata('error', '"Sorry, we encountered an issue User has not been inserted! ');
+                      $this->index();
+                  }
                        }
-                          else{ //User has been inserted but Email has not been sent
+                        else{ //User Email has not been sent
                               $this->session->set_flashdata('error', 'Email not sent and user has not been inserted');
-                              $this->load->view('login');
+                              $this->index();
 
-                          }
-
-
-
-
-                        $this->session->set_flashdata('success', 'New User info was added successfully and User Password has been sent to their email!');
-                        $this->load->view('login');
-
-
-
-                    }//end of if failed to insert
-                    //Failed to insert the user
-                    else{
-                        $this->session->set_flashdata('error', '"Sorry, we encountered an issue User has not been inserted! ');
-                        $this->index();
-                    }
-
-
-
-
+                         }
+                
         }//end of if random password
             else{
             $this->session->set_flashdata('error','Failed to generate random password');
@@ -245,7 +240,7 @@ class Users extends CI_Controller {
         else{
 
 
-            $ret = 'Account Names'.' '. $firstname .' '. $surname.''.'is already in the System';
+            $ret = 'Account with email '.' '. $useremail.' and user role '.chgtouppercase($userRoleAssigned).''.' is already in the System';
             $this->session->set_flashdata('error', $ret);
             $this->index();
 
@@ -254,6 +249,17 @@ class Users extends CI_Controller {
 
 
     }
+
+
+    public function SelectManagerStations(){
+       
+        $this->load->helper(array('form', 'url'));
+
+        $region = ($stationName == "") ? $this->input->post('region') : $region;
+        $result = $this->DbHandler->SelectZonalStations($region);   // $value, $field, $table
+        echo json_encode($result);
+    }
+
     public function generatePasswdString(){
         $this->unsetflashdatainfo();
         $this->load->helper(array('string'));
@@ -269,7 +275,7 @@ class Users extends CI_Controller {
         $config['smtp_host'] = 'ssl://smtp.gmail.com';
         $config['smtp_port'] = '465';
         $config['smtp_user'] = 'wimeaictwdr@gmail.com';  //change it
-        $config['smtp_pass'] = '1wimeawdr2'; //change it
+        $config['smtp_pass'] = '1c7wimearepo.'; //change it
         $config['charset'] = 'utf-8';
         $config['newline'] = "\r\n";
         $config['mailtype'] = 'html';
@@ -308,6 +314,7 @@ class Users extends CI_Controller {
         $this->load->helper(array('form', 'url'));
         $session_data = $this->session->userdata('logged_in');
         $UserRole=$session_data['UserRole'];
+        $ocStationid = $session_data['StationId'];
 
         $firstname =firstcharuppercase(chgtolowercase( $this->input->post('firstname')));
         //$fname=firstcharuppercase($firstname);
@@ -315,50 +322,44 @@ class Users extends CI_Controller {
         //$sname=firstcharuppercase($surname);
         $useremail = chgtolowercase($this->input->post('email'));
         $userphone = $this->input->post('contact');
+        $id = $this->input->post('id');
         $stationId = $this->input->post('stationId_Manager');
         //$urole=firstcharuppercase($URole);
 
         if($UserRole=="Manager" || $UserRole=="ManagerData"){
             $userRoleAssigned = $this->input->post('Role_AssignedBy_Manager');
+            $stationRegion = $this->input->post('stationRegion_AssignedBy_Manager');
+            $stationid = $this->input->post('stationid');
+
         }
         else if($UserRole=="OC"){
             $userRoleAssigned = $this->input->post('Role_AssignedBy_OC');
             $station = firstcharuppercase(chgtolowercase($this->input->post('station_OC')));
             $stationNo = $this->input->post('stationNo_OC');
             $stationRegion = $this->input->post('stationRegion_OC');
+            $stationid = $ocStationid;
         }
 
-        if( $userRoleAssigned=="Observer" || $userRoleAssigned=="ObserverArchive" || $userRoleAssigned=="ObserverDataEntrant" || $userRoleAssigned=="WeatherForecaster"){
+        if($userRoleAssigned=="OC" || $userRoleAssigned=="Observer" || $userRoleAssigned=="ObserverArchive" || 
+      $userRoleAssigned=="WeatherAnalyst" || $userRoleAssigned=="ObserverDataEntrant" || $userRoleAssigned=="WeatherForecaster"){
 
-                  $stationRegion = "NULL";
-       }elseif($userRoleAssigned=="OC"){
-            $station = firstcharuppercase(chgtolowercase($this->input->post('station_Manager')));
-            $stationNo = $this->input->post('stationNo_Manager');
-           //$stationRegion = $this->input->post('stationRegion_Manager');
-        }elseif($userRoleAssigned=="ZonalOfficer" ||$userRoleAssigned=="SeniorZonalOfficer" ){
+                  $updateUserData=array(
+                    'station' => $stationid,'FirstName' => $firstname, 'SurName' => $surname,
+                    'UserEmail' => $useremail, 'UserPhone' => $userphone,'UserRole' => $userRoleAssigned);
+       }
+       elseif($userRoleAssigned=="ZonalOfficer" ||$userRoleAssigned=="SeniorZonalOfficer" ){
 
-            $station = "NULL";
-            $stationNo = "NULL";
-            $stationRegion = $this->input->post('stationRegion_AssignedBy_Manager');
-        }else{
-          $station = "NULL";
-          $stationNo = "NULL";
-          $stationRegion = "NULL";
-        }
-
-  $id = $this->input->post('id');
-  $stationChosen=$this->DbHandler->identifyStationById($station,$stationNo);
-  $updateUserData=array(
-            'station' => $stationChosen,'FirstName' => $firstname, 'SurName' => $surname,
+        $updateUserData=array(
+            'region_zone' => $stationRegion,'station' => 0,'FirstName' => $firstname, 'SurName' => $surname,
             'UserEmail' => $useremail, 'UserPhone' => $userphone,'UserRole' => $userRoleAssigned);
 
+        }else{
+          
+        $updateUserData=array(
+            'FirstName' => $firstname, 'SurName' => $surname,
+            'UserEmail' => $useremail, 'UserPhone' => $userphone,'UserRole' => $userRoleAssigned);  
+        }
 
-        $updatesuccess=$this->DbHandler->updateUser($updateUserData, $updateUserData2,'systemusers',$id,$stationId);
-
-        //Redirect the user back with  message
-        if($updatesuccess){
-            //Store User logs.
-            //Create user Logs
             $session_data = $this->session->userdata('logged_in');
             $userrole=$session_data['UserRole'];
             $userstation=$session_data['UserStation'];
@@ -368,12 +369,32 @@ class Users extends CI_Controller {
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             $userlogs = array('User' => $name,
+            'UserRole' => $userrole,'Action' => 'Updated User Details',
+            'Details' => $name . ' updated user details in the system ',
+            'station' => $userstationId ,
+            'IP' => $this->input->ip_address());
+        
+        $updatesuccess=$this->DbHandler->updateUser($updateUserData, $updateUserData2,'systemusers',$id,$stationId,$userlogs);
+
+        //Redirect the user back with  message
+        if($updatesuccess){
+            //Store User logs.
+            //Create user Logs
+           /* $session_data = $this->session->userdata('logged_in');
+            $userrole=$session_data['UserRole'];
+            $userstation=$session_data['UserStation'];
+            $userstationNo=$session_data['StationNumber'];
+            $StationRegion=$session_data['StationRegion'];
+            $userstationId=$session_data['StationId'];
+            $name=$session_data['FirstName'].' '.$session_data['SurName'];
+
+           /* $userlogs = array('User' => $name,
                 'UserRole' => $userrole,'Action' => 'Updated user details',
                 'Details' => $name . ' updated user details in the system ',
                 'station' => $userstationId ,
                 'IP' => $this->input->ip_address());
             //  save user logs
-            $this->DbHandler->saveUserLogs($userlogs);
+            $this->DbHandler->saveUserLogs($userlogs);*/
 
 
 
@@ -431,19 +452,102 @@ class Users extends CI_Controller {
 
     }
 
+    function getPopuplogs(){
+        $date = rawurldecode($this->uri->segment(4));
+        $userid = rawurldecode($this->uri->segment(3));
+        $result=$this->DbHandler->getPopuplogs($date,$userid);
+
+        if($result){
+            $data = array(
+                'result' => $result
+                );
+        }else{
+            $data = array(
+                'result' => 'none'
+                );
+        }
+       
+        echo json_encode($data);
+    }
+
+    public function activateUser() {
+        $this->unsetflashdatainfo();
+
+        $id = $this->uri->segment(3); // URL Segment Three.
+        //$id = $this->uri->segment(3); // URL Segment Three.
+
+        $rowsaffected = $this->DbHandler->activateUser('systemusers',$id);  //$rowsaffected > 0  //$tablename,id of the row
+
+        if ($rowsaffected) {
+
+            //Store User logs.
+            //Create user Logs
+            $session_data = $this->session->userdata('logged_in');
+            $userrole=$session_data['UserRole'];
+            $userstation=$session_data['UserStation'];
+            $userstationNo=$session_data['StationNumber'];
+            $userstationId=$session_data['StationId'];
+            $name=$session_data['FirstName'].' '.$session_data['SurName'];
+
+            $userlogs = array('User' => $name,
+                'UserRole' => $userrole,'Action' => 'Updated User Details',
+                'Details' => $name . ' Activated user details in the system ',
+                'station' => $userstationId ,
+                'IP' => $this->input->ip_address());
+            //  save user logs
+            // $this->DbHandler->saveUserLogs($userlogs);
+
+            $this->session->set_flashdata('success', 'User info was Activated successfully!');
+            $this->index();
+
+            //redirect('/element', 'refresh');
+        }
+        else {
+
+            $this->session->set_flashdata('error', '"Sorry, we encountered an issue! ');
+            $this->index();
+
+        }
+
+    }
+    
+    public function GetUserLogs(){
+        $region=$this->input->post('region');
+        $station=$this->input->post('station');
+        $action=$this->input->post('action');
+        $typeofform=$this->input->post('typeofform');
+        $startdate=$this->input->post('startdate');
+        $enddate=$this->input->post('enddate');
+        $data['datedisplay1'] = $startdate;
+        $data['datedisplay2'] = $enddate;
+        $result=$this->DbHandler->GetUserLogs($station,$action,$typeofform,$startdate,$enddate);
+        if ($result) {
+            
+            $data['userlogsdata'] = $result;
+            
+        } else {
+            $data['userlogsdata'] = array();
+        }
+        $this->load->view('userlogs', $data);
+       // print_r($result);
+        //exit($startdate.' - '.$enddate);
+    }
+
     public function userlogs() {
         $this->unsetflashdatainfo();
         $session_data = $this->session->userdata('logged_in');
         $userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
+        $userregion=$session_data['ZonalRegion'];
+        //exit('hey...'.$userregion);
 
 
-        $query = $this->DbHandler->selectAllFromSystemData($userstation,'StationName','userlogs');  //value,field,table
+        $query1 = $this->DbHandler->SelectZonalStations($userregion);
         //  var_dump($query);
-        if ($query) {
-            $data['userlogs'] = $query;
+        if ($query1) {
+            $data['zonalstations'] = $query1;
         } else {
-            $data['userlogs'] = array();
+            $data['zonalstations'] = array();
         }
 
         $this->load->view('userlogs', $data);

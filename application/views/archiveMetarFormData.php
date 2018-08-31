@@ -279,7 +279,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
         <div class="modal-footer clearfix">
 
-            <a href="<?= base_url(); ?>index.php/ArchiveMetarForm/" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+            <a href="<?= base_url(); ?>index.php/ArchiveMetarFormData" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
 
             <button type="submit" id="postarchivemetarformdata_button" name="postarchivemetarformdata_button" class="btn btn-primary pull-left"><i class="fa fa-plus"></i> Save  New Archive metar Form</button>
         </div>
@@ -491,12 +491,32 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">Approved</span>
-                        <select name="approval" id="approval"  required class="form-control">
-                            <option value="<?php echo $metadataform->Approved;?>"><?php echo $metadataform->Approved;?> </option>
-                            <option value="">--Select Approval Options--</option>
-                            <option value="TRUE">TRUE</option>
-                            <option value="FALSE">FALSE</option>
-                        </select>
+                        	<?php if($userrole=="DataOfficer"||$metadataform->Approved=='TRUE'){?>
+								<select name="approval" id="approval" disabled  class="form-control" >
+									<option value="<?php echo $metadataform->Approved;?>"><?php echo $metadataform->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<input type="hidden" name="approval" value="<?php echo $metadataform->Approved;?>">
+								<?php }else{?>
+								   <select name="approval" id="approval"  class="form-control" >
+									<option value="<?php echo $metadataform->Approved;?>"><?php echo $metadataform->Approved;?></option>
+									<option value="TRUE">TRUE</option>
+									<option value="FALSE">FALSE</option>
+								</select>
+								<?php }?>
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
                     </div>
                 </div>
 
@@ -531,7 +551,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 <div class="box">
                     <?php require_once(APPPATH . 'views/error.php'); ?>
-                    <div class="box-body table-responsive">
+                    <div class="box-body table-responsive"style="overflow:auto;">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -565,8 +585,12 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                             $count = 0;
                             if (is_array($archivedmetarformdata) && count($archivedmetarformdata)) {
                                 foreach($archivedmetarformdata as $metardata){
-                                    $count++;
+                                   ;
                                     $metarid = $metardata->id;
+									 if($userrole =='DataOfficer'&& $metardata->Approved =='TRUE' ){
+									   $count++;
+									   }else{
+										   $count++;
 
                                     ?>
                                     <tr>
@@ -592,15 +616,26 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                                   <?php if($userrole=='SeniorDataOfficer'  || $userrole=='DataOfficer' || $userrole=='ObserverArchive' || $userrole=='OC' ){ ?>
 
                                     <td><?php echo $metardata->Approved;?></td>
-                                    <td><?php echo $metardata->SubmittedBy;?></td>
+                                    <td><?php echo $metardata->AM_SubmittedBy;?></td>
                                     <td class="no-print">
 
-                                            <a href="<?php echo base_url() . "index.php/ArchiveMetarFormData/DisplayArchivedMetarFormForUpdate/" .$metarid ;?>" style="cursor:pointer;">Edit</a>
-                                    </tr>
+									<table>
+                                         <tr><td>
+                                            <a  class="btn btn-primary " href="<?php echo base_url() . "index.php/ArchiveMetarFormData/DisplayArchivedMetarFormForUpdate/" .$metarid ;?>" style="cursor:pointer;"><li class="fa fa-edit"></li> Edit</a>
+                                    </td>
+											<?php if($userrole=='SeniorDataOfficer'){?>
+											<td>
+											
+											<form method="post" action="<?php echo base_url() . "index.php/ArchiveMetarFormData/update_approval/" .$metarid;?>"> <input type="hidden" name="id" value="<?php echo $metarid; ?>" ><input type="hidden" name="approve" value="TRUE" ><button class="btn btn-success" <?php if($metardata->Approved=='TRUE'){ echo "disabled";}?> type="submit"  ><li class='fa fa-check'></li>Approve</button></form>
+											</td><?php }?> 
+									     </tr>
+										 </table>
+									</td>
+									</tr>
 
                                 <?php
                                 }
-                            }
+								}}
                           }
                             ?>
                             </tbody>
@@ -664,7 +699,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                 //Check that the a station is selected from the list of stations(Manager)
-                var station=$('#station_archivemetarformdata').val();
+                var station=$('#stationManager').val();
                 if(station==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station not picked");
                     $('#station_archivemetarformdata').val("");  //Clear the field.
@@ -673,7 +708,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
                 }
                 //Check that the a station Number is selected from the list of stations(Manager)
-                var stationNo=$('#stationNo_archivemetarformdata').val();
+                var stationNo=$('#stationNoManager').val();
                 if(stationNo==""){  // returns true if the variable does NOT contain a valid number
                     alert("Station Number not picked");
                     $('#stationNo_archivemetarformdata').val("");  //Clear the field.
@@ -741,8 +776,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
             //Check against the date,stationName,SManagernNumber,Time and MetarManageron.
                 var date= $('#date').val();
-                var stationName=$('#station_archivemetarformdata').val();
-                var stationNumber=$('#stationNo_archivemetarformdata').val();
+                var stationName=$('#stationManager').val();
+                var stationNumber=$('#stationNoManager').val();
                 var timeOfMetarRecorded = $('#time_archivemetarformdata').val();
                 var metarOption = $('#metarspeci_archivemetarformdata').val();
 

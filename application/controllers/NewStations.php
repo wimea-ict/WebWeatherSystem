@@ -10,7 +10,10 @@ class NewStations extends CI_Controller {
         $this->load->model('DbHandler');
         $this->load->library('session');
         $this->load->library('encrypt');
-
+        if(!$this->session->userdata('logged_in')){
+	   $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
         // $this->unsetflashdatainfo();
@@ -134,12 +137,12 @@ class NewStations extends CI_Controller {
             //$creationDate= date('Y-m-d H:i:s');
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
             $SubmittedBy=$name;
-
+            $height = $this->input->post('height');
             $insertStationData=array(
                 'StationName'=> $stationname,'StationNumber'=>$stationnumber,'StationRegNumber'=>$stationregNo,
                 'Location'=>$stationlocation,'Country'=>$country,
                 'StationRegion'=>$region,'Indicator'=>$indicator,
-                'Latitude'=>$latitude,'Longitude'=>$longitude,
+                'Latitude'=>$latitude,'Longitude'=>$longitude,'Height'=>$height,
                 'Altitude'=>$altitude,'Opened'=>$opened,
                 'Closed'=>$closed,'StationStatus'=>$status,
                 'StationType'=>$type,'SubmittedBy'=>$SubmittedBy);
@@ -159,14 +162,14 @@ class NewStations extends CI_Controller {
                 //$StationRegion=$session_data['StationRegion'];
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $UserRole,'Action' => 'Inserted new station details',
-                    'Details' => $name . ' inserted new station details in the system ',
-                    'StationName' => $StationName,
-                    'StationNumber' => $StationNumber,
+               $userid =$session_data['Userid'];
+               $userlogs = array('Userid' => $userid,
+                    'Action' => 'Created new station ',
+                    'Details' => $name . ' created a new station details in the system ',
+                   
                     'IP' => $this->input->ip_address());
                 //  save user logs
-                // $this->DbHandler->saveUserLogs($userlogs);
+                $this->DbHandler->saveUserLogs($userlogs);
 
 
 
@@ -216,15 +219,15 @@ class NewStations extends CI_Controller {
             $type = $this->input->post('stationtype');
 
             $id = $this->input->post('id');
-
-
+             $height = $this->input->post('height');
+                
 
 
             $updateStationData=array(
                 'StationName'=> $stationname,'StationNumber'=>$stationnumber,
                 'Location'=>$stationlocation,'Country'=>$country,
                 'StationRegion'=>$region,'Indicator'=>$indicator,
-                'Latitude'=>$latitude,'Longitude'=>$longitude,
+                'Latitude'=>$latitude,'Longitude'=>$longitude,'Height'=>$height,
                 'Altitude'=>$altitude,'Opened'=>$opened,
                 'Closed'=>$closed,'StationStatus'=>$status,
                 'StationType'=>$type);
@@ -242,11 +245,11 @@ class NewStations extends CI_Controller {
 
                 $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-                $userlogs = array('User' => $name,
-                    'UserRole' => $UserRole,'Action' => 'Updated station details',
+               $userid =$session_data['Userid'];
+               $userlogs = array('Userid' => $userid,
+                    'Action' => 'Updated station details',
                     'Details' => $name . ' updated station details in the system ',
-                    'StationName' => $StationName,
-                    'StationNumber' => $StationNumber,
+                   
                     'IP' => $this->input->ip_address());
                 //  save user logs
                 $this->DbHandler->saveUserLogs($userlogs);

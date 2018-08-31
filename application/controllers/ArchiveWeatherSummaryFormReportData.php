@@ -9,7 +9,11 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
         error_reporting(E_PARSE);
         $this->load->model('DbHandler');
         $this->load->library('session');
-        //$this->load->library('encrypt');
+        $this->load->library('encrypt');
+		if(!$this->session->userdata('logged_in')){
+	   $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
 
     }
     public function index(){
@@ -96,9 +100,9 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
 
         $station = firstcharuppercase(chgtolowercase($this->input->post('station_archiveweathersummaryformreportdata')));
 
-        $stationNumber = $this->input->post('stationNo_archiveweathersummaryformreportdata');
-
-
+        $stationNumber = $this->input->post('stationNo');
+         $station_id= $this->DbHandler->identifyStationById($station,$stationNumber);
+      //exit($station.$stationNumber);
 
 
 
@@ -179,8 +183,8 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
 
 
         $insertArchiveWeatherSummaryFormReportDataIntoDB=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=> $stationNumber,
-            'SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
+            'Date'=>$date,'station'=>$station_id,
+            'AW_SubmittedBy' => $SubmittedBy ,'Approved'=>$Approved,
             'TEMP_MAX'=> $max, 'TEMP_MIN'=>$min,'SUNSHINE'=>$sunshine,
 
             'DB_0600Z'=>$db0600Z,'WB_0600Z'=>$wb0600Z,
@@ -218,16 +222,17 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added Archived WEather Summary Form  info',
-                'Details' => $name . ' added Archived WEather Summary Form info into the system',
-                'station' => $userstationId,
+           $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+               'Action' => 'Added Archived Weather Summary Form  info',
+                'Details' => $name . ' added Archived Weather Summary Form info into the system',
+             
                 'IP' => $this->input->ip_address());
             //  save user logs
             $this->DbHandler->saveUserLogs($userlogs);
 
 
-            $this->session->set_flashdata('success', 'New Archived WEather Summary Form info was added successfully!');
+            $this->session->set_flashdata('success', 'New Archived Weather Summary Form info was added successfully!');
             $this->index();
 
         }
@@ -238,6 +243,24 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
         }
 
     }
+	 public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"archiveweathersummaryformreportdata");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function updateArchiveWeatherSummaryFormReportData(){
         $session_data = $this->session->userdata('logged_in');
         $role=$session_data['UserRole'];
@@ -359,10 +382,11 @@ class ArchiveWeatherSummaryFormReportData extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated Archived Weather Summary Form info',
+           $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Updated Archived Weather Summary Form info',
                 'Details' => $name . ' updated Archived Weather Summary Form info into the system',
-                'station' => $userstationId,
+                
                 'IP' => $this->input->ip_address());
             //  save user logs
             $this->DbHandler->saveUserLogs($userlogs);

@@ -9,8 +9,11 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         error_reporting(E_PARSE);
         $this->load->model('DbHandler');
         $this->load->library('session');
-        //$this->load->library('encrypt');
-
+        $this->load->library('encrypt');
+         if(!$this->session->userdata('logged_in')){
+	  $this->session->set_flashdata('warning', 'Sorry, your session has expired.Please login again.');
+       redirect('/Welcome');
+	  }
     }
     public function index(){
         //$this->unsetflashdatainfo();
@@ -18,13 +21,16 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         //$userrole=$session_data['UserRole'];
         $userstation=$session_data['UserStation'];
         $query = $this->DbHandler->selectAll($userstation,'StationName','archiveobservationslipformdata');
-
+         //
 
         //  var_dump($query);
         if ($query) {
             $data['archivedobservationslipformdata'] = $query;
+			
         } else {
             $data['archivedobservationslipformdata'] = array();
+			
+			
         }
 
         $this->load->view('archiveObservationSlipFormData', $data);
@@ -98,8 +104,9 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station_archiveobservationslipformdata')));
             $stationNumber = $this->input->post('stationNo_archiveobservationslipformdata');
+            $station_id= $this->DbHandler->identifyStationById($station,$stationNumber);
 
-
+            
 
         $timeobservationslipform = $this->input->post('time_archiveobservationslipformdata');
 
@@ -197,7 +204,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
         $insertObservationSlipFormData=array(
-            'Date'=>$date,'StationName'=>$station,'StationNumber'=>$stationNumber,
+            'Date'=>$date,'Station'=>$station_id,
             'TIME'=> $timeobservationslipform,
             'TotalAmountOfAllClouds'=>$totalAmountOfAllClouds,
 
@@ -273,7 +280,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
             'Approved'=>$approved,
-             'SubmittedBy'=>$user);
+             'AO_SubmittedBy'=>$user);
 
 
 
@@ -292,10 +299,11 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Added New Archive Observation Slip Form info',
+            $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Added New Archive Observation Slip Form info',
                 'Details' => $name . ' added New Archive Observation Slip Form info into the system',
-                'station' => $userstationId,
+                
                 'IP' => $this->input->ip_address());
             //  save user logs
             $this->DbHandler->saveUserLogs($userlogs);
@@ -330,9 +338,11 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
 
             $station = firstcharuppercase(chgtolowercase($this->input->post('station')));
+			
             $stationNumber = $this->input->post('stationNo');
+			
             $stationId = $this->DbHandler->identifyStationById($station,$stationNumber);
-
+            
 
         $timeobservationslip = $this->input->post('timeRecorded');
         $totalAmountOfAllClouds = $this->input->post('totalamountofallclouds');
@@ -495,12 +505,9 @@ class ArchiveObservationSlipFormData extends CI_Controller {
 
             'Approved'=>$approved
         );
-
+       
         $updatesuccess=$this->DbHandler->updateData($updateArchiveObservationSlipFormData,"",'archiveobservationslipformdata',$id);
-
-
-
-
+        
         //Redirect the user back with  message
         if($updatesuccess){
             //Store User logs.
@@ -511,11 +518,10 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userstationNo=$session_data['StationNumber'];
               $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
-
-            $userlogs = array('User' => $name,
-                'UserRole' => $userrole,'Action' => 'Updated Archived Observation Slip info',
+             $userid =$session_data['Userid'];
+            $userlogs = array('Userid' => $userid,
+                'Action' => 'Updated Archived Observation Slip info',
                 'Details' => $name . ' updated Archived Observation Slip info into the system',
-                'station' => $userstationId,
                 'IP' => $this->input->ip_address());
             //  save user logs
              $this->DbHandler->saveUserLogs($userlogs);
@@ -533,7 +539,24 @@ class ArchiveObservationSlipFormData extends CI_Controller {
         }
 
     }
-
+    public 	function update_approval() {
+		$session_data = $this->session->userdata('logged_in');
+      $userstation=$session_data['UserStation'];
+	  $user_id=$session_data['Userid'];
+		$id= $this->input->post('id');
+		$data = array(
+		'Approved' => $this->input->post('approve')
+		
+		);
+		$query=$this->DbHandler->updateApproval1($id,$data,"archiveobservationslipformdata");
+		if ($query) {
+		$this->session->set_flashdata('success', 'Data was updated successfully!');
+		$this->index();
+		}else{
+		$this->session->set_flashdata('error', 'Sorry, Data was not updated, Please try again!');
+		$this->index();	
+		}
+		}
     public function deleteArchiveObservationSlipFormData() {
         $this->unsetflashdatainfo();
 
@@ -552,7 +575,7 @@ class ArchiveObservationSlipFormData extends CI_Controller {
             $userstationId=$session_data['StationId'];
             $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
-            $userlogs = array('User' => $name,
+            $userlogs = array('Userid' => $id,
                 'UserRole' => $userrole,'Action' => 'Deleted Observation Slip info',
                 'Details' => $name . ' deleted Observation Slip info into the system',
                 'station' => $userstationId,

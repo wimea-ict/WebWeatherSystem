@@ -209,8 +209,8 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         <td ><?php echo $data->Dekadal_Number;?></td>
                         <td><?php echo $data->Description;?></td>
                         <td>
-                          <!--  <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileName; ?>">View Image</a> -->
-                            <?php echo $data->FileName;?>
+                         <a title="click to view file" href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedDekadalFormDataReportCopy/ViewImageFromBrowser/<?php echo $data->FileRef; ?>"> <?php echo $data->FileRef;?></a> 
+                           
                         </td>
 
 
@@ -220,12 +220,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                 }
             ?>
         </table>
-        <br><br>
-
-    <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
-    </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
-    <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
-
+       
 
         <div class="clearfix"></div>
 

@@ -144,15 +144,15 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
 
 
                                 <td ><?php echo $count;?></td>
-                                <td ><?php echo $data->Form;?></td>
+                                <td ><?php echo $data->Form_scanned;?></td>
                                 <td ><?php echo $data->StationName;?></td>
                                 <td ><?php echo $data->StationNumber;?></td>
-                                <td ><?php echo $data->Date;?></td>
+                                <td ><?php echo $data->form_date;?></td>
                                 <td><?php echo $data->Description;?></td>
 
                                 <td>
-                                  <!--  <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedMetarFormDataCopy/ViewImageFromBrowser/<?php echo $data->FileName; ?>">View Image</a> -->
-                                    <?php echo $data->FileName;?>
+                                    <a href="<?php echo base_url(); ?>/index.php/SearchArchivedScannedMetarFormDataCopy/ViewImageFromBrowser/<?php echo $data->FileRef; ?>" target = "blank"><?php echo $data->FileRef;?></a> 
+                                    
                                 </td>
 
 
@@ -162,12 +162,7 @@ $name=$session_data['FirstName'].' '.$session_data['SurName'];
                         }
                     ?>
                 </table>
-            <br><br>
-
-            <span><strong>Data Status</strong></span><span class="dotted-line"><?php echo $data->Approved;?></span>
-            </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>
-            <span><strong>Observer's Name</strong></span> <span class="dotted-line"><?php echo $data->SubmittedBy;?></span>
-
+          
                 <br><br><br><br>
 
 
